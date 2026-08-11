@@ -1,0 +1,22 @@
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix saref: <https://saref.etsi.org/core/> .
+@prefix ex: <https://saref.etsi.org/core/v4.1.1/example/services/> .
+@prefix time: <http://www.w3.org/2006/time#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix dctype: <http://purl.org/dc/dcmitype/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#>.
+
+<https://saref.etsi.org/core/v4.1.1/example/services#> a dctype:Dataset ;
+    dcterms:license <https://forge.etsi.org/etsi-software-license> ;
+    dcterms:conformsTo <https://saref.etsi.org/core/v4.1.1/> ;
+    dcterms:title "Example services"@en ;
+    dcterms:description "Example services"@en .
+
+
+ex:SwitchOnService a saref:Service ;
+    rdfs:comment "A type of service that represents an on/off function to the network"@en ;
+    rdfs:label "Switch on service"@en ;
+    saref:represents ex:OnOffFunction .

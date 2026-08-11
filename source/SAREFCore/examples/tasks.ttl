@@ -1,0 +1,56 @@
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix saref: <https://saref.etsi.org/core/> .
+@prefix ex: <https://saref.etsi.org/core/v4.1.1/example/tasks/> .
+@prefix time: <http://www.w3.org/2006/time#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix dctype: <http://purl.org/dc/dcmitype/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#>.
+
+<https://saref.etsi.org/core/v4.1.1/example/tasks#> a dctype:Dataset ;
+    dcterms:license <https://forge.etsi.org/etsi-software-license> ;
+    dcterms:conformsTo <https://saref.etsi.org/core/v4.1.1/> ;
+    dcterms:title "Example tasks"@en ;
+    dcterms:description "Example tasks"@en .
+
+ex:Cleaning a saref:Task ;
+    rdfs:comment "A type of task for which a device is designed"@en ;
+    rdfs:label "Cleaning"@en .
+     
+ex:Comfort a saref:Task ;
+    rdfs:comment "A type of task for which a device is designed"@en ;
+    rdfs:label "Comfort"@en .
+
+ex:Drying a saref:Task ;
+    rdfs:comment "A type of task for which a device is designed"@en ;
+    rdfs:label "Drying"@en .
+
+ex:EnergyEfficiency a saref:Task ;
+    rdfs:comment "A type of task for which a device is designed"@en ;
+    rdfs:label "EnergyEfficiency"@en .
+
+ex:Entertainment a saref:Task ;
+    rdfs:comment "A type of task for which a device is designed"@en ;
+    rdfs:label "Entertainment"@en .
+
+ex:Lighting a saref:Task ;
+    rdfs:comment "A type of task for which a device is designed"@en ;
+    rdfs:label "Lighting"@en .
+
+ex:MeterReading a saref:Task ;
+    rdfs:comment "A type of task for which a device is designed"@en ;
+    rdfs:label "Meter reading"@en .
+
+ex:Safety a saref:Task ;
+    rdfs:comment "A type of task for which a device is designed"@en ;
+    rdfs:label "Safety"@en .
+
+ex:Washing a saref:Task ;
+    rdfs:comment "A type of task for which a device is designed"@en ;
+    rdfs:label "Washing"@en .
+
+ex:WellBeing a saref:Task ;
+    rdfs:comment "A type of task for which a device is designed"@en ;
+    rdfs:label "WellBeing"@en .

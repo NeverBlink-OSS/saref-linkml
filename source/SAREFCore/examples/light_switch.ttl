@@ -1,0 +1,53 @@
+
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix saref: <https://saref.etsi.org/core/> .
+@prefix ex: <https://saref.etsi.org/core/v4.1.1/example/light_switch/> .
+@prefix time: <http://www.w3.org/2006/time#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix dctype: <http://purl.org/dc/dcmitype/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#>.
+
+<https://saref.etsi.org/core/v4.1.1/example/light_switch#> a dctype:Dataset ;
+    dcterms:license <https://forge.etsi.org/etsi-software-license> ;
+    dcterms:conformsTo <https://saref.etsi.org/core/v4.1.1/> ;
+    dcterms:title "Example light switch"@en ;
+    dcterms:description "Example light switch"@en .
+
+ex:Light a saref:FeatureKind ;
+    rdfs:label "Light"@en ;
+    rdfs:comment "Lights, a feature kind."@en .
+
+ex:LightSwitch a saref:FeatureKind ;
+    skos:broader ex:Switch ;
+    rdfs:comment "A switch that performs the saref:OnOffFunction, controls the property saref:Light, and can be found in the state ex:OnOffState. It can offer a switch on service. A ex:LightSwitch is typically used to accomplish ex:Lighting."@en ;
+    rdfs:label "Light switch"@en ;
+    saref:hasFunction ex:OnOffFunction ;
+    saref:controls ex:Light ;
+    saref:hasState ex:OnOffState ;
+    saref:accomplishes ex:Lighting .
+
+ex:OnOffFunction a saref:Function ;
+  rdfs:label "On Off Function"@en ;
+  rdfs:comment "A function to control the on/off state of some feature"@en ;
+  saref:controls ex:OnOffState .
+
+ex:OnOffState a saref:State ;
+  rdfs:label "On Off State"@en ;
+  rdfs:comment "the state of on or off"@en .
+
+ex:On a saref:State ;
+  skos:broader ex:OnOffState ;
+  rdfs:label "On"@en ;
+  rdfs:comment "the state on"@en .
+
+ex:Off a saref:State ;
+  skos:broader ex:OnOffState ;
+  rdfs:label "Off"@en ;
+  rdfs:comment "the state off"@en .
+
+ex:Lighting a saref:Task ;
+    rdfs:comment "A type of task for which a device is designed"@en ;
+    rdfs:label "Lighting"@en .

@@ -1,0 +1,42 @@
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix saref: <https://saref.etsi.org/core/> .
+@prefix ex: <https://saref.etsi.org/core/v4.1.1/example/open_close_switch/> .
+@prefix time: <http://www.w3.org/2006/time#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix dctype: <http://purl.org/dc/dcmitype/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#>.
+
+<https://saref.etsi.org/core/v4.1.1/example/open_close_switch#> a dctype:Dataset ;
+  dcterms:license <https://forge.etsi.org/etsi-software-license> ;
+  dcterms:conformsTo <https://saref.etsi.org/core/v4.1.1/> ;
+  dcterms:title "Example open/close switch"@en ;
+  dcterms:description "Example open/close switch"@en .
+
+ex:OpenCloseSwitch a saref:FeatureKind ;
+    skos:broader ex:Switch ;
+    rdfs:comment "The kind of switch devices, that perform actuating function ex:OpenCloseFunction"@en ;
+    saref:hasFunction ex:OpenCloseFunction ;
+    rdfs:label "Open Close Switch"@en .
+
+ex:OpenCloseFunction a saref:Function ;
+  rdfs:label "Open Close Function"@en ;
+  rdfs:comment "A function to control the open/close state of some feature"@en ;
+  saref:controls ex:OpenCloseState .
+
+ex:OpenCloseState a saref:State ;
+  rdfs:label "Open Close State"@en ;
+  rdfs:comment "the state open or close"@en .
+
+ex:Open a saref:State ;
+  skos:broader ex:OpenCloseState ;
+  rdfs:label "Open"@en ;
+  rdfs:comment "the state open"@en .
+
+ex:Close a saref:State ;
+  skos:broader ex:OpenCloseState ;
+  rdfs:label "Close"@en ;
+  rdfs:comment "the state close"@en .
+

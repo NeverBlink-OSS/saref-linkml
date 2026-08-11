@@ -1,0 +1,28 @@
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix saref: <https://saref.etsi.org/core/> .
+@prefix ex: <https://saref.etsi.org/core/v4.1.1/example/hvac/> .
+@prefix time: <http://www.w3.org/2006/time#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix dctype: <http://purl.org/dc/dcmitype/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#>.
+
+<https://saref.etsi.org/core/v4.1.1/example/hvac#> a dctype:Dataset ;
+  dcterms:license <https://forge.etsi.org/etsi-software-license> ;
+  dcterms:conformsTo <https://saref.etsi.org/core/v4.1.1/> ;
+  dcterms:title "Example HVAC"@en ;
+  dcterms:description "Example HVAC"@en .
+
+## Device kinds
+
+ex:HVAC a saref:FeatureKind ;
+    rdfs:comment "Heating, Ventilation and Air Conditioning (HVAC) device that provides indoor environmental Comfort. A ex:HVAC is typically used to accomplish ex:Comfort."@en ;
+    saref:accomplishes ex:Comfort ;
+    rdfs:label "HVAC"@en .
+
+
+ex:Comfort a saref:Task ;
+    rdfs:comment "A type of task for which a device is designed"@en ;
+    rdfs:label "Comfort"@en .

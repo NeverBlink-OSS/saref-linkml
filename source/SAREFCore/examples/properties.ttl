@@ -1,0 +1,58 @@
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix saref: <https://saref.etsi.org/core/> .
+@prefix ex: <https://saref.etsi.org/core/v4.1.1/example/properties/> .
+@prefix time: <http://www.w3.org/2006/time#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix dctype: <http://purl.org/dc/dcmitype/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#>.
+
+<https://saref.etsi.org/core/v4.1.1/example/properties#> a dctype:Dataset ;
+    dcterms:license <https://forge.etsi.org/etsi-software-license> ;
+    dcterms:conformsTo <https://saref.etsi.org/core/v4.1.1/> ;
+    dcterms:title "Example properties"@en ;
+    dcterms:description "Example properties"@en .
+
+ex:Energy a saref:Property ;
+    rdfs:comment "The property ex:Energy is defined as the capacity of a physical system to perform work. Work, in turn, is defined as the application of force over a distance, resulting in the transfer of energy. Energy exists in different forms, including kinetic energy (energy associated with motion), potential energy (energy stored in an object due to its position or configuration), thermal energy (energy associated with the temperature of an object), chemical energy (energy stored in chemical bonds), electrical energy (energy associated with the flow of electric charge), and various other forms. In physics, energy is considered a conserved quantity, meaning it cannot be created or destroyed, only transformed from one form to another. This principle is described by the law of conservation of energy."@en ;
+    rdfs:label "Energy"@en .
+
+ex:Humidity a owl:Class ;
+     rdfs:subClassOf saref:Property ;
+     rdfs:comment "The property ex:Humidity represents the measure of water vapor present in the air or another gas. It quantifies the amount of moisture in the atmosphere or within a confined space, typically expressed as a percentage of the maximum amount of moisture that the air or gas can hold at a given temperature. Humidity is a critical environmental parameter with implications for various domains, including agriculture, meteorology, and indoor air quality management."@en ;
+     rdfs:label "Humidity"@en .
+
+ex:Light a saref:Property ;
+    rdfs:comment "The property ex:Light represents the measure of electromagnetic radiation within the visible spectrum that is capable of stimulating the human visual system. It quantifies the intensity or brightness of visible light present in a given environment or emitted by a light source. Light is a fundamental environmental parameter with significant implications for various applications, including lighting control systems, energy management, and human-centric lighting design."@en ;
+    rdfs:label "Light"@en .
+
+ex:Motion a owl:Class ;
+   rdfs:subClassOf saref:Property ;
+   rdfs:comment "The property ex:Motion represents the change in position or orientation of an object or system over time. It quantifies the movement or displacement of an object relative to a reference point or frame of reference. Motion is a fundamental physical phenomenon with broad applications across various domains, including robotics, transportation, and biomechanics. This property enables the standardized representation and interoperability of motion-related data, facilitating enhanced understanding and integration of motion-related information within the ontology framework."@en ;
+   rdfs:label "Motion"@en .
+
+ex:Occupancy a saref:Property ;
+    rdfs:comment "The property ex:Occupancy represents the presence or absence of individuals or objects within a defined space or area. It quantifies the state of occupancy, indicating whether a space is currently occupied or vacant. Occupancy is a crucial environmental parameter with significant implications for building management, security systems, and energy efficiency strategies. This property facilitates the standardized representation and interoperability of occupancy-related data, enabling better integration and utilization of occupancy information within the ontology framework across various applications and systems."@en ;
+    rdfs:label "Occupancy"@en .
+
+ex:Power a saref:Property ;
+    rdfs:comment "The property ex:Power represents the rate at which energy is transferred, converted, or consumed over time. It quantifies the rate of doing work or generating energy, typically measured in watts (W) or kilowatts (kW). Power is a fundamental physical quantity with broad applications across various domains, including electrical engineering, mechanical systems, and renewable energy. This property enables the standardized representation and interoperability of power-related data, facilitating enhanced understanding and integration of power-related information within the ontology framework across different systems and applications."@en ;
+    rdfs:label "Power"@en .
+
+ex:Pressure a saref:Property ;
+    rdfs:comment "The property ex:Pressure represents the force exerted per unit area on a surface, typically measured in units such as pascals (Pa), bars, or atmospheres. It quantifies the intensity of force distributed over a given area, reflecting the compressive or expansive force exerted by a fluid (liquid or gas) or solid material. Pressure is a fundamental physical parameter with diverse applications across various fields, including fluid mechanics, engineering, meteorology, and materials science. This property enables the standardized representation and interoperability of pressure-related data, facilitating enhanced understanding and integration of pressure information within the ontology framework across different systems and applications."@en ;
+    rdfs:label "Pressure"@en .
+
+ex:Price a saref:Property ;
+    rdfs:comment "The property ex:Price represents the monetary value assigned to a product, service, or asset in a particular transaction or market. It quantifies the cost or value associated with acquiring, selling, or exchanging goods or services, typically measured in a specific currency unit (e.g., dollars, euros, yen). Price is a crucial economic parameter with implications for business transactions, consumer behavior, and market dynamics across various industries and sectors. This property enables the standardized representation and interoperability of price-related data, facilitating enhanced understanding and integration of pricing information within the ontology framework across different systems and applications."@en ;
+    rdfs:label "Price"@en .
+
+ex:Smoke a saref:Property ;
+    rdfs:comment "The property ex:Smoke represents the presence or concentration of airborne particulate matter resulting from combustion processes, such as burning fuel or wildfires. It quantifies the density or level of suspended solid or liquid particles in the air, typically measured in units like micrograms per cubic meter (µg/m³) or parts per million (ppm). Smoke is a critical environmental parameter with implications for air quality, public health, and safety, particularly in urban areas or during fire incidents. This property enables the standardized representation and interoperability of smoke-related data, facilitating enhanced monitoring, analysis, and mitigation of smoke pollution within the ontology framework across different systems and applications."@en ;
+    rdfs:label "Smoke"@en .
+
+ex:Temperature a saref:Property ;
+    rdfs:comment "The property ex:Temperature represents the measure of the average kinetic energy of particles within a substance or system, typically measured in units such as degrees Celsius (°C) or degrees Fahrenheit (°F). It quantifies the hotness or coldness of a material or environment, reflecting the thermal energy present. Temperature is a fundamental physical parameter with broad applications across various fields, including meteorology, climate science, engineering, and materials science. This property enables the standardized representation and interoperability of temperature-related data, facilitating enhanced understanding and integration of temperature information within the ontology framework across different systems and applications."@en ;
+    rdfs:label "Temperature"@en .

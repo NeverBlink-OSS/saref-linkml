@@ -1,0 +1,29 @@
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix saref: <https://saref.etsi.org/core/> .
+@prefix ex: <https://saref.etsi.org/core/v4.1.1/example/temperature_sensor/> .
+@prefix time: <http://www.w3.org/2006/time#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix dctype: <http://purl.org/dc/dcmitype/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#>.
+
+<https://saref.etsi.org/core/v4.1.1/example/temperature_sensor#> a dctype:Dataset ;
+    dcterms:license <https://forge.etsi.org/etsi-software-license> ;
+    dcterms:conformsTo <https://saref.etsi.org/core/v4.1.1/> ;
+    dcterms:title "Example temperature sensor"@en ;
+    dcterms:description "Example temperature sensor"@en .
+
+ex:TemperatureSensor a saref:FeatureKind ;
+    skos:broader ex:Sensor ;
+    rdfs:comment "A sensor that is used for the purpose of sensing a property of type ex:Temperature. A ex:TemperatureSensor is typically used to accomplish ex:Comfort."@en ;
+    rdfs:label "Temperature sensor"@en ;
+    saref:observes ex:Temperature ;
+    saref:accomplishes ex:Comfort .
+
+ex:Sensor a saref:FeatureKind .
+
+ex:Temperature a saref:Property .
+
+ex:Comfort a saref:Task .

@@ -1,0 +1,81 @@
+# Validate the LinkML schema, then check it against the SAREF source and the official examples.
+
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: validate schema
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate models
+        uses: NeverBlink-OSS/linkml-scala-action@86c1c1a217425b4b9bd18241bf89d5681aa958eb
+        with:
+          working-directory: schema
+          files: "*.yaml"
+          strict: true
+          ignore: "No 'tree_root' class"
+
+  check:
+    name: SHACL and RDFS checks
+    needs: validate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Generate SHACL
+        uses: NeverBlink-OSS/linkml-scala-action@86c1c1a217425b4b9bd18241bf89d5681aa958eb
+        with:
+          command: generate
+          generator: shacl
+          files: "schema/*.yaml"
+          output: build/shacl
+
+      - name: Generate RDFS
+        uses: NeverBlink-OSS/linkml-scala-action@86c1c1a217425b4b9bd18241bf89d5681aa958eb
+        with:
+          command: generate
+          generator: rdfs
+          files: "schema/*.yaml"
+          output: build/rdfs
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - run: pip install rdflib pyyaml pyshacl
+
+      - name: Resolve generated artifacts
+        run: |
+          set -euo pipefail
+          ls -R build
+          SHACL=$(find build/shacl -type f -print -quit)
+          RDFS=$(find build/rdfs  -type f -print -quit)
+          [ -n "$SHACL" ] && [ -n "$RDFS" ] || { echo "::error::generation produced no files"; exit 1; }
+          echo "SHACL=$SHACL" >> "$GITHUB_ENV"
+          echo "RDFS=$RDFS" >> "$GITHUB_ENV"
+
+      - name: RDFS - inheritance, domains, ranges
+        if: ${{ !cancelled() }}
+        run: python checks/check-rdfs.py --rdfs "$RDFS"
+
+      - name: SHACL - examples must not be over-constrained
+        if: ${{ !cancelled() }}
+        run: python checks/check-examples.py --shapes "$SHACL" --mode open
+
+      - name: SHACL - schema must declare everything the examples use
+        if: ${{ !cancelled() }}
+        run: python checks/check-examples.py --shapes "$SHACL" --mode closed

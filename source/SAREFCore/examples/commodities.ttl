@@ -1,0 +1,52 @@
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix saref: <https://saref.etsi.org/core/> .
+@prefix ex: <https://saref.etsi.org/core/v4.1.1/example/commodities/> .
+@prefix time: <http://www.w3.org/2006/time#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix dctype: <http://purl.org/dc/dcmitype/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#>.
+
+<https://saref.etsi.org/core/v4.1.1/example/commodities#> a dctype:Dataset ;
+    dcterms:license <https://forge.etsi.org/etsi-software-license> ;
+    dcterms:conformsTo <https://saref.etsi.org/core/v4.1.1/> ;
+    dcterms:title "Example commodities"@en ;
+    dcterms:description "Example commodities"@en .
+
+
+## Examples of commodity categories: energy commodities that groups electricity, gas, propane (narrower than gas), coal, and natural resource commodities.
+
+ex:EnergyCommodity a owl:Class ;
+    rdfs:subClassOf saref:Commodity ;
+    rdfs:label "Energy Commodity"@en ;
+    rdfs:comment "The class of energy commodities"@en .
+
+ex:NaturalResourceCommodity a owl:Class ;
+    rdfs:subClassOf saref:Commodity ;
+    rdfs:label "Natural Resource Commodity"@en ;
+    rdfs:comment "The class of natural resource commodities"@en .
+
+## Example commodities
+
+ex:Electricity a ex:EnergyCommodity ;
+    rdfs:comment "The electricity energy commodity"@en ;
+    rdfs:label "Electricity"@en .
+
+ex:Gas a ex:EnergyCommodity ;
+    rdfs:comment "The gas energy commodity"@en ;
+    rdfs:label "Gas"@en .
+
+ex:Propane a ex:EnergyCommodity ;
+    skos:broader ex:Gas ;
+    rdfs:comment "The propane energy commodity"@en ;
+    rdfs:label "Propane"@en .
+
+ex:Coal a ex:EnergyCommodity ;
+    rdfs:comment "The coal energy commodity"@en ;
+    rdfs:label "Coal"@en .
+
+ex:Water a ex:NaturalResourceCommodity ;
+    rdfs:comment "The water natural resource commodity"@en ;
+    rdfs:label "Water"@en .
