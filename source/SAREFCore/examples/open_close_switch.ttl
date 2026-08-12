@@ -21,7 +21,7 @@ ex:OpenCloseSwitch a saref:FeatureKind ;
     saref:hasFunction ex:OpenCloseFunction ;
     rdfs:label "Open Close Switch"@en .
 
-ex:Switch a saref:FeatureKind .
+ex:Switch a saref:FeatureKind . # added, not in the ETSI original
 
 ex:OpenCloseFunction a saref:Function ;
   rdfs:label "Open Close Function"@en ;

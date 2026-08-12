@@ -29,7 +29,7 @@ ex:LightSwitch a saref:FeatureKind ;
     saref:hasState ex:OnOffState ;
     saref:accomplishes ex:Lighting .
 
-ex:Switch a saref:FeatureKind .
+ex:Switch a saref:FeatureKind . # added, not in the ETSI original
 
 ex:OnOffFunction a saref:Function ;
   rdfs:label "On Off Function"@en ;

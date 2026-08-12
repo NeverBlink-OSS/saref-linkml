@@ -21,7 +21,7 @@ ex:OnOffSwitch a saref:FeatureKind ;
   saref:hasFunction ex:OnOffFunction ;
   rdfs:label "On Off Switch"@en .
 
-ex:Switch a saref:FeatureKind .
+ex:Switch a saref:FeatureKind . # added, not in the ETSI original
 
 ex:OnOffFunction a saref:Function ;
   rdfs:label "On Off Function"@en ;
