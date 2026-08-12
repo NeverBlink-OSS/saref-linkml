@@ -1,0 +1,69 @@
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix saref: <https://saref.etsi.org/core/> .
+@prefix ex: <https://saref.etsi.org/core/v4.1.1/example/states/> .
+@prefix time: <http://www.w3.org/2006/time#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix dctype: <http://purl.org/dc/dcmitype/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#>.
+
+<https://saref.etsi.org/core/v4.1.1/example/states#> a dctype:Dataset ;
+    dcterms:license <https://forge.etsi.org/etsi-software-license> ;
+    dcterms:conformsTo <https://saref.etsi.org/core/v4.1.1/> ;
+    dcterms:title "Example states"@en ;
+    dcterms:description "Example states"@en .
+
+
+ex:MultiLevelState a saref:State ;
+    rdfs:comment "The property ex:MultilevelState represents a complex or categorical state that can have multiple discrete values or levels. It quantifies the state or condition of a system or entity along multiple dimensions or attributes, where each level represents a distinct qualitative or quantitative state. Multilevel states are common in various domains, including complex systems, machine learning models, and decision-making processes, where entities can exhibit multiple states simultaneously or transition between different states over time. This property enables the standardized representation and interoperability of multilevel state-related data, facilitating enhanced understanding and integration of complex state information within the ontology framework across different systems and applications."@en ;
+    rdfs:label "Multi level state"@en .
+
+
+
+ex:OnOffState a saref:State ;
+    rdfs:comment "The property ex:OnOffState represents a binary state indicating whether a device, system, or entity is in an active (on) or inactive (off) state. It quantifies the operational status or power state of an entity, where \"on\" typically denotes functionality or activation, while \"off\" signifies deactivation or non-functionality. On/off states are ubiquitous in various domains, including electronics, automation, and control systems, where devices can be toggled between active and inactive states for operation or energy conservation purposes. This property enables the standardized representation and interoperability of on/off state-related data, facilitating enhanced understanding and integration of binary state information within the ontology framework across different systems and applications."@en ;
+    rdfs:label "On off state"@en .
+
+ex:OnState a saref:State ;
+    skos:broader ex:OnOffState ;
+    rdfs:comment "The property ex:OnState represents a binary state indicating that the device, system, or entity is actively powered or in an operational state. It quantifies the activation or functionality of the entity, where \"on\" signifies that the entity is functioning or actively providing its intended service. On states are common in various domains, including electronics, automation, and control systems, where devices are typically activated to perform specific tasks or functions. This property enables the standardized representation and interoperability of on state-related data, facilitating enhanced understanding and integration of binary state information within the ontology framework across different systems and applications."@en ;
+    rdfs:label "On state"@en .
+
+ex:OffState a saref:State ;
+    skos:broader ex:OnOffState ;
+    rdfs:comment "The property ex:OffState represents a binary state indicating that the device, system, or entity is not in an active (off) state. It quantifies the deactivation or non-functionality of the entity, where \"off\" signifies that the entity is not actively providing its intended service. Off states are common in various domains, including electronics, automation, and control systems, where devices are typically deactivated to conserve energy or temporarily suspend operation. This property enables the standardized representation and interoperability of off state-related data, facilitating enhanced understanding and integration of binary state information within the ontology framework across different systems and applications."@en ;
+    rdfs:label "Off state"@en .
+
+
+
+ex:OpenClosedState a saref:State ;
+    rdfs:comment "The property ex:OpenClosedState represents a binary state indicating whether an object, entity, or system is in an open or closed position or condition. It quantifies the state of openness or closure, where \"open\" signifies accessibility or unobstructed passage, while \"closed\" indicates sealing or obstruction. Open/closed states are common in various domains, including doors, windows, valves, and containers, where entities can transition between these two states to control passage, airflow, or access to contents. This property enables the standardized representation and interoperability of open/closed state-related data, facilitating enhanced understanding and integration of binary state information within the ontology framework across different systems and applications."@en ;
+    rdfs:label "Open closed state"@en .
+
+ex:OpenState a saref:State ;
+    skos:broader ex:OpenClosedState ; # typo fixed
+    rdfs:comment "The property ex:OpenState represents a binary state indicating that an object, entity, or system is in an open position or condition. It quantifies the state of openness, where \"open\" signifies that the entity is accessible, unobstructed, or not closed. Open states are common in various domains, including doors, windows, valves, and containers, where entities can be opened to allow passage, airflow, or access to contents. This property enables the standardized representation and interoperability of open state-related data, facilitating enhanced understanding and integration of binary state information within the ontology framework across different systems and applications."@en ;
+    rdfs:label "Open state"@en .
+
+ex:ClosedState a saref:State ;
+    skos:broader ex:OpenClosedState ;
+    rdfs:comment "The property ex:ClosedState represents a binary state indicating that an object, entity, or system is in a closed position or condition. It quantifies the state of closure, where \"closed\" signifies that the entity is sealed, obstructed, or not open. Closed states are common in various domains, including doors, windows, valves, and containers, where entities can be closed to prevent passage, airflow, or access to contents. This property enables the standardized representation and interoperability of closed state-related data, facilitating enhanced understanding and integration of binary state information within the ontology framework across different systems and applications."@en ;
+    rdfs:label "Closed state"@en .
+
+
+
+ex:StartStopState a saref:State ;
+    rdfs:comment "The property ex:StartStopState represents a binary state indicating whether a process, activity, or system is in a started or stopped condition. It quantifies the state of activity, where \"start\" signifies the initiation or activation of the process, while \"stop\" indicates the termination or deactivation of the process. Start/stop states are common in various domains, including machinery, engines, and processes, where entities can be initiated or halted to control operations. This property enables the standardized representation and interoperability of start/stop state-related data, facilitating enhanced understanding and integration of binary state information within the ontology framework across different systems and applications."@en ;
+    rdfs:label "Start stop state"@en .
+
+ex:StopState a saref:State ;
+    skos:broader ex:StartStopState ;
+    rdfs:comment "The property ex:StopState represents a binary state indicating that a process, activity, or system is in a stopped condition. It quantifies the state of inactivity or cessation, where \"stop\" signifies the termination or deactivation of the process. Stop states are common in various domains, including machinery, engines, and processes, where entities are halted to cease operations. This property enables the standardized representation and interoperability of stop state-related data, facilitating enhanced understanding and integration of binary state information within the ontology framework across different systems and applications."@en ;
+    rdfs:label "Stop state"@en .
+
+ex:StartState a saref:State ;
+    skos:broader ex:StartStopState ;
+    rdfs:comment "The property ex:StartState represents a binary state indicating that a process, activity, or system is in a started condition. It quantifies the state of activity or initiation, where \"start\" signifies the initiation or activation of the process. Start states are common in various domains, including machinery, engines, and processes, where entities are initiated to commence operations. This property enables the standardized representation and interoperability of start state-related data, facilitating enhanced understanding and integration of binary state information within the ontology framework across different systems and applications."@en ;
+    rdfs:label "Start state"@en .

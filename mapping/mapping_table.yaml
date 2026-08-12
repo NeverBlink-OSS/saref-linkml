@@ -1,0 +1,114 @@
+# How OWL/RDFS/SKOS becomes LinkML.
+
+prefixes:
+  rdf:     http://www.w3.org/1999/02/22-rdf-syntax-ns#
+  rdfs:    http://www.w3.org/2000/01/rdf-schema#
+  owl:     http://www.w3.org/2002/07/owl#
+  skos:    http://www.w3.org/2004/02/skos/core#
+  dcterms: http://purl.org/dc/terms/
+  vann:    http://purl.org/vocab/vann/
+  xsd:     http://www.w3.org/2001/XMLSchema#
+
+terms:
+  owl:Class:               class
+  owl:ObjectProperty:      slot
+  owl:DatatypeProperty:    slot
+  owl:AnnotationProperty:  ignored   # ontology metadata is listed under documentation
+
+# Note: Anonymous classes are not emitted.
+classes:
+  rdfs:subClassOf:  mixins
+  rdfs:domain:         slots
+  owl:onProperty:      slots
+  rdfs:subPropertyOf:  slots 
+
+properties:
+  owl:FunctionalProperty:  {multivalued: false}
+  rdfs:subPropertyOf:  mixins
+  owl:inverseOf:           inverse
+  owl:unionOf:             any_of # for range unions, for domain unions adds slot to relevant classes
+
+
+# Two reserved keys:
+#   when          the axiom's value must equal this, or the row does not apply
+#   from <axiom>  as a value: read it off the class that <axiom> points to
+# Every other key is a LinkML metaslot.
+restrictions:
+  owl:allValuesFrom:            {range: from owl:allValuesFrom}
+  owl:minCardinality:           {required: true}
+  owl:maxCardinality:           {when: 1, multivalued: false}
+  owl:cardinality:              {when: 1, required: true, multivalued: false}
+  owl:minQualifiedCardinality:  {when: 1, required: true, range: from owl:onClass}
+
+# `one` keeps the first value found; `many` collects every value into a list.
+documentation:
+  one:
+    rdfs:label:        title
+    rdfs:comment:      description
+  many:
+    skos:note:         comments
+    skos:historyNote:  notes
+    skos:example:      examples
+    rdfs:seeAlso:      see_also
+
+
+# rdfs:label and rdfs:comment also appear on individuals, each becomes a slot carried by every class.
+instance_annotations:
+  rdfs:label:    {slot: label,   multivalued: true, range: Literal}
+  rdfs:comment:  {slot: comment, multivalued: true, range: Literal}
+
+
+datatypes:
+  xsd:string:    string
+  xsd:boolean:   boolean
+  xsd:integer:   integer
+  xsd:float:     float
+  xsd:double:    double
+  xsd:decimal:   decimal
+  xsd:dateTime:  datetime
+  xsd:date:      date
+  xsd:anyURI:    uri
+
+
+# Read from the owl:Ontology node.
+ontology:
+  one:
+    owl:Ontology:                   id
+    dcterms:title:                  title
+    dcterms:description:            description
+    dcterms:license:                license
+    owl:versionIRI:                 version
+    dcterms:modified:               last_updated_on
+    vann:preferredNamespacePrefix:  default_prefix
+    dcterms:issued:                 created_on
+    dcterms:source:                 source
+  many:
+    dcterms:creator:                contributors
+    rdfs:comment:                   comments
+    rdfs:seeAlso:                   see_also
+
+defaults:  
+  multivalued:  true # OWL by default assumes 0..n cardinality unless stated otherwise by restrictions
+  range:
+    owl:ObjectProperty:    uriorcurie
+    owl:DatatypeProperty:  Literal
+
+# Emitted verbatim into the schema header.
+schema:
+  imports:
+    - linkml:types
+  prefixes:
+    linkml: https://w3id.org/linkml/
+  types:
+    Literal:
+      uri: rdfs:Literal
+      typeof: string
+      description: An RDF literal of any datatype, serialised as a string.
+  default_range:  string
+
+report_ignored:
+  owl:propertyChainAxiom:  Omitted, LinkML does not support property chains.
+  owl:versionInfo:    Superseded by owl:versionIRI as the version string.
+  owl:priorVersion:   No LinkML counterpart.
+  dcterms:publisher:  No LinkML counterpart.
+  vann:preferredNamespaceUri: Same as id

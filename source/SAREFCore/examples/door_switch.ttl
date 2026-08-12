@@ -1,0 +1,52 @@
+
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix saref: <https://saref.etsi.org/core/> .
+@prefix ex: <https://saref.etsi.org/core/v4.1.1/example/door_switch/> .
+@prefix time: <http://www.w3.org/2006/time#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix dctype: <http://purl.org/dc/dcmitype/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#>.
+
+<https://saref.etsi.org/core/v4.1.1/example/door_switch#> a dctype:Dataset ;
+    dcterms:license <https://forge.etsi.org/etsi-software-license> ;
+    dcterms:conformsTo <https://saref.etsi.org/core/v4.1.1/> ;
+    dcterms:title "Example door switch"@en ;
+    dcterms:description "Example door switch"@en .
+
+ex:Door a saref:FeatureKind ;
+    rdfs:label "Door"@en ;
+    rdfs:comment "Doors, a feature kind."@en .
+
+ex:DoorSwitch a saref:FeatureKind ;
+    rdfs:comment "A switch that performs the ex:OpenCloseFunction, is used for controlling a door, and can be found in the state ex:OpenCloseState. A ex:DoorSwitch is used to accomplish ex:Safety."@en ;
+    rdfs:label "Door switch"@en ;
+    saref:hasFunction ex:OpenCloseFunction ;
+    saref:controls ex:Door ;
+    saref:hasState ex:OpenCloseState ;
+    saref:accomplishes ex:Safety .
+
+ex:OpenCloseFunction a saref:Function ;
+    rdfs:label "Open Close Function"@en ;
+    rdfs:comment "A function to control the open/close state of some feature"@en ;
+    saref:controls ex:OpenCloseState .
+
+ex:OpenCloseState a saref:State ;
+  rdfs:label "Open Close State"@en ;
+  rdfs:comment "the state open or close"@en .
+
+ex:Open a saref:State ;
+  skos:broader ex:OpenCloseState ;
+  rdfs:label "Open"@en ;
+  rdfs:comment "the state open"@en .
+
+ex:Close a saref:State ;
+  skos:broader ex:OpenCloseState ;
+  rdfs:label "Close"@en ;
+  rdfs:comment "the state close"@en .
+
+ex:Safety a saref:Task ;
+    rdfs:comment "A type of task for which a device is designed"@en ;
+    rdfs:label "Safety"@en .

@@ -1,0 +1,35 @@
+
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix saref: <https://saref.etsi.org/core/> .
+@prefix ex: <https://saref.etsi.org/core/v4.1.1/example/smoke_sensor/> .
+@prefix time: <http://www.w3.org/2006/time#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix dctype: <http://purl.org/dc/dcmitype/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#>.
+
+<https://saref.etsi.org/core/v4.1.1/example/smoke_sensor#> a dctype:Dataset ;
+    dcterms:license <https://forge.etsi.org/etsi-software-license> ;
+    dcterms:conformsTo <https://saref.etsi.org/core/v4.1.1/> ;
+    dcterms:title "Example smoke sensor"@en ;
+    dcterms:description "Example smoke sensor"@en .
+
+ex:SmokeSensor a saref:FeatureKind ;
+    skos:broader saref:Sensor ;
+    rdfs:comment "A sensor that performs the ex:SensingFunction and the ex:EventFunction, and is used for the purpose of sensing a property of type ex:Smoke. A ex:SmokeSensor is typically used to accomplish ex:Safety."@en ;
+    rdfs:label "Smoke sensor"@en ;
+    saref:hasFunction ex:SensingFunction , ex:EventFunction ;
+    saref:observes ex:Smoke ;
+    saref:accomplishes ex:Safety .
+
+ex:SensingFunction a saref:Function .
+
+ex:EventFunction a saref:Function .
+
+ex:Smoke a saref:Property .
+
+ex:Safety a saref:Task .
+
+saref:Sensor a saref:FeatureKind . # Sensor is NOT a feature kind, it is a Device -> FeatureOfInterest (!), alternatively can simply comment out conflicting broader

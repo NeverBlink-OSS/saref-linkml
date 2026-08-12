@@ -1,0 +1,155 @@
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix saref: <https://saref.etsi.org/core/> .
+@prefix ex: <https://saref.etsi.org/core/v4.1.1/example/functions/> .
+@prefix time: <http://www.w3.org/2006/time#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix dctype: <http://purl.org/dc/dcmitype/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#>.
+
+<https://saref.etsi.org/core/v4.1.1/example/functions#> a dctype:Dataset ;
+    dcterms:license <https://forge.etsi.org/etsi-software-license> ;
+    dcterms:conformsTo <https://saref.etsi.org/core/v4.1.1/> ;
+    dcterms:title "Example functions"@en ;
+    dcterms:description "Example functions"@en .
+
+ex:SensingFunction a saref:Function ;
+    rdfs:comment "A sensing function is a capability enabling the transmission of data collected by sensors, encompassing various types of measurements or sensing data. This can include quantitative measurements like temperature readings or qualitative data such as open close states. Additionally, sensing functions may involve processing and interpreting sensor data to derive meaningful insights about the environment or system being monitored. These functions are essential for gathering real-time information, monitoring conditions, and facilitating decision-making processes in diverse domains ranging from environmental monitoring to industrial automation and smart infrastructure."@en ;
+    rdfs:label "Sensing function"@en .
+
+ex:GetSensingDataCommand a saref:Command ;
+    rdfs:comment "A command that requests sensing data or measurements"@en ;
+    rdfs:label "Get sensing data command"@en ;
+    saref:isCommandOf ex:SensingFunction .
+
+ex:EventFunction a saref:Function ;
+    rdfs:comment "An event function is a capability designed to notify about significant activities or occurrences, providing alerts or notifications when specific conditions are met. These conditions could include surpassing predefined threshold values, detecting motion or movement of objects, or any other predefined triggers. Essentially, event functions serve to monitor and report on events that are relevant to the system or application being monitored. These functions are critical for real-time monitoring, proactive management, and decision-making across various domains, including security systems, industrial processes, and environmental monitoring."@en ;
+    rdfs:label "Event function"@en .
+
+ex:NotifyCommand a saref:Command ;
+    rdfs:comment "A command that triggers a notification or alert"@en ;
+    rdfs:label "Notify command"@en ;
+    saref:isCommandOf ex:EventFunction .
+
+ex:MeteringFunction a saref:Function ;
+    rdfs:comment "A metering function is a capability aimed at measuring and quantifying various parameters or quantities within a system or environment. It involves the systematic collection and recording of data related to specific attributes such as energy consumption, resource usage, or environmental conditions. Metering functions typically employ sensors or measuring devices to capture data accurately and may involve the aggregation, processing, and analysis of this data to derive insights or inform decision-making processes. Metering functions play a crucial role in monitoring and managing resources, optimizing efficiency, and ensuring compliance with regulations or standards across diverse domains, including energy management, utilities, and environmental monitoring."@en ;
+    rdfs:label "Metering function"@en .
+
+ex:GetCommand a saref:Command ;
+    rdfs:comment "A command that requests something"@en ;
+    rdfs:label "Get command"@en .
+
+ex:GetCurrentMeterValueCommand a saref:Command ;
+    skos:broader ex:GetCommand ;
+    rdfs:comment "A command that requests the current value of a meter"@en ;
+    rdfs:label "Get current meter value command"@en ;
+    saref:isCommandOf ex:MeteringFunction .
+
+ex:GetMeterDataCommand a saref:Command ;
+    skos:broader ex:GetCommand ;
+    rdfs:comment "A command that requests data from a meter"@en ;
+    rdfs:label "Get meter data command"@en ;
+    saref:isCommandOf ex:MeteringFunction .
+
+ex:GetMeterHistoryCommand a saref:Command ;
+    skos:broader ex:GetCommand ;
+    rdfs:comment "A command that requests historical data from a meter"@en ;
+    rdfs:label "Get meter history command"@en ;
+    saref:isCommandOf ex:MeteringFunction .
+
+
+ex:ActuatingFunction a saref:Function ;
+    rdfs:comment "An actuating function is a capability that facilitates the transmission of data to actuators, enabling the control or manipulation of physical systems or devices. This function encompasses various types of commands or instructions, such as setting levels (e.g., adjusting temperature) or issuing binary commands (e.g., open/close, on/off). Actuating functions play a crucial role in translating desired actions or changes into physical responses within a system, enabling the execution of tasks or operations based on input data or commands. These functions are essential for automation, control systems, and robotics, where precise manipulation of actuators is required to achieve specific objectives or outcomes."@en ;
+    rdfs:label "Actuating function"@en .
+
+ex:LevelControlFunction a saref:Function ;
+    skos:broader ex:ActuatingFunction ;
+    rdfs:comment "A LevelControlFunction refers to a capability designed to regulate or maintain a specified level or quantity within a system or process. It involves controlling the level of a particular attribute, such as temperature, pressure, or fluid volume, to achieve desired targets or meet predefined criteria. This function typically employs control mechanisms or algorithms to adjust inputs or outputs based on feedback from sensors or monitoring devices. Level control functions are essential in various applications, including industrial processes, environmental control systems, and fluid management systems, where precise control of levels is critical for operational efficiency, safety, and quality assurance."@en ;
+    rdfs:label "Level control function"@en .
+    
+ex:SetAbsoluteLevelCommand a saref:Command ;
+    rdfs:comment "A command that sets the absolute level or value"@en ;
+    rdfs:label "Set absolute level command"@en ;
+    saref:isCommandOf ex:LevelControlFunction .
+
+ex:SetRelativeLevelCommand a saref:Command ;
+    skos:broader ex:SetLevelCommand ;
+    rdfs:comment "A command that sets the level or value relative to the current state"@en ;
+    rdfs:label "Set relative level command"@en ;
+    saref:isCommandOf ex:LevelControlFunction .
+
+ex:SetLevelCommand a saref:Command ;
+    rdfs:comment "A command that sets the level or value"@en ;
+    rdfs:label "Set level command"@en ;
+    saref:isCommandOf ex:LevelControlFunction .
+
+ex:StepDownCommand a saref:Command ;
+    rdfs:comment "A command that instructs to decrement or decrease the level"@en ;
+    rdfs:label "Step down command"@en ;
+    saref:isCommandOf ex:LevelControlFunction .
+
+ex:StepUpCommand a saref:Command ;
+    rdfs:comment "A command that instructs to increment or increase the level"@en ;
+    rdfs:label "Step up command"@en ;
+    saref:isCommandOf ex:LevelControlFunction .
+    
+
+ex:StartStopFunction a saref:Function ;
+    skos:broader ex:ActuatingFunction ;
+    rdfs:comment "A StartStopFunction refers to a capability designed to initiate or terminate a process, operation, or system. It involves controlling the activation (start) or deactivation (stop) of a particular function, equipment, or process based on predefined criteria or user commands. StartStopFunctions are commonly used in various domains, including manufacturing, automation, and machinery, where the ability to start and stop processes or equipment is essential for operational control, safety, and efficiency. These functions may involve the use of control systems, switches, or software algorithms to execute the start and stop commands effectively."@en ;
+    rdfs:label "Start stop function"@en .
+
+ex:PauseCommand a saref:Command ;
+    rdfs:comment "A command that instructs to pause or temporarily halt a process"@en ;
+    rdfs:label "Pause command"@en ;
+    saref:isCommandOf ex:StartStopFunction .
+
+ex:StartCommand a saref:Command ;
+    rdfs:comment "A command that instructs to start or initiate a process"@en ;
+    rdfs:label "Start command"@en ;
+    saref:isCommandOf ex:StartStopFunction .
+
+ex:StopCommand a saref:Command ;
+    rdfs:comment "A command that instructs to stop or terminate a process"@en ;
+    rdfs:label "Stop command"@en ;
+    saref:isCommandOf ex:StartStopFunction .
+
+
+ex:OpenCloseFunction a saref:Function ;
+    skos:broader ex:ActuatingFunction ;
+    rdfs:comment "An OpenCloseFunction refers to a capability designed to control the opening and closing of a physical entity, such as a door, valve, or gate. It involves the activation or deactivation of mechanisms that facilitate the transition between an open state (allowing passage or access) and a closed state (preventing passage or access). OpenCloseFunctions are essential in various applications, including building automation, security systems, and industrial processes, where the control of access or flow is necessary. These functions may be operated manually, mechanically, or electronically, depending on the specific application and requirements."@en ;
+    rdfs:label "Open close function"@en  .
+
+ex:CloseCommand a saref:Command ;
+    rdfs:comment "A command that instructs to close or shut down a function or device"@en ;
+    rdfs:label "Close command"@en ;
+    saref:isCommandOf ex:OpenCloseFunction .
+
+ex:OpenCommand a saref:Command ;
+    rdfs:comment "A command that instructs to open or activate a function or device"@en ;
+    rdfs:label "Open command"@en ;
+    saref:isCommandOf ex:OpenCloseFunction .
+
+
+ex:OnOffFunction a saref:Function ;
+    skos:broader ex:ActuatingFunction ;
+    rdfs:comment "An OnOffFunction refers to a capability designed to activate (on) or deactivate (off) a device, system, or function. It involves controlling the power supply or operational status of a particular entity based on predefined conditions or user commands. OnOffFunctions are ubiquitous in various domains, including electronics, appliances, automation systems, and machinery, where the ability to switch between active and inactive states is essential for control, operation, and energy management. These functions may be implemented using switches, relays, electronic circuits, or software algorithms to execute the on and off commands effectively."@en ;
+    rdfs:label "On off function"@en .
+
+ex:OnCommand a saref:Command ;
+    rdfs:comment "A command that instructs to turn on or activate a function or device"@en ;
+    rdfs:label "On command"@en ;
+    saref:isCommandOf ex:OnOffFunction .
+
+ex:OffCommand a saref:Command ;
+    rdfs:comment "A command that instructs to turn off or deactivate a function or device"@en ;
+    rdfs:label "Off command"@en ;
+    saref:isCommandOf ex:OnOffFunction .
+
+ex:ToggleOnOffCommand a saref:Command ;
+    rdfs:comment "A command that instructs to toggle or switch between two states"@en ;
+    rdfs:label "Toggle On off command"@en ;
+    saref:isCommandOf ex:OnOffFunction .
+
