@@ -29,6 +29,8 @@ ex:LightSwitch a saref:FeatureKind ;
     saref:hasState ex:OnOffState ;
     saref:accomplishes ex:Lighting .
 
+ex:Switch a saref:FeatureKind .
+
 ex:OnOffFunction a saref:Function ;
   rdfs:label "On Off Function"@en ;
   rdfs:comment "A function to control the on/off state of some feature"@en ;

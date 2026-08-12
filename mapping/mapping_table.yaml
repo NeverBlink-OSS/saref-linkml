@@ -17,14 +17,14 @@ terms:
 
 # Note: Anonymous classes are not emitted.
 classes:
-  rdfs:subClassOf:  is_a
+  rdfs:subClassOf:  mixins
   rdfs:domain:         slots
   owl:onProperty:      slots
   rdfs:subPropertyOf:  slots 
 
 properties:
   owl:FunctionalProperty:  {multivalued: false}
-  rdfs:subPropertyOf:  is_a # subproperty_of?
+  rdfs:subPropertyOf:  mixins
   owl:inverseOf:           inverse
   owl:unionOf:             any_of # for range unions, for domain unions adds slot to relevant classes
 
@@ -54,8 +54,8 @@ documentation:
 
 # rdfs:label and rdfs:comment also appear on individuals, each becomes a slot carried by every class.
 instance_annotations:
-  rdfs:label:    {slot: label,   multivalued: true, range: [string, langString]}
-  rdfs:comment:  {slot: comment, multivalued: true, range: [string, langString]}
+  rdfs:label:    {slot: label,   multivalued: true, range: Literal}
+  rdfs:comment:  {slot: comment, multivalued: true, range: Literal}
 
 
 datatypes:
@@ -90,8 +90,8 @@ ontology:
 defaults:  
   multivalued:  true # OWL by default assumes 0..n cardinality unless stated otherwise by restrictions
   range:
-    owl:ObjectProperty:    uriorcurie # potentially omit?
-    owl:DatatypeProperty:  string
+    owl:ObjectProperty:    uriorcurie
+    owl:DatatypeProperty:  Literal
 
 # Emitted verbatim into the schema header.
 schema:
@@ -100,10 +100,10 @@ schema:
   prefixes:
     linkml: https://w3id.org/linkml/
   types:
-    langString:
-      uri: rdf:langString
+    Literal:
+      uri: rdfs:Literal
       typeof: string
-      description: A literal with a language tag.
+      description: An RDF literal of any datatype, serialised as a string.
   default_range:  string
 
 report_ignored:

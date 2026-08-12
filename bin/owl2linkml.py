@@ -161,9 +161,7 @@ class Converter:
         return docs
 
     def inheritance(self, parents: list[str]) -> dict:
-        """One parent is an is_a; several are all mixins, since LinkML allows one is_a."""
-        if len(parents) == 1:
-            return {self.m["classes"]["rdfs:subClassOf"]: parents[0]}
+        """All are mixins"""
         return {"mixins": sorted(parents)} if parents else {}
 
     # -- slots --------------------------------------------------------------
@@ -196,7 +194,7 @@ class Converter:
             )
             if union in expression:
                 self.note(f"{self.curie(heir)}: {union} copied down from {self.curie(parent)}, "
-                          f"is_a does not propagate it")
+                          f"mixins does not propagate it")
                 return expression
         return {}
 
@@ -239,22 +237,55 @@ class Converter:
 
     # -- restrictions -------------------------------------------------------
 
-    def merge_usage(self, usage: dict, addition: dict, cls: URIRef, slot: str) -> None:
-        """Fold one restriction into a slot's usage, reporting whatever it contradicts.
+    def dimension(self, metaslot: str) -> str | None:
+        """What a slot_usage metaslot constrains, or None if nothing can contest it.
 
-        Several restrictions may sit on the same class and property, and OWL reads them as a
-        conjunction that LinkML cannot always express in one slot_usage entry.
+        Two restrictions clash only when they write the same dimension. An upper bound and a type
+        constraint are both true at once, so both survive.
         """
-        ranges = {"range", self.m["properties"]["owl:unionOf"]}
-        for metaslot, value in addition.items():
-            previous = usage.get(metaslot)
-            if previous is not None and previous != value:
-                self.note(f"{self.curie(cls)}.{slot}: {metaslot} {previous} replaced by {value}")
-            if metaslot in ranges:
-                for other in (ranges - {metaslot}) & usage.keys():
-                    self.note(f"{self.curie(cls)}.{slot}: {metaslot} and {other} come from "
-                              f"different restrictions and disagree")
-        usage.update(addition)
+        if metaslot in ("range", self.m["properties"]["owl:unionOf"]):
+            return "type"
+        return {"required": "lower", "multivalued": "upper"}.get(metaslot)
+
+    def width(self, dimension: str, body: dict) -> int:
+        """How much `body` admits in `dimension`; the wider value wins a clash."""
+        if dimension == "type":
+            union = body.get(self.m["properties"]["owl:unionOf"])
+            return len(union) if union else 1
+        if dimension == "lower":
+            return 0 if body.get("required") else 1
+        return 1 if body.get("multivalued", True) else 0
+
+    def resolve(self, bodies: list[dict], cls: URIRef, slot: str) -> dict:
+        """One slot_usage entry from every restriction on this class and property.
+
+        OWL reads several restrictions as a conjunction, which one slot_usage entry cannot always
+        hold, so the widest constraint wins. 
+        """
+        widest: dict[str, int] = {}
+        for body in bodies:
+            for metaslot in body:
+                if d := self.dimension(metaslot):
+                    widest[d] = max(widest.get(d, 0), self.width(d, body))
+
+        usage: dict = {}
+        for body in bodies:
+            narrower = sorted({
+                d for metaslot in body
+                if (d := self.dimension(metaslot)) and self.width(d, body) < widest[d]
+            })
+            if narrower:
+                self.note(f"{self.curie(cls)}.{slot}: dropped {body}, narrower on "
+                          f"{' and '.join(narrower)} than another restriction on the same slot")
+                continue
+            # equally wide restrictions still disagree; OWL reads them as a conjunction that one
+            # slot_usage entry cannot hold, so the later one wins and the choice is reported
+            clash = {k: [usage[k], v] for k, v in body.items() if k in usage and usage[k] != v}
+            if clash:
+                self.note(f"{self.curie(cls)}.{slot}: {clash} disagree between restrictions of "
+                          f"equal width, keeping the later value of each")
+            usage |= body
+        return usage
 
     def restriction(self, node: BNode) -> tuple[str | None, dict]:
         """An owl:Restriction becomes slot_usage for the slot it is on."""
@@ -290,13 +321,14 @@ class Converter:
     def build_class(self, iri: URIRef) -> dict:
         cls = {"class_uri": self.curie(iri)} | self.documentation(iri)
         parents: list[str] = []
-        usage: dict[str, dict] = {}
+        contributions: dict[str, list[dict]] = defaultdict(list)
         for parent in self.g.objects(iri, RDFS.subClassOf):
             if isinstance(parent, BNode):
                 slot, restriction = self.restriction(parent)
                 if slot:
                     self.class_slots[iri].add(slot)
-                    self.merge_usage(usage.setdefault(slot, {}), restriction, iri, slot)
+                    if restriction:
+                        contributions[slot].append(restriction)
             elif parent in self.classes:
                 parents.append(self.classes[parent])
             else:
@@ -304,27 +336,12 @@ class Converter:
         cls |= self.inheritance(parents)
         if self.class_slots[iri]:
             cls["slots"] = sorted(self.class_slots[iri])
+        # every restriction on a slot is resolved together, so the widest can be found
+        usage = {s: b for s in sorted(contributions)
+                 if (b := self.resolve(contributions[s], iri, s))}
         if usage:
-            cls["slot_usage"] = {k: usage[k] for k in sorted(usage)}
+            cls["slot_usage"] = usage
         return ordered(cls, CLASS_ORDER)
-
-    def prune_unions(self, slots: dict, classes: dict) -> None:
-        """Drop a slot's union range when every class carrying it narrows the range locally.
-
-        """
-        union = self.m["properties"]["owl:unionOf"]
-        carriers: dict[str, list[dict]] = defaultdict(list)
-        for cls in classes.values():
-            for name in cls.get("slots", ()):
-                carriers[name].append(cls.get("slot_usage", {}).get(name, {}))
-        for name, slot in slots.items():
-            usages = carriers.get(name)
-            if union not in slot or not usages:
-                continue
-            if all(usage.keys() & {"range", union} for usage in usages):
-                self.note(f"{slot['slot_uri']}: {union} dropped, every class carrying it narrows "
-                          f"the range and slot_usage widens rather than replaces")
-                del slot[union]
 
     # -- reporting ----------------------------------------------------------
 
@@ -349,17 +366,18 @@ class Converter:
 
         slots = {self.slots[p]: self.build_slot(p) for p in self.slots}
         for prop in self.slots:
-            attached = self.domains(prop)
-            for owner in attached:
+            for owner in self.domains(prop):
                 self.class_slots[owner].add(self.slots[prop])
-            if not attached:
-                self.note(f"{self.curie(prop)} has no domain, emitted unattached to any class")
 
         annotations = self.annotation_slots()
         for owner in self.classes:
             self.class_slots[owner].update(annotations)
         classes = {self.classes[c]: self.build_class(c) for c in self.classes}
-        self.prune_unions(slots, classes)
+        carried = {name for names in self.class_slots.values() for name in names}
+        for prop, name in self.slots.items():
+            if name not in carried:
+                self.note(f"{self.curie(prop)} is emitted unattached to any class, "
+                          f"neither a domain nor a restriction places it")
         self.report_predicates()
 
         schema |= {k: v for k, v in self.m["schema"].items() if k != "prefixes"}
@@ -375,7 +393,7 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("source", type=Path, help="ontology in Turtle")
     parser.add_argument("-o", "--out", type=Path, required=True, help="LinkML schema to write")
-    parser.add_argument("-m", "--mapping", type=Path, default=here / "mapping/mapping_table_v2.yaml")
+    parser.add_argument("-m", "--mapping", type=Path, default=here / "mapping/mapping_table.yaml")
     args = parser.parse_args()
 
     mapping = yaml.safe_load(args.mapping.read_text())

@@ -19,4 +19,8 @@
 ex:SwitchOnService a saref:Service ;
     rdfs:comment "A type of service that represents an on/off function to the network"@en ;
     rdfs:label "Switch on service"@en ;
+    saref:isOfferedBy ex:SwitchDevice ; # saref:Service has cardinality constraint 1 for saref:isOfferedBy, so this is required
     saref:represents ex:OnOffFunction .
+
+ex:OnOffFunction a saref:Function .
+ex:SwitchDevice a saref:Device .

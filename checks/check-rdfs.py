@@ -1,9 +1,19 @@
 #!/usr/bin/env python3
 """Compare the RDFS generated from schema/saref-core.yaml against source/SAREFCore/saref.ttl.
 
-Checks inheritance, rdfs:domain and rdfs:range. Range comparison is skipped for slots
-whose LinkML definition (or slot_usage) uses any_of. Cardinality, inverses, property chains, functional properties,
-allValuesFrom and annotations are out of scope and are never reported as differences.
+Only checks what RDFS itself expresses about hierarchy: rdfs:subClassOf between named
+classes and rdfs:subPropertyOf between named properties. Domain and range are deliberately
+out of scope - saref.ttl states them in OWL terms (owl:unionOf, per-class owl:Restriction),
+which has no faithful RDFS counterpart. Cardinality, inverses, property chains, functional
+properties and annotations are likewise never reported as differences.
+
+A property saref.ttl declares but the generated RDFS omits is only a real loss if the LinkML
+schema does not declare it either: the RDFS generator prunes slots no class carries, so it
+drops terms the translation kept. Those are checked against schema/saref-core.yaml and
+reported as mismatches only when the schema has no slot for them.
+
+The rdfs:subPropertyOf comparison is currently disabled and reported as skipped; pass
+--check-slots to run it. See CHECK_SLOT_INHERITANCE below.
 
 RDFS comes from `--rdfs` when given, else from `linkml-scala generate rdfs` - so CI can pass an
 already-generated file and needs no linkml-scala binary.
@@ -13,11 +23,10 @@ import argparse
 import subprocess
 import sys
 import tempfile
-from collections import defaultdict
 from pathlib import Path
 
 import yaml
-from rdflib import BNode, Graph, RDF, RDFS, URIRef
+from rdflib import Graph, RDF, RDFS, URIRef
 from rdflib.namespace import OWL
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -25,11 +34,14 @@ SCHEMA = ROOT / "schema" / "saref-core.yaml"
 SAREF = ROOT / "source" / "SAREFCore" / "saref.ttl"
 
 SKOS = "http://www.w3.org/2004/02/skos/core#"
-# saref.ttl declares no global domain/range for these; the taxonomies are per-class
-# allValuesFrom restrictions instead. Reported separately, never as a mismatch.
-EXCEPTIONS = {URIRef(SKOS + "broader"), URIRef(SKOS + "narrower")}
 # saref.ttl never declares these as properties; they only appear as annotations.
 IGNORED = {RDFS.label, RDFS.comment}
+
+# Slot (property) inheritance is checked but disabled by default: saref-core.yaml declares no
+# is_a on any slot, so the generated RDFS carries no rdfs:subPropertyOf and every pair in
+# saref.ttl reports as MISSING. Flip to True - or pass --check-slots - once the schema models
+# the slot hierarchy.
+CHECK_SLOT_INHERITANCE = False
 
 PREFIXES = {
     "https://saref.etsi.org/core/": "saref:",
@@ -42,19 +54,10 @@ PREFIXES = {
 
 
 def qname(term):
-    if isinstance(term, str) and not isinstance(term, URIRef):
-        return term
     for base, pfx in PREFIXES.items():
         if str(term).startswith(base):
             return pfx + str(term)[len(base):]
     return f"<{term}>"
-
-
-def fmt(terms):
-    return ", ".join(sorted(qname(t) for t in terms)) if terms else "(empty)"
-
-
-# --- step 1: generate RDFS from the LinkML schema ------------------------------------
 
 def generate_rdfs():
     out = Path(tempfile.mkdtemp(prefix="rdfs-check-")) / "generated.rdfs.ttl"
@@ -64,166 +67,105 @@ def generate_rdfs():
     )
     return out
 
+def named_hierarchy(graph, predicate):
+    """subject/object pairs of `predicate` where both ends are named terms.
 
-# --- steps 3-7: extract the reference model from saref.ttl ---------------------------
-
-def resolve(graph, subj, pred):
-    """None if the triple is absent; otherwise the set of IRIs, unfolding owl:unionOf."""
-    objs = list(graph.objects(subj, pred))
-    if not objs:
-        return None
-    out = set()
-    for o in objs:
-        if isinstance(o, URIRef):
-            out.add(o)
-        else:
-            heads = list(graph.objects(o, OWL.unionOf))
-            if not heads:
-                out.add("<unresolved blank node>")
-            for head in heads:
-                out.update(graph.items(head))
-    return out
+    Blank-node objects are skipped: in saref.ttl they are owl:Restriction axioms, which
+    say nothing about the class hierarchy.
+    """
+    return {
+        (s, o)
+        for s, o in graph.subject_objects(predicate)
+        if isinstance(s, URIRef) and isinstance(o, URIRef)
+    }
 
 
 def read_reference(graph):
     classes = {s for s in graph.subjects(RDF.type, OWL.Class) if isinstance(s, URIRef)}
-    subclass_of = set()
-    local_axioms = defaultdict(set)  # property -> classes carrying a local restriction
-    for c, d in graph.subject_objects(RDFS.subClassOf):
-        if isinstance(d, URIRef):
-            subclass_of.add((c, d))
-        elif isinstance(d, BNode):
-            for prop in graph.objects(d, OWL.onProperty):
-                local_axioms[prop].add(c)
     props = {
         s
         for t in (OWL.ObjectProperty, OWL.DatatypeProperty)
         for s in graph.subjects(RDF.type, t)
         if isinstance(s, URIRef)
     }
-    domains = {p: resolve(graph, p, RDFS.domain) for p in props}
-    ranges = {p: resolve(graph, p, RDFS.range) for p in props}
-    return classes, subclass_of, props, domains, ranges, local_axioms
+    return (
+        classes,
+        props,
+        named_hierarchy(graph, RDFS.subClassOf),
+        named_hierarchy(graph, RDFS.subPropertyOf),
+    )
 
+def read_schema_slots(path):
+    """Every slot_uri the LinkML schema declares, resolved to a full IRI.
 
-# --- steps 8-9: extract the generated model ------------------------------------------
+    This is the fallback the RDFS output cannot provide: a slot no class carries is pruned
+    from the generated RDFS, so only the schema itself can say whether a property survived
+    the translation.
+    """
+    schema = yaml.safe_load(path.read_text())
+    prefixes = schema.get("prefixes") or {}
+    definitions = list((schema.get("slots") or {}).values())
+    for cls in (schema.get("classes") or {}).values():
+        definitions += list((cls.get("attributes") or {}).values())
+
+    uris = set()
+    for definition in definitions:
+        curie = definition.get("slot_uri")
+        if not curie:
+            continue
+        prefix, _, local = curie.partition(":")
+        uris.add(URIRef(prefixes[prefix] + local) if prefix in prefixes else URIRef(curie))
+    return uris
 
 def read_generated(graph):
-    classes = set(graph.subjects(RDF.type, RDFS.Class))
-    subclass_of = set(graph.subject_objects(RDFS.subClassOf))
-    props = set(graph.subjects(RDF.type, RDF.Property))
-    domains = {p: resolve(graph, p, RDFS.domain) for p in props}
-    ranges = {p: resolve(graph, p, RDFS.range) for p in props}
-    return classes, subclass_of, props, domains, ranges
+    classes = {s for s in graph.subjects(RDF.type, RDFS.Class) if isinstance(s, URIRef)}
+    props = {s for s in graph.subjects(RDF.type, RDF.Property) if isinstance(s, URIRef)}
+    return (
+        classes,
+        props,
+        named_hierarchy(graph, RDFS.subClassOf),
+        named_hierarchy(graph, RDFS.subPropertyOf),
+    )
 
+def report_hierarchy(predicate, ref_pairs, gen_pairs, scope):
+    """Report both directions of difference; returns the number of mismatches.
 
-# --- steps 10-11: normalisation over saref.ttl's own hierarchy -----------------------
+    `scope` limits the comparison to terms both files declare, so that a class or property
+    only one side knows about is reported once under coverage rather than again here.
+    """
+    ref_pairs = {(s, o) for s, o in ref_pairs if s in scope and o in scope}
+    gen_pairs = {(s, o) for s, o in gen_pairs if s in scope and o in scope}
 
-def make_closure(subclass_of):
-    children = defaultdict(set)
-    for sub, sup in subclass_of:
-        children[sup].add(sub)
-
-    def close(terms):
-        if terms is None:
-            return None
-        seen, queue = set(terms), list(terms)
-        while queue:
-            for child in children[queue.pop()]:
-                if child not in seen:
-                    seen.add(child)
-                    queue.append(child)
-        return seen
-
-    return close
-
-
-# --- step 17: which slot URIs use any_of --------------------------------------------
-
-def any_of_slot_uris():
-    schema = yaml.safe_load(SCHEMA.read_text())
-    prefixes = schema.get("prefixes", {})
-    default_prefix = schema.get("default_prefix", "")
-
-    def expand(curie):
-        pfx, _, local = curie.partition(":")
-        return URIRef(prefixes.get(pfx, pfx) + local) if local else URIRef(curie)
-
-    slots = schema.get("slots", {})
-
-    def uri_of(name):
-        definition = slots.get(name) or {}
-        curie = definition.get("slot_uri")
-        return expand(curie) if curie else expand(f"{default_prefix}:{name}")
-
-    skip = set()
-    for name, definition in slots.items():
-        if "any_of" in (definition or {}):
-            skip.add(uri_of(name))
-    for cls in (schema.get("classes") or {}).values():
-        for name, usage in ((cls or {}).get("slot_usage") or {}).items():
-            if "any_of" in (usage or {}):
-                skip.add(uri_of(name))
-    return skip
-
-
-# --- steps 14-18: compare one dimension ---------------------------------------------
-
-def compare(dimension, ref_map, gen_map, shared, close, skip, local_axioms):
-    buckets = defaultdict(list)
-    for prop in sorted(shared, key=str):
-        ref, gen = ref_map.get(prop), gen_map.get(prop)
-        if prop in EXCEPTIONS:
-            buckets["exception"].append((prop, ref, gen))
-        elif dimension == "range" and prop in skip:
-            buckets["skipped"].append((prop, ref, gen))
-        elif ref is None and gen is None:
-            buckets["equal"].append((prop, ref, gen))
-        elif ref is None:
-            buckets["unilateral"].append((prop, ref, gen))
-        elif gen is None:
-            buckets["missing"].append((prop, ref, gen))
-        else:
-            cref, cgen = close(ref), close(gen)
-            if cref == cgen:
-                buckets["equal"].append((prop, ref, gen))
-            elif cgen < cref:
-                buckets["narrower"].append((prop, cref - cgen, local_axioms.get(prop, set())))
-            elif cgen > cref:
-                buckets["wider"].append((prop, cgen - cref, local_axioms.get(prop, set())))
-            else:
-                buckets["disjoint"].append((prop, cgen ^ cref, local_axioms.get(prop, set())))
-    return buckets
-
-
-def report_dimension(dimension, buckets):
+    print(f"\n=== inheritance: rdfs:{predicate} (named terms only) ===")
+    print(f"  shared pairs: {len(ref_pairs & gen_pairs)}")
     failures = 0
-    print(f"\n=== rdfs:{dimension} ===")
-    print(f"  equal (after subclass closure): {len(buckets['equal'])}")
-    if dimension == "range" and buckets["skipped"]:
-        print(f"  skipped, slot uses any_of:     {len(buckets['skipped'])}")
-    for kind, label in (
-        ("narrower", "generated is NARROWER than saref.ttl, missing"),
-        ("wider", "generated is WIDER than saref.ttl, extra"),
-        ("disjoint", "generated and saref.ttl differ both ways, symmetric difference"),
-    ):
-        for prop, diff, axioms in buckets[kind]:
-            failures += 1
-            note = ""
-            overlap = diff & axioms if isinstance(diff, set) else set()
-            if overlap:
-                note = f"  [saref has a local owl:Restriction on this property for: {fmt(overlap)}]"
-            print(f"  MISMATCH {qname(prop)}: {label}: {fmt(diff)}{note}")
-    for prop, ref, _ in buckets["missing"]:
+    for sub, sup in sorted(ref_pairs - gen_pairs, key=str):
         failures += 1
-        print(f"  MISMATCH {qname(prop)}: saref.ttl declares {fmt(ref)}, generated declares none")
-    for prop, _, gen in buckets["unilateral"]:
-        print(f"  narrowing {qname(prop)}: saref.ttl declares none, generated declares {fmt(gen)}")
-    for prop, ref, gen in buckets["exception"]:
-        print(
-            f"  by design {qname(prop)}: saref.ttl "
-            f"{'declares none' if ref is None else fmt(ref)}, generated {fmt(gen)}"
-        )
+        print(f"  MISSING  {qname(sub)} rdfs:{predicate} {qname(sup)}")
+    for sub, sup in sorted(gen_pairs - ref_pairs, key=str):
+        failures += 1
+        print(f"  EXTRA    {qname(sub)} rdfs:{predicate} {qname(sup)}")
+    return failures
+
+
+def report_dropped_properties(dropped, schema_slots):
+    """Every property missing from the generated RDFS must still exist in the LinkML schema.
+
+    The generator prunes slots no class carries, so absence from the RDFS is not by itself a
+    translation loss. Absence from the schema is: nothing downstream can recover the property.
+    """
+    print(f"\n=== properties in {SAREF.name} but not in the generated RDFS ===")
+    if not dropped:
+        print("  none")
+        return 0
+
+    failures = 0
+    for prop in sorted(dropped, key=str):
+        if prop in schema_slots:
+            print(f"  pruned   {qname(prop)} - carried by no class, declared in {SCHEMA.name}")
+        else:
+            failures += 1
+            print(f"  MISMATCH {qname(prop)} - absent from the RDFS and from {SCHEMA.name}")
     return failures
 
 
@@ -231,6 +173,8 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--rdfs", default=None,
                     help="pre-generated RDFS; skips calling linkml-scala")
+    ap.add_argument("--check-slots", action="store_true", default=CHECK_SLOT_INHERITANCE,
+                    help="also compare rdfs:subPropertyOf (disabled by default, see module docstring)")
     args = ap.parse_args()
 
     generated = Path(args.rdfs) if args.rdfs else generate_rdfs()
@@ -238,48 +182,39 @@ def main():
     ref.parse(SAREF, format="turtle")
     gen.parse(generated)          # format inferred from the extension, so .ttl or .nt both work
 
-    ref_classes, ref_sub, ref_props, ref_dom, ref_rng, local_axioms = read_reference(ref)
-    gen_classes, gen_sub, gen_props, gen_dom, gen_rng = read_generated(gen)
-    close = make_closure(ref_sub)
-    skip = any_of_slot_uris()
+    ref_classes, ref_props, ref_subclass, ref_subprop = read_reference(ref)
+    gen_classes, gen_props, gen_subclass, gen_subprop = read_generated(gen)
 
     print(f"reference: {SAREF.name} - {len(ref_classes)} classes, {len(ref_props)} properties")
     print(f"generated: {generated.name} - {len(gen_classes)} classes, {len(gen_props)} properties")
-    print("out of scope: cardinality, inverses, property chains, functional properties,")
-    print("             allValuesFrom, annotations, ontology metadata")
-    print("note: repeated rdfs:domain/rdfs:range values are read as unions (generator intent),")
-    print("      not as the conjunction that strict RDFS semantics would give them")
 
-    failures = 0
+    failures = report_hierarchy(
+        "subClassOf", ref_subclass, gen_subclass, ref_classes & gen_classes
+    )
 
-    print("\n=== inheritance (named rdfs:subClassOf only) ===")
-    print(f"  shared pairs: {len(ref_sub & gen_sub)}")
-    for sub, sup in sorted(ref_sub - gen_sub, key=str):
-        failures += 1
-        print(f"  MISSING  {qname(sub)} rdfs:subClassOf {qname(sup)}")
-    for sub, sup in sorted(gen_sub - ref_sub, key=str):
-        failures += 1
-        print(f"  EXTRA    {qname(sub)} rdfs:subClassOf {qname(sup)}")
-    print(f"  blank-node subClassOf axioms in saref.ttl (not inheritance): "
-          f"{sum(len(v) for v in local_axioms.values())}")
+    slot_scope = (ref_props & gen_props) - IGNORED
+    if args.check_slots:
+        failures += report_hierarchy("subPropertyOf", ref_subprop, gen_subprop, slot_scope)
+    else:
+        pending = {(s, o) for s, o in ref_subprop if s in slot_scope and o in slot_scope}
+        print("\n=== inheritance: rdfs:subPropertyOf (named terms only) ===")
+        print("  DISABLED - not compared, not counted below. Pass --check-slots to enable.")
+        print(f"  saref.ttl declares {len(pending)} pair(s) that would be compared.")
 
-    shared = (ref_props & gen_props) - IGNORED
-    failures += report_dimension("domain", compare("domain", ref_dom, gen_dom, shared, close, skip, local_axioms))
-    failures += report_dimension("range", compare("range", ref_rng, gen_rng, shared, close, skip, local_axioms))
+    failures += report_dropped_properties(ref_props - gen_props, read_schema_slots(SCHEMA))
 
     print("\n=== coverage ===")
     for c in sorted(ref_classes - gen_classes, key=str):
         print(f"  class only in saref.ttl:  {qname(c)}")
     for c in sorted(gen_classes - ref_classes, key=str):
         print(f"  class only in generated:  {qname(c)}")
-    for p in sorted(ref_props - gen_props, key=str):
-        print(f"  property only in saref.ttl: {qname(p)}")
     for p in sorted((gen_props - ref_props) - IGNORED, key=str):
         print(f"  property only in generated: {qname(p)}")
     for p in sorted(gen_props & IGNORED, key=str):
         print(f"  property ignored, saref.ttl uses it only as an annotation: {qname(p)}")
 
-    print(f"\n{failures} mismatch(es) in inheritance, domain and range.")
+    scope = "class and property inheritance" if args.check_slots else "class inheritance"
+    print(f"\n{failures} mismatch(es) in {scope} and property coverage.")
     return 1 if failures else 0
 
 

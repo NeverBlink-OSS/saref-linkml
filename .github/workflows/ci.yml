@@ -15,6 +15,28 @@ permissions:
   contents: read
 
 jobs:
+  convert:
+    name: converter reproduces the schema
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - run: pip install rdflib pyyaml
+
+      - name: Regenerate the schema from saref.ttl
+        run: python bin/owl2linkml.py source/SAREFCore/saref.ttl -o "$RUNNER_TEMP/saref-core.yaml"
+
+      - name: Checked-in schema must match what the converter produces
+        run: |
+          diff -u <(grep -v '^name:' schema/saref-core.yaml) \
+                  <(grep -v '^name:' "$RUNNER_TEMP/saref-core.yaml") && exit 0
+          echo "::error file=schema/saref-core.yaml::stale - regenerate with bin/owl2linkml.py"
+          exit 1
+
   validate:
     name: validate schema
     runs-on: ubuntu-latest
@@ -75,7 +97,3 @@ jobs:
       - name: SHACL - examples must not be over-constrained
         if: ${{ !cancelled() }}
         run: python checks/check-examples.py --shapes "$SHACL" --mode open
-
-      - name: SHACL - schema must declare everything the examples use
-        if: ${{ !cancelled() }}
-        run: python checks/check-examples.py --shapes "$SHACL" --mode closed

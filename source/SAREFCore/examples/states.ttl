@@ -43,7 +43,7 @@ ex:OpenClosedState a saref:State ;
     rdfs:label "Open closed state"@en .
 
 ex:OpenState a saref:State ;
-    skos:broader ex:OpenCloseState ;
+    skos:broader ex:OpenClosedState ; # typo fixed
     rdfs:comment "The property ex:OpenState represents a binary state indicating that an object, entity, or system is in an open position or condition. It quantifies the state of openness, where \"open\" signifies that the entity is accessible, unobstructed, or not closed. Open states are common in various domains, including doors, windows, valves, and containers, where entities can be opened to allow passage, airflow, or access to contents. This property enables the standardized representation and interoperability of open state-related data, facilitating enhanced understanding and integration of binary state information within the ontology framework across different systems and applications."@en ;
     rdfs:label "Open state"@en .
 

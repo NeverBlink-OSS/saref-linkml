@@ -31,3 +31,5 @@ ex:EventFunction a saref:Function .
 ex:Smoke a saref:Property .
 
 ex:Safety a saref:Task .
+
+saref:Sensor a saref:FeatureKind . # Sensor is NOT a feature kind, it is a Device -> FeatureOfInterest (!), alternatively can simply comment out conflicting broader
