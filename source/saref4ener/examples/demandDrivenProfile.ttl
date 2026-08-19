@@ -1,0 +1,214 @@
+@prefix : <https://saref.etsi.org/saref4ener/v2.1.1/example/demandDrivenProfile/> .
+@prefix operationModeProfile: <http://ontology.tno.nl/interconnect/data/operationModeProfile#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix s4ener: <https://saref.etsi.org/saref4ener/> .
+@prefix saref: <https://saref.etsi.org/core/> .
+@prefix time: <http://www.w3.org/2006/time#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix om: <http://www.ontology-of-units-of-measure.org/resource/om-2-ucum/> . # typo fixed: the original has no trailing slash, so om:watt read as .../om-2-ucumwatt
+@prefix dctype: <http://purl.org/dc/dcmitype/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix vann: <http://purl.org/vocab/vann/> .
+@prefix voaf: <http://purl.org/vocommons/voaf#> .
+
+<https://saref.etsi.org/saref4ener/v2.1.1/example/demandDrivenProfile#>
+  a dctype:Dataset ;
+  dcterms:conformsTo <https://saref.etsi.org/saref4ener/v2.1.1/> ;
+  dcterms:title "SAREF4ENER Demand Driven Profile Examples"@en ;
+  dcterms:abstract "This example file exemplifies how to model a Demand Driven profile in the SAREF4ENER extension." ;
+  dcterms:description "This example file exemplifies how to model a Demand Driven profile in the SAREF4ENER extension." ;
+  dcterms:license <https://forge.etsi.org/etsi-software-license> ;
+  owl:imports saref:, s4ener: ;
+.
+
+#######################################
+### Devices, actuators and profiles ###
+#######################################
+:HybridHeatPump
+  a saref:Device ;
+  rdfs:comment "An example device that exhibits a demand driven profile" ;
+  rdfs:label "Hybrid heat pump" ;
+  saref:hasProfile :DemandDrivenProfile_1 ;
+.
+:DemandDrivenProfile_1
+  a s4ener:DemandDrivenProfile ;
+  s4ener:hasDemandRateForecast :TimeSeries_1 ;
+  s4ener:isActuatedBy :HeatPump ;
+  s4ener:hasDemandRate :NumberRange_1 ;
+  s4ener:hasEarliestStartTime "2023-01-29T09:00:00Z"^^xsd:dateTimeStamp ;
+  rdfs:label "Demand driven profile 1" ;
+.
+:HeatPump rdf:type saref:Actuator ;
+  saref:consumes s4ener:Electricity ;
+  s4ener:hasOperationMode :OperationMode_1 ;
+  s4ener:hasTransition :Transition_1 ;
+  s4ener:hasTimer :Timer_1 ;
+  s4ener:hasActiveOperationMode :OperationMode_1 ;
+  s4ener:hasOperationModeFactor "0.8"^^xsd:decimal ;
+  s4ener:hasPreviousOperationMode :OperationMode_1 ;
+  s4ener:hasTransitionTimestamp "2023-01-29T16:55:00Z"^^xsd:dateTimeStamp ;
+.
+
+:NumberRange_1
+  a s4ener:NumberRange ;
+  s4ener:endOfRange :PropertyValue_1 ; 
+  s4ener:startOfRange :PropertyValue_2 ; 
+  rdfs:label "Number range 1" ;
+. 
+:PropertyValue_1
+  a saref:PropertyValue ;
+  saref:hasValue "2500"^^xsd:decimal ;
+  saref:isValueOfProperty s4ener:Power ;
+  saref:isMeasuredIn om:kilowatt ; 
+.
+:PropertyValue_2
+  a saref:PropertyValue ;
+  saref:hasValue "2000"^^xsd:decimal ;
+  saref:isValueOfProperty s4ener:Power ;
+  saref:isMeasuredIn om:kilowatt ;
+.
+
+############################################
+### Operation modes and related concepts ###
+############################################
+
+:OperationMode_1 rdf:type s4ener:OperationMode ;
+  rdfs:label "off" ;
+  s4ener:hasPowerRange :PowerRange_1 ;
+  s4ener:hasSupplyRange :NumberRange_2 ;
+  s4ener:hasRunningCosts :PropertyValue_7 ;
+  s4ener:abnormalConditionOnly "false"^^xsd:boolean ;
+.
+
+:PropertyValue_7 rdf:type saref:PropertyValue ;
+  saref:hasValue "0"^^xsd:decimal ;
+  saref:isValueOfProperty :Price ;
+  saref:isMeasuredIn <https://spec.edmcouncil.org/fibo/ontology/FND/Accounting/ISO4217-CurrencyCodes/EUR> ;
+.
+
+:PowerRange_1 rdf:type s4ener:PowerRange ;
+  s4ener:relatesToCommodity s4ener:ElectricPowerL1 ;
+  s4ener:hasNumberRange :NumberRange_3 ;
+.
+
+:NumberRange_3 rdf:type s4ener:NumberRange ;
+  s4ener:endOfRange :PropertyValue_5 ;
+  s4ener:startOfRange :PropertyValue_6 ;
+  rdfs:label "Number range 3" ;
+.
+
+:PropertyValue_5 rdf:type saref:PropertyValue ;
+  saref:hasValue "0"^^xsd:decimal ;
+  saref:isValueOfProperty s4ener:Power ;
+  saref:isMeasuredIn om:kilowatt ; 
+.
+
+:PropertyValue_6 rdf:type saref:PropertyValue ;
+  saref:hasValue "0"^^xsd:decimal ;
+  saref:isValueOfProperty s4ener:Power ;
+  saref:isMeasuredIn om:kilowatt ; 
+.
+
+:NumberRange_2 rdf:type s4ener:NumberRange ;
+  rdfs:label "Supply range";
+  s4ener:endOfRange :PropertyValue_3 ; 
+  s4ener:startOfRange :PropertyValue_4 ; 
+  rdfs:label "Number range 2" ;
+.
+
+:PropertyValue_3 rdf:type saref:PropertyValue ;
+  saref:hasValue "0"^^xsd:decimal ;
+  saref:isValueOfProperty s4ener:Power ;
+  saref:isMeasuredIn om:kilowatt ; 
+.
+
+:PropertyValue_4 rdf:type saref:PropertyValue ;
+  saref:hasValue "0"^^xsd:decimal ;
+  saref:isValueOfProperty s4ener:Power ;
+  saref:isMeasuredIn om:kilowatt ; 
+.
+
+:Transition_1 rdf:type s4ener:Transition ;
+  rdfs:comment "See the OperationModeProfile examples for an extensive example containing multiple instances the Transition class." ;
+.
+
+:Timer_1 rdf:time s4ener:Timer ;
+  rdfs:comment "See the OperationModeProfile examples for an extensive example containing multiple instances of the Transition class." ;
+.  
+
+################################################
+### Average demand rate forecast time series ###
+################################################
+
+:TimeSeries_1
+  a s4ener:TimeSeries ;
+  s4ener:hasDataPoint :DataPoint_1 ;
+  s4ener:hasDataPoint :DataPoint_2 ;
+  s4ener:hasDataPoint :DataPoint_3 ;
+  rdfs:label "Average demand rate forecast" ;
+.
+:DataPoint_1
+  a s4ener:DataPoint, saref:Observation ;
+  rdfs:label "Data point 1" ;
+  saref:hasTimestamp "2023-01-29T14:40:00Z"^^xsd:dateTime; # was xsd:dateTimeStamp, see the note at the end of this file
+.
+:DataPoint_1_PropVal 
+  a saref:PropertyValue ;
+  saref:hasValue "2000" ;
+  saref:isValueOfProperty s4ener:Power ;
+  saref:isMeasuredIn om:kilowatt ;
+.  
+:DataPoint_2
+  a s4ener:DataPoint, saref:Observation ;
+  rdfs:label "Data point 2" ;
+  saref:hasTimestamp "2023-01-29T14:45:00Z"^^xsd:dateTime; # was xsd:dateTimeStamp, see the note at the end of this file
+  saref:hasResult :DataPoint_2_PropVal ;
+.  
+:DataPoint_2_PropVal 
+  a saref:PropertyValue ;  
+  saref:hasValue "2500" ;
+  saref:isValueOfProperty s4ener:Power ;
+  saref:isMeasuredIn om:kilowatt ;
+.
+:DataPoint_3
+  a s4ener:DataPoint, saref:Observation ;
+  rdfs:label "Data point 3" ;
+  saref:hasTimestamp "2023-01-29T15:00:00Z"^^xsd:dateTime; # was xsd:dateTimeStamp, see the note at the end of this file
+.
+:DataPoint_3_PropVal
+  a saref:PropertyValue ;
+  saref:hasValue "2000" ;
+  saref:isValueOfProperty s4ener:Power ;
+  saref:isMeasuredIn om:kilowatt ;
+.
+
+:Price rdf:type saref:Property .
+
+dcterms:abstract a owl:AnnotationProperty .
+
+#################################################################
+#    Added for SHACL validation, not in the ETSI original
+#################################################################
+
+# SAREF Core types saref:hasTimestamp with rdfs:range xsd:dateTime
+
+# Types declarations
+om:kilowatt a saref:UnitOfMeasure .
+s4ener:Electricity a saref:Commodity .
+s4ener:Power a saref:Property .
+:DemandDrivenProfile_1 a saref:Profile .
+<https://spec.edmcouncil.org/fibo/ontology/FND/Accounting/ISO4217-CurrencyCodes/EUR> a saref:UnitOfMeasure .
+
+# Node added only so that the required values below have something to point at
+:AddedInterval a time:Interval .
+
+# Values required by sh:minCount 1
+:HeatPump saref:controls :Price .
+:DataPoint_1 saref:observes :Price .
+:DataPoint_3 saref:observes :Price .
+:DataPoint_2 saref:observes :Price .
+:DataPoint_1 s4ener:hasEffectivePeriod :AddedInterval .
+:DataPoint_3 s4ener:hasEffectivePeriod :AddedInterval .
+:DataPoint_2 s4ener:hasEffectivePeriod :AddedInterval .

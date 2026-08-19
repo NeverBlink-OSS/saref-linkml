@@ -1,0 +1,219 @@
+@prefix : <https://saref.etsi.org/saref4ener/v2.1.1/example/heatingSystemPowerProfile/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix s4ener: <https://saref.etsi.org/saref4ener/> .
+@prefix saref: <https://saref.etsi.org/core/> .
+@prefix time: <http://www.w3.org/2006/time#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix dctype: <http://purl.org/dc/dcmitype/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+
+<https://saref.etsi.org/saref4ener/v2.1.1/example/heatingSystemPowerProfile#> a dctype:Dataset ;
+  dcterms:conformsTo <https://saref.etsi.org/saref4ener/v2.1.1/> ;
+  dcterms:title "SAREF4ENER Power Profile Example"@en ;
+  dcterms:description "Example power profile of a heatingsystem based on how a power profile would be defined in SPINE."@en ;
+  dcterms:abstract "Example power profile of a heatingsystem based on how a power profile would be defined in SPINE."@en ;
+  owl:imports saref:, s4ener: ;
+  dcterms:license <https://forge.etsi.org/etsi-software-license> ;
+.
+
+dcterms:abstract a owl:AnnotationProperty .
+time:Instant a owl:Class .
+time:DateTimeInterval a owl:Class .
+time:inXSDDateTime a owl:DatatypeProperty .
+time:hasBeginning a owl:ObjectProperty .
+time:hasEnd a owl:ObjectProperty .
+
+:Beginning_PowerProfile-1-HS0001
+  rdf:type time:Instant ;
+  rdfs:label "Beginning Power profile-1-HS0001"^^xsd:string ;
+  time:inXSDDateTime "2016-12-15T00:01:01.01"^^xsd:dateTime ;
+.
+:Beginning_PowerSequence-HS0001_afternoon
+  rdf:type time:Instant ;
+  rdfs:label "Beginning Power sequence-HS0001 afternoon"^^xsd:string ;
+  time:inXSDDateTime "2016-12-15T15:30:00.00"^^xsd:dateTime ;
+.
+:Beginning_PowerSequence-HS0001_morning
+  rdf:type time:Instant ;
+  rdfs:label "Beginning Power sequence-HS0001 morning"^^xsd:string ;
+  time:inXSDDateTime "2016-12-15T08:45:00.00"^^xsd:dateTime ;
+.
+:DateTimeInterval_PowerProfile-1-HS0001
+  rdf:type time:DateTimeInterval ;
+  rdfs:label "Date time interval Power profile-1-HS0001"^^xsd:string ;
+  time:hasBeginning :Beginning_PowerProfile-1-HS0001 ;
+  time:hasEnd :End_PowerProfile-1-HS0001 ;
+.
+:End_PowerProfile-1-HS0001
+  rdf:type time:Instant ;
+  rdfs:label "End Power profile-1-HS0001"^^xsd:string ;
+  time:inXSDDateTime "2016-12-15T00:23:59.59"^^xsd:dateTime ;
+.
+:End_PowerSequence-HS0001_afternoon
+  rdf:type time:Instant ;
+  rdfs:label "End Power sequence-HS0001 afternoon"^^xsd:string ;
+  time:inXSDDateTime "2016-12-15T00:18:00.00"^^xsd:dateTime ;
+.
+:End_PowerSequence-HS0001_morning
+  rdf:type time:Instant ;
+  rdfs:label "End Power sequence-HS0001 morning"^^xsd:string ;
+  time:inXSDDateTime "2016-12-15T00:12:00.00"^^xsd:dateTime ;
+.
+:PowerSequence-HS0001_afternoon
+  rdf:type time:DateTimeInterval ;
+  rdfs:label "Power sequence-HS0001 afternoon"^^xsd:string ;
+  time:hasBeginning :Beginning_PowerSequence-HS0001_afternoon ;
+  time:hasEnd :End_PowerSequence-HS0001_afternoon ;
+.
+:PowerSequence-HS0001_morning
+  rdf:type time:DateTimeInterval ;
+  rdfs:label "Power sequence-HS0001 morning"^^xsd:string ;
+  time:hasBeginning :Beginning_PowerSequence-HS0001_morning ;
+  time:hasEnd :End_PowerSequence-HS0001_morning ;
+.
+:AlternativesGroup-1-HS0001
+  rdf:type s4ener:AlternativesGroup ;
+  rdfs:label "Alternatives group-1-HS0001"^^xsd:string ;
+  saref:consistsOf :PowerSequence-1-HS0001 ;
+  saref:hasIdentifier "1"^^xsd:unsignedInt ; # was xsd:decimal, the schema types to xsd:unsignedInt due to restriction
+  s4ener:belongsTo :PowerProfile-1-HS0001 ;
+.
+:AlternativesGroup-2-HS0001
+  rdf:type s4ener:AlternativesGroup ;
+  rdfs:label "Alternatives group-2-HS0001"^^xsd:string ;
+  saref:consistsOf :PowerSequence-2-HS0001 ;
+  saref:consistsOf :PowerSequence-3-HS0001 ;
+  saref:hasIdentifier "2"^^xsd:unsignedInt ; # was xsd:decimal, the schema types to xsd:unsignedInt due to restriction
+  s4ener:belongsTo :PowerProfile-1-HS0001 ;
+.
+:Heating
+  rdf:type saref:Task ;
+  rdfs:label "Heating"^^xsd:string ;
+.
+:HeatingSystem
+  rdf:type saref:Device ;
+  rdfs:label "Heating system"^^xsd:string ;
+  saref:accomplishes :Heating ;
+  rdfs:comment "Heating system HS0001 is an example of how to instantiate a heating system with hot water tank using SAREF4ENER"^^xsd:string ;
+  saref:consumes s4ener:Energy, s4ener:Power ;
+  saref:observes s4ener:Energy, s4ener:Power ;
+.
+:PropertyValue_1
+  rdf:type saref:PropertyValue ;
+  rdfs:label "Property Value 1"^^xsd:string ;
+  saref:hasValue "0.2"^^xsd:string ;
+  saref:isMeasuredIn <http://www.ontology-of-units-of-measure.org/resource/om-2/kilowatt_hour> ;
+  saref:isValueOfProperty s4ener:Energy ;
+.
+:PropertyValue_2
+  rdf:type saref:PropertyValue ;
+  rdfs:label "Property Value 2"^^xsd:string ;
+  saref:hasValue "0.2"^^xsd:string ;
+  saref:isMeasuredIn <http://www.ontology-of-units-of-measure.org/resource/om-2/kilowatt> ;
+  saref:isValueOfProperty s4ener:Power ;
+.
+:PowerProfile-1-HS0001
+  rdf:type s4ener:PowerProfile ;
+  rdfs:label "Power profile-1-HS0001"^^xsd:string ;
+  saref:consistsOf :AlternativesGroup-1-HS0001 ;
+  saref:consistsOf :AlternativesGroup-2-HS0001 ;
+  s4ener:hasEffectivePeriod :Time_PowerProfile-1-HS0001 ;
+  s4ener:belongsTo :HeatingSystem ;
+  s4ener:nodeRemoteControllable "true"^^xsd:boolean ;
+  s4ener:supportsReselection "true"^^xsd:boolean ;
+  s4ener:supportsSingleSlotSchedulingOnly "true"^^xsd:boolean ;
+  s4ener:totalSequencesCountMax "1"^^xsd:unsignedInt ;
+.
+:PowerSequence-1-HS0001
+  rdf:type s4ener:PowerSequence ;
+  rdfs:label "Power sequence-1-HS0001"^^xsd:string ;
+  saref:consistsOf :Slot-1-HS0001 ;
+  s4ener:hasEffectivePeriod :PowerSequence-HS0001_morning ;
+  s4ener:belongsTo :AlternativesGroup-1-HS0001 ;
+  s4ener:isPausable "false"^^xsd:boolean ;
+  s4ener:isStoppable "false"^^xsd:boolean ;
+.
+:PowerSequence-2-HS0001
+  rdf:type s4ener:PowerSequence ;
+  rdfs:label "Power sequence-2-HS0001"^^xsd:string ;
+  saref:consistsOf :Slot-2-HS0001 ;
+  s4ener:hasEffectivePeriod :PowerSequence-HS0001_afternoon ;
+  s4ener:belongsTo :AlternativesGroup-2-HS0001 ;
+  s4ener:greenest "true"^^xsd:boolean ;
+  s4ener:isPausable "false"^^xsd:boolean ;
+  s4ener:isStoppable "false"^^xsd:boolean ;
+.
+:PowerSequence-3-HS0001
+  rdf:type s4ener:PowerSequence ;
+  rdfs:label "Power sequence-3-HS0001"^^xsd:string ;
+  saref:consistsOf :Slot-3-HS0001 ;
+  s4ener:hasEffectivePeriod :PowerSequence-HS0001_afternoon ;
+  s4ener:belongsTo :AlternativesGroup-2-HS0001 ;
+  s4ener:cheapest "true"^^xsd:boolean ;
+  s4ener:isPausable "false"^^xsd:boolean ;
+  s4ener:isStoppable "false"^^xsd:boolean ;
+.
+:Power
+  rdf:type saref:Property ;
+  rdfs:label "Power 1"^^xsd:string ;
+.
+:Slot-1-HS0001
+  rdf:type s4ener:Slot ;
+  rdfs:label "Slot 1 HS0001"^^xsd:string ;
+  s4ener:belongsTo :PowerSequence-1-HS0001 ;
+  s4ener:hasSlotValue :PropertyValue_1, :PropertyValue_2 ;
+  s4ener:slotNumber "1"^^xsd:unsignedInt ;
+.
+:Slot-2-HS0001
+  rdf:type s4ener:Slot ;
+  rdfs:label "Slot 2 HS0001"^^xsd:string ;
+  s4ener:belongsTo :PowerSequence-2-HS0001 ;
+  s4ener:slotNumber "2"^^xsd:unsignedInt ;
+.
+:Slot-3-HS0001
+  rdf:type s4ener:Slot ;
+  rdfs:label "Slot 3 HS0001"^^xsd:string ;
+  s4ener:belongsTo :PowerSequence-3-HS0001 ;
+  s4ener:slotNumber "3"^^xsd:unsignedInt ;
+.
+:Time_PowerProfile-1-HS0001
+  rdf:type time:TemporalEntity  ;
+  rdfs:label "Time Power profile-1-HS0001"^^xsd:string ;
+  saref:consistsOf :DateTimeInterval_PowerProfile-1-HS0001 ;
+.
+
+#################################################################
+#    Added for SHACL validation, not in the ETSI original
+#################################################################
+
+# Types the shapes check with sh:class but this file never states.
+<http://www.ontology-of-units-of-measure.org/resource/om-2/kilowatt> a saref:UnitOfMeasure .
+<http://www.ontology-of-units-of-measure.org/resource/om-2/kilowatt_hour> a saref:UnitOfMeasure .
+s4ener:Energy a saref:Commodity, saref:Property .  # two types: the example uses this term in two places whose shapes ask for different classes
+s4ener:Power a saref:Commodity, saref:Property .  # two types: the example uses this term in two places whose shapes ask for different classes
+:HeatingSystem a s4ener:Device .
+
+# Nodes added only so that the required values below have something to point at
+s4ener:Average a s4ener:Usage .
+
+# Values required by sh:minCount 1.
+:Slot-1-HS0001 s4ener:hasUsage s4ener:Average .
+:Slot-3-HS0001 s4ener:hasUsage s4ener:Average .
+:Slot-2-HS0001 s4ener:hasUsage s4ener:Average .
+:PowerSequence-3-HS0001 s4ener:hasActiveDurationMin "PT1H"^^xsd:duration .
+:PowerSequence-2-HS0001 s4ener:hasActiveDurationMin "PT1H"^^xsd:duration .
+:PowerSequence-1-HS0001 s4ener:hasActiveDurationMin "PT1H"^^xsd:duration .
+:PowerSequence-3-HS0001 s4ener:sequenceRemoteControllable "false"^^xsd:boolean .
+:PowerSequence-2-HS0001 s4ener:sequenceRemoteControllable "false"^^xsd:boolean .
+:PowerSequence-1-HS0001 s4ener:sequenceRemoteControllable "false"^^xsd:boolean .
+:PowerSequence-3-HS0001 s4ener:hasActiveDurationMax "PT1H"^^xsd:duration .
+:PowerSequence-2-HS0001 s4ener:hasActiveDurationMax "PT1H"^^xsd:duration .
+:PowerSequence-1-HS0001 s4ener:hasActiveDurationMax "PT1H"^^xsd:duration .
+:PowerSequence-3-HS0001 s4ener:hasStartTime "2023-01-29T00:00:00Z"^^xsd:dateTimeStamp .
+:PowerSequence-2-HS0001 s4ener:hasStartTime "2023-01-29T00:00:00Z"^^xsd:dateTimeStamp .
+:PowerSequence-1-HS0001 s4ener:hasStartTime "2023-01-29T00:00:00Z"^^xsd:dateTimeStamp .
+:PowerSequence-3-HS0001 saref:hasIdentifier "1"^^xsd:string .
+:PowerSequence-2-HS0001 saref:hasIdentifier "1"^^xsd:string .
+:PowerSequence-1-HS0001 saref:hasIdentifier "1"^^xsd:string .

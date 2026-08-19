@@ -1,0 +1,110 @@
+@prefix ex: <https://saref.etsi.org/saref4grid/v2.1.1/example/PropertyValues/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix oneM2M: <http://www.owl-ontologies.com/oneM2M#> .
+@prefix saref: <https://saref.etsi.org/core/> .
+@prefix s4grid: <https://saref.etsi.org/saref4grid/> .
+@prefix dctype: <http://purl.org/dc/dcmitype/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix om: <http://www.ontology-of-units-of-measure.org/resource/om-2/> . # typo fixed, the original has no trailing slash so om:watt read as .../om-2watt
+
+<https://saref.etsi.org/saref4grid/v2.1.1/example/PropertyValues#> a dctype:Dataset ;
+  dcterms:license <https://forge.etsi.org/etsi-software-license> ;
+  dcterms:conformsTo <https://saref.etsi.org/saref4grid/v2.1.1/> ;
+  dcterms:title "Example Property Value"@en ;
+  dcterms:description "Example Property Value"@en .
+
+#################################################################
+#    Object Properties
+#################################################################
+
+saref:hasPropertyValue a owl:ObjectProperty .
+
+saref:isValueOfProperty a owl:ObjectProperty .
+
+saref:isMeasuredIn a owl:ObjectProperty .
+
+skos:broader a owl:ObjectProperty .
+
+skos:narrower a owl:ObjectProperty .
+
+
+#################################################################
+#    Data properties
+#################################################################
+
+s4grid:hasObis a owl:DatatypeProperty .
+
+saref:hasValue a owl:DatatypeProperty .
+
+
+#################################################################
+#    Classes
+#################################################################
+
+saref:UnitOfMeasure a owl:Class .
+
+s4grid:GridMeter a owl:Class .
+
+saref:PropertyValue a owl:Class .
+
+saref:Property a owl:Class .
+
+s4grid:MeterProperty a owl:Class ;
+	rdfs:subClassOf saref:Property .
+
+#################################################################
+#    Individuals
+#################################################################
+
+ex:Meter1234 a s4grid:GridMeter,
+        owl:NamedIndividual ;
+    saref:hasPropertyValue ex:PropertyValue234,
+		ex:PropertyValue678.
+
+ex:PropertyValue678 a saref:PropertyValue,
+        owl:NamedIndividual ;
+    saref:isValueOfProperty ex:ScrollDisplayMode ;
+    saref:hasValue "224.0.1.0"^^xsd:string .
+
+ex:ActivePowerLimitContract1TariffPeriod1 a s4grid:MeterProperty,
+        owl:NamedIndividual ;
+    s4grid:hasObis "0-1:94.34.1.255"^^xsd:string ;
+	skos:broader s4grid:PowerLimit .
+
+s4grid:ScreenDisplay a s4grid:MeterProperty,
+        owl:NamedIndividual ;
+    skos:narrower ex:ScrollDisplayMode .
+
+om:watt a saref:UnitOfMeasure,
+        owl:NamedIndividual .
+
+ex:PropertyValue234 a saref:PropertyValue,
+        owl:NamedIndividual ;
+    saref:isValueOfProperty ex:ActivePowerLimitContract1TariffPeriod1 ;
+    saref:hasValue "1200"^^xsd:int ;
+	saref:isMeasuredIn om:watt .
+	
+s4grid:PowerLimit a s4grid:MeterProperty,
+		owl:NamedIndividual ;
+	skos:narrower ex:ActivePowerLimitContract1TariffPeriod1 .
+
+ex:ScrollDisplayMode a s4grid:MeterProperty,
+        owl:NamedIndividual ;
+    s4grid:hasObis "0-0:96.1.7.255"^^xsd:string ;
+    skos:broader s4grid:ScreenDisplay .
+
+
+#################################################################
+#    Added for SHACL validation, not in the ETSI original
+#################################################################
+
+# Types the shapes check with sh:class but this file never states.
+ex:ActivePowerLimitContract1TariffPeriod1 a saref:Property .
+
+# Values required by sh:minCount 1.
+ex:Meter1234 saref:observes ex:ActivePowerLimitContract1TariffPeriod1 .
+

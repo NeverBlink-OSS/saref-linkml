@@ -1,0 +1,289 @@
+@prefix : <https://saref.etsi.org/saref4ener/v2.1.1/example/PowerEnvelopeProfile/>  .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix s4ener: <https://saref.etsi.org/saref4ener/> .
+@prefix saref: <https://saref.etsi.org/core/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix om: <http://www.ontology-of-units-of-measure.org/resource/om-2-ucum/> . # typo fixed: the original has no trailing slash, so om:watt read as .../om-2-ucumwatt
+@prefix dctype: <http://purl.org/dc/dcmitype/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+
+<https://saref.etsi.org/saref4ener/v2.1.1/example/powerEnvelopeProfile#>
+  a dctype:Dataset ;
+  dcterms:conformsTo <https://saref.etsi.org/saref4ener/v2.1.1/> ;
+  dcterms:title "SAREF4ENER Power Envelope Flexilibity Profile Examples"@en ;
+  owl:imports saref:, s4ener: ;
+  dcterms:abstract "This example file exemplifies how to model a Power Envelope profile in the SAREF4ENER extension." ;
+  dcterms:description "This example file exemplifies how to model a Power Envelope profile in the SAREF4ENER extension." ;
+  dcterms:license <https://forge.etsi.org/etsi-software-license> ;
+.
+:AllowedLimitRange_1
+  a s4ener:AllowedLimitRange ;
+  s4ener:abnormalConditionOnly false ;
+  s4ener:limitType s4ener:UpperLimit ;
+  s4ener:rangeBoundary :NumberRange_1 ;
+  s4ener:relatesToCommodity s4ener:ElectricPowerL1 ;
+  rdfs:label "Allowed limit range 1" ;
+.
+:AllowedLimitRange_2
+  a s4ener:AllowedLimitRange ;
+  s4ener:abnormalConditionOnly false ;
+  s4ener:limitType s4ener:UpperLimit ;
+  s4ener:rangeBoundary :NumberRange_2 ;
+  s4ener:relatesToCommodity s4ener:ElectricPowerL1 ;
+  rdfs:label "Allowed limit range 2" ;
+.
+:AllowedLimitRange_3
+  a s4ener:AllowedLimitRange ;
+  s4ener:abnormalConditionOnly false ;
+  s4ener:limitType s4ener:LowerLimit ;
+  s4ener:rangeBoundary :NumberRange_3 ;
+  s4ener:relatesToCommodity s4ener:ElectricPowerL1 ;
+  rdfs:label "Allowed limit range 3" ;
+.
+:AllowedLimitRange_4
+  a s4ener:AllowedLimitRange ;
+  s4ener:abnormalConditionOnly false ;
+  s4ener:limitType s4ener:LowerLimit ;
+  s4ener:rangeBoundary :NumberRange_4 ;
+  s4ener:relatesToCommodity s4ener:ElectricPowerL1 ;
+  rdfs:label "Allowed limit range 4" ;
+.
+:DataPoint_1
+  a s4ener:DataPoint, saref:Observation ;
+  rdfs:label "Data point 1" ;
+  saref:hasTimestamp "2023-01-29T10:00:00Z"^^xsd:dateTime; # was xsd:dateTimeStamp, see the note at the end of this file
+  saref:hasResult :DataPoint_1_Result ;
+.
+:DataPoint_1_Result a saref:PropertyValue ;
+  saref:hasValue "100" ;
+  saref:isValueOfProperty s4ener:Power ;
+  saref:isMeasuredIn om:kilowatt ;
+.
+:DataPoint_2
+  a s4ener:DataPoint, saref:Observation ;
+  rdfs:label "Data point 2" ;
+  saref:hasTimestamp "2023-01-29T10:00:00Z"^^xsd:dateTime; # was xsd:dateTimeStamp, see the note at the end of this file
+  saref:hasResult :DataPoint_2_Result ;
+.
+:DataPoint_2_Result a saref:PropertyValue ;
+  saref:hasValue "200" ;
+  saref:isValueOfProperty s4ener:Power ;
+  saref:isMeasuredIn om:kilowatt ;
+.
+:DataPoint_3
+  a s4ener:DataPoint, saref:Observation ;
+  rdfs:label "Data point 3" ;
+  saref:hasTimestamp "2023-01-29T13:00:00Z"^^xsd:dateTime; # was xsd:dateTimeStamp, see the note at the end of this file
+  saref:hasResult :DataPoint_3_Result ;
+.
+:DataPoint_3_Result a saref:PropertyValue ;
+  saref:hasValue "1000" ;
+  saref:isValueOfProperty s4ener:Power ;
+  saref:isMeasuredIn om:kilowatt ;
+.
+:DataPoint_4
+  a s4ener:DataPoint, saref:Observation ;
+  rdfs:label "Data point 4" ;
+  saref:hasTimestamp "2023-01-30T13:00:00Z"^^xsd:dateTime; # was xsd:dateTimeStamp, see the note at the end of this file
+  saref:hasResult :DataPoint_4_Result ;
+.
+:DataPoint_4_Result a saref:PropertyValue ;
+  saref:hasValue "150" ;
+  saref:isValueOfProperty s4ener:Power ;
+  saref:isMeasuredIn om:kilowatt ;
+.
+:DataPoint_5
+  a s4ener:DataPoint, saref:Observation ;
+  rdfs:label "Data point 5" ;
+  saref:hasTimestamp "2023-01-30T17:00:00Z"^^xsd:dateTime; # was xsd:dateTimeStamp, see the note at the end of this file
+  saref:hasResult :DataPoint_5_Result ;
+.
+:DataPoint_5_Result a saref:PropertyValue ;
+  saref:hasValue "200" ;
+  saref:isValueOfProperty s4ener:Power ;
+  saref:isMeasuredIn om:kilowatt ;
+.
+:DataPoint_6
+  a s4ener:DataPoint, saref:Observation ;
+  rdfs:label "Data point 6" ;
+  saref:hasTimestamp "2023-01-29T17:00:00Z"^^xsd:dateTime; # was xsd:dateTimeStamp, see the note at the end of this file
+  saref:hasResult :DataPoint_6_Result ;
+.
+:DataPoint_6_Result a saref:PropertyValue ;
+  saref:hasValue "200" ;
+  saref:isValueOfProperty s4ener:Power ;
+  saref:isMeasuredIn om:kilowatt ;
+.
+
+:EnergyConstraint_1
+  a s4ener:EnergyConstraint ;
+  s4ener:rangeBoundary :EnergyConstraintsRange_1 ;
+  s4ener:relatesToCommodity s4ener:ElectricPowerL1 ;
+  s4ener:hasStartTime "2023-01-29T10:00:00Z"^^xsd:dateTimeStamp ;
+  s4ener:hasEndTime "2023-01-29T18:00:00Z"^^xsd:dateTimeStamp ;
+  rdfs:label "Energy constraint 1" ;
+.
+:EnergyConstraintsRange_1 rdf:type s4ener:NumberRange ;
+  s4ener:endOfRange :PropertyValue_15 ;
+  s4ener:startOfRange :PropertyValue_16 ;
+  rdfs:label "Energy constraint average power boundary" ;
+.
+:PropertyValue_15 rdf:type saref:PropertyValue ;
+  saref:hasValue "1000"^^xsd:decimal ;
+  saref:isMeasuredIn om:kilowatt ;
+  saref:isValueOfProperty s4ener:Power ;
+.
+:PropertyValue_16 rdf:type saref:PropertyValue ;
+  saref:hasValue "100"^^xsd:decimal ;
+  saref:isMeasuredIn om:kilowatt ;
+  saref:isValueOfProperty s4ener:Power ;
+.
+
+:NumberRange_1
+  a s4ener:NumberRange ;
+  s4ener:endOfRange :PropertyValue_7 ; # "550"^^xsd:decimal ;
+  s4ener:startOfRange :PropertyValue_8 ; #"400"^^xsd:decimal ;
+  rdfs:label "Number range 1" ;
+.
+:NumberRange_2
+  a s4ener:NumberRange ;
+  s4ener:endOfRange :PropertyValue_9 ; # "1100"^^xsd:decimal ;
+  s4ener:startOfRange :PropertyValue_10 ; #"800"^^xsd:decimal ;
+  rdfs:label "Number range 2" ;
+.
+:NumberRange_3
+  a s4ener:NumberRange ;
+  s4ener:endOfRange :PropertyValue_11 ; # "150"^^xsd:decimal ;
+  s4ener:startOfRange :PropertyValue_12 ; # "0"^^xsd:decimal ;
+  rdfs:label "Number range 3" ;
+.
+:NumberRange_4
+  a s4ener:NumberRange ;
+  s4ener:endOfRange :PropertyValue_13 ; # "-500"^^xsd:decimal ;
+  s4ener:startOfRange :PropertyValue_14 ; #"-500"^^xsd:decimal ;
+  rdfs:label "Number range 4" ;
+.
+:PropertyValue_7 
+  a saref:PropertyValue ;
+  saref:hasValue "550"^^xsd:decimal ;
+  saref:isValueOfProperty s4ener:Power ;
+  saref:isMeasuredIn om:kilowatt ;
+.
+:PropertyValue_8 
+  a saref:PropertyValue ;
+  saref:hasValue "400"^^xsd:decimal ;
+  saref:isValueOfProperty s4ener:Power ;
+  saref:isMeasuredIn om:kilowatt ;
+.
+:PropertyValue_9
+  a saref:PropertyValue ;
+  saref:hasValue "1100"^^xsd:decimal ;
+  saref:isValueOfProperty s4ener:Power ;
+  saref:isMeasuredIn om:kilowatt ;
+.
+:PropertyValue_10 
+  a saref:PropertyValue ;
+  saref:hasValue "800"^^xsd:decimal ;
+  saref:isValueOfProperty s4ener:Power ;
+  saref:isMeasuredIn om:kilowatt ;
+.
+:PropertyValue_11
+  a saref:PropertyValue ;
+  saref:hasValue "150"^^xsd:decimal ;
+  saref:isValueOfProperty s4ener:Power ;
+  saref:isMeasuredIn om:kilowatt ;
+.
+:PropertyValue_12
+  a saref:PropertyValue ;
+  saref:hasValue "0"^^xsd:decimal ;
+  saref:isValueOfProperty s4ener:Power ;
+  saref:isMeasuredIn om:kilowatt ;
+.
+:PropertyValue_13
+  a saref:PropertyValue ;
+  saref:hasValue "-500"^^xsd:decimal ;
+  saref:isValueOfProperty s4ener:Power ;
+  saref:isMeasuredIn om:kilowatt ;
+.
+:PropertyValue_14
+  a saref:PropertyValue ;
+  saref:hasValue "500"^^xsd:decimal ;
+  saref:isValueOfProperty s4ener:Power ;
+  saref:isMeasuredIn om:kilowatt ;
+.
+:PowerConstraint_1
+  a s4ener:PowerConstraint ;
+  s4ener:allowedLimitRange :AllowedLimitRange_1 ;
+  s4ener:allowedLimitRange :AllowedLimitRange_2 ;
+  s4ener:allowedLimitRange :AllowedLimitRange_3 ;
+  s4ener:allowedLimitRange :AllowedLimitRange_4 ;
+  s4ener:hasConsequenceType s4ener:Defer ;
+  s4ener:hasStartTime "2023-01-29T10:00:00Z"^^xsd:dateTime ;
+  s4ener:hasEndTime "2023-01-30T18:00:00Z"^^xsd:dateTime ;
+  rdfs:comment "Implementation of the power constraints consisting of a set of allowed limit ranges following Figure 7 in section 7.6.2.1 of the S2 standard." ;
+  rdfs:label "Power constraint 1" ;
+.
+:PowerEnvelopeProfile_1
+  a s4ener:PowerEnvelopeProfile ;
+  s4ener:hasConstraints :EnergyConstraint_1 ;
+  s4ener:hasConstraints :PowerConstraint_1 ;
+  s4ener:hasPowerEnvelope :PowerEnvelope_1 ;
+  rdfs:label "Power envelope profile 1" ;
+.
+:PowerEnvelope_1
+  a s4ener:PowerEnvelope ;
+  s4ener:hasEnvelope :TimeSeries_1 ;
+  s4ener:relatesToCommodity s4ener:ElectricPowerL1 ;
+  rdfs:label "Power envelope 1" ;
+.
+:SolarPanelInverter
+  a saref:Device ;
+  saref:hasProfile :PowerEnvelopeProfile_1 ;
+  rdfs:label "Solar panel inverter" ;
+.
+:TimeSeries_1
+  a s4ener:TimeSeries ;
+  s4ener:hasDataPoint :DataPoint_1 ;
+  s4ener:hasDataPoint :DataPoint_2 ;
+  s4ener:hasDataPoint :DataPoint_3 ;
+  s4ener:hasDataPoint :DataPoint_4 ;
+  s4ener:hasDataPoint :DataPoint_5 ;
+  s4ener:hasDataPoint :DataPoint_6 ;
+  rdfs:label "Time series 1" ;
+.
+
+dcterms:abstract a owl:AnnotationProperty .
+
+#################################################################
+#    Added for SHACL validation, not in the ETSI original
+#################################################################
+
+# SAREF Core types saref:hasTimestamp with rdfs:range xsd:dateTime
+
+# Types the shapes check with sh:class but this file never states.
+om:kilowatt a saref:UnitOfMeasure .
+s4ener:Defer a s4ener:PowerEnvelopeConsequenceType .
+s4ener:LowerLimit a s4ener:PowerEnvelopeLimitType .
+s4ener:Power a saref:Property .
+s4ener:UpperLimit a s4ener:PowerEnvelopeLimitType .
+:PowerEnvelopeProfile_1 a saref:Profile .
+
+# Nodes added only so that the required values below have something to point at
+:AddedProperty a saref:Property .
+:AddedInterval a <http://www.w3.org/2006/time#Interval> .
+
+# Values required by sh:minCount 1.
+:DataPoint_6 saref:observes :AddedProperty .
+:DataPoint_5 saref:observes :AddedProperty .
+:DataPoint_2 saref:observes :AddedProperty .
+:DataPoint_3 saref:observes :AddedProperty .
+:DataPoint_4 saref:observes :AddedProperty .
+:DataPoint_1 saref:observes :AddedProperty .
+:DataPoint_6 s4ener:hasEffectivePeriod :AddedInterval .
+:DataPoint_5 s4ener:hasEffectivePeriod :AddedInterval .
+:DataPoint_2 s4ener:hasEffectivePeriod :AddedInterval .
+:DataPoint_3 s4ener:hasEffectivePeriod :AddedInterval .
+:DataPoint_4 s4ener:hasEffectivePeriod :AddedInterval .
+:DataPoint_1 s4ener:hasEffectivePeriod :AddedInterval .

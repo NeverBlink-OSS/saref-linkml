@@ -1,0 +1,78 @@
+@prefix ex: <https://saref.etsi.org/saref4grid/v2.1.1/example/BreakerState/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix oneM2M: <http://www.owl-ontologies.com/oneM2M#> .
+@prefix saref: <https://saref.etsi.org/core/> .
+@prefix s4grid: <https://saref.etsi.org/saref4grid/> .
+@prefix dctype: <http://purl.org/dc/dcmitype/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+
+
+<https://saref.etsi.org/saref4grid/v2.1.1/example/BreakerState#> a dctype:Dataset ;
+  dcterms:license <https://forge.etsi.org/etsi-software-license> ;
+  dcterms:conformsTo <https://saref.etsi.org/saref4grid/v2.1.1/> ;
+  dcterms:title "Example Breaker State"@en ;
+  dcterms:description "Example Breaker State"@en .
+
+
+
+#################################################################
+#    Object Properties
+#################################################################
+
+saref:hasState a owl:ObjectProperty .
+
+
+#################################################################
+#    Data properties
+#################################################################
+
+s4grid:hasControlMode a owl:DatatypeProperty .
+
+s4grid:hasControlState a owl:DatatypeProperty .
+
+s4grid:hasObis a owl:DatatypeProperty .
+
+s4grid:hasOutputState a owl:DatatypeProperty .
+
+
+#################################################################
+#    Classes
+#################################################################
+
+s4grid:BreakerState a owl:Class .
+
+s4grid:GridMeter a owl:Class .
+
+
+#################################################################
+#    Individuals
+#################################################################
+
+ex:Meter1234 a s4grid:GridMeter,
+        owl:NamedIndividual ;
+    saref:hasState ex:CurrentConnectivityState .
+
+ex:CurrentConnectivityState a s4grid:BreakerState,
+        owl:NamedIndividual ;
+    s4grid:hasControlMode "1"^^xsd:int ;
+    s4grid:hasControlState "1"^^xsd:int ;
+    s4grid:hasObis "0-0:10.0.196.255"^^xsd:string ;
+    s4grid:hasOutputState "true"^^xsd:boolean .
+
+
+#################################################################
+#    Added for SHACL validation, not in the ETSI original
+#################################################################
+
+# Types the shapes check with sh:class but this file never states.
+ex:CurrentConnectivityState a saref:State .
+
+# Nodes added only so that the required values below have something to point at
+s4grid:ActiveEnergy a s4grid:EnergyAndPowerProperty, saref:Property .
+
+# Values required by sh:minCount 1.
+ex:Meter1234 saref:observes s4grid:ActiveEnergy .
+

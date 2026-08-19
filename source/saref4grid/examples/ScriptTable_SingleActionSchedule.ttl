@@ -1,0 +1,92 @@
+@prefix ex: <https://saref.etsi.org/saref4grid/v2.1.1/example/ScriptTable_SingleActionSchedule/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix oneM2M: <http://www.owl-ontologies.com/oneM2M#> .
+@prefix saref: <https://saref.etsi.org/core/> .
+@prefix s4grid: <https://saref.etsi.org/saref4grid/> .
+@prefix dctype: <http://purl.org/dc/dcmitype/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+
+<https://saref.etsi.org/saref4grid/v2.1.1/example/ScriptTable_SingleActionSchedule#> a dctype:Dataset ;
+  dcterms:license <https://forge.etsi.org/etsi-software-license> ;
+  dcterms:conformsTo <https://saref.etsi.org/saref4grid/v2.1.1/> ;
+  dcterms:title "Example Script Table and Single Action Schedule"@en ;
+  dcterms:description "Example Script Table and Single Action Schedule"@en .
+ 
+
+
+#################################################################
+#    Object Properties
+#################################################################
+
+s4grid:executesScript a owl:ObjectProperty .
+
+s4grid:hasScriptTable a owl:ObjectProperty .
+
+s4grid:hasSingleScheduledAction a owl:ObjectProperty .
+
+s4grid:storesScript a owl:ObjectProperty .
+
+
+#################################################################
+#    Data properties
+#################################################################
+
+s4grid:hasExecutionTime a owl:DatatypeProperty .
+
+s4grid:hasObis a owl:DatatypeProperty .
+
+
+#################################################################
+#    Classes
+#################################################################
+
+s4grid:GridMeter a owl:Class .
+
+s4grid:Script a owl:Class .
+
+s4grid:ScriptTable a owl:Class .
+
+s4grid:SingleScheduledAction a owl:Class .
+	
+
+#################################################################
+#    Individuals
+#################################################################
+
+ex:Meter1234 a s4grid:GridMeter,
+        owl:NamedIndividual ;
+    s4grid:hasScriptTable ex:DisconnectScriptTable ;
+    s4grid:hasSingleScheduledAction ex:DisconnectControlScheduler .
+
+ex:ConnectionScript a s4grid:Script,
+        owl:NamedIndividual .
+
+ex:DisconnectControlScheduler a s4grid:SingleScheduledAction,
+        owl:NamedIndividual ;
+    s4grid:hasExecutionTime "2023-10-25T09:00:00"^^xsd:dateTime ;
+    s4grid:hasObis "0-0:96.3.10.255"^^xsd:string ;
+	s4grid:executesScript ex:DisconnectionScript .
+
+ex:DisconnectScriptTable a s4grid:ScriptTable,
+        owl:NamedIndividual ;
+    s4grid:storesScript ex:ConnectionScript,
+        ex:DisconnectionScript ;
+	s4grid:hasObis "0-0:10.0.196.255"^^xsd:string .
+
+ex:DisconnectionScript a s4grid:Script,
+        owl:NamedIndividual .
+
+
+#################################################################
+#    Added for SHACL validation, not in the ETSI original
+#################################################################
+
+# Nodes added only so that the required values below have something to point at
+s4grid:ActiveEnergy a s4grid:EnergyAndPowerProperty, saref:Property .
+
+# Values required by sh:minCount 1.
+ex:Meter1234 saref:observes s4grid:ActiveEnergy .
+

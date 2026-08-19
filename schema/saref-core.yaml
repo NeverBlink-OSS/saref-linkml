@@ -229,6 +229,33 @@ default_range: string
 imports:
 - linkml:types
 types:
+  Duration:
+    uri: xsd:duration
+    typeof: string
+  DateTimeStamp:
+    uri: xsd:dateTimeStamp
+    typeof: datetime
+  Int:
+    uri: xsd:int
+    typeof: integer
+  Long:
+    uri: xsd:long
+    typeof: integer
+  UnsignedInt:
+    uri: xsd:unsignedInt
+    typeof: integer
+  UnsignedLong:
+    uri: xsd:unsignedLong
+    typeof: integer
+  UnsignedShort:
+    uri: xsd:unsignedShort
+    typeof: integer
+  NonNegativeInteger:
+    uri: xsd:nonNegativeInteger
+    typeof: integer
+  PositiveInteger:
+    uri: xsd:positiveInteger
+    typeof: integer
   Literal:
     uri: rdfs:Literal
     typeof: string
@@ -246,11 +273,6 @@ slots:
     range: uriorcurie
     multivalued: true
     inverse: narrower
-  comment:
-    slot_uri: rdfs:comment
-    description: rdfs:comment on an instance, not on its class.
-    range: Literal
-    multivalued: true
   consists_of:
     slot_uri: saref:consistsOf
     title: consists of
@@ -813,11 +835,6 @@ slots:
     - range: FeatureOfInterest
     - range: StateOfInterest
     multivalued: true
-  label:
-    slot_uri: rdfs:label
-    description: rdfs:label on an instance, not on its class.
-    range: Literal
-    multivalued: true
   made_by:
     slot_uri: saref:madeBy
     title: made by
@@ -944,9 +961,7 @@ classes:
     mixins:
     - ProcedureExecution
     slots:
-    - comment
     - controls
-    - label
     - made_by
     slot_usage:
       controls:
@@ -964,9 +979,7 @@ classes:
     mixins:
     - Device
     slots:
-    - comment
     - controls
-    - label
     slot_usage:
       controls:
         required: true
@@ -979,9 +992,6 @@ classes:
     - 'V3.2.1: Definition of saref:Appliance is grounded on tasks and commodities.'
     mixins:
     - Device
-    slots:
-    - comment
-    - label
   Command:
     class_uri: saref:Command
     title: Command
@@ -995,12 +1005,10 @@ classes:
         turn on or off, change color, subscribe, publish, etc. are all commands.
     slots:
     - broader
-    - comment
     - controls
     - has_input
     - has_output
     - is_command_of
-    - label
     - narrower
     - observes
     - targets
@@ -1018,9 +1026,7 @@ classes:
     mixins:
     - ProcedureExecution
     slots:
-    - comment
     - is_execution_of
-    - label
     slot_usage:
       is_execution_of:
         any_of:
@@ -1046,13 +1052,11 @@ classes:
     - value: The smart fridge supports a command of kind “observe temperature”, which observes the temperature
         of the fridge.
     slots:
-    - comment
     - controls
     - has_command_kind
     - has_input
     - has_output
     - is_command_of_interest_of
-    - label
     - observes
     - targets
     slot_usage:
@@ -1073,11 +1077,9 @@ classes:
     - 'V4.1.1: Removed examples of commodity categories.'
     slots:
     - broader
-    - comment
     - is_consumed_by
     - is_produced_by
     - is_stored_by
-    - label
     - narrower
     slot_usage:
       broader:
@@ -1104,12 +1106,10 @@ classes:
     - FeatureOfInterest
     - System
     slots:
-    - comment
     - consumes
     - has_device_kind
     - has_function_of_interest
     - has_profile
-    - label
     - offers
     - produces
     - stores
@@ -1127,11 +1127,9 @@ classes:
     - FeatureKind
     slots:
     - broader
-    - comment
     - consumes
     - controls
     - has_profile
-    - label
     - narrower
     - observes
     - produces
@@ -1153,7 +1151,6 @@ classes:
     - 'V3.2.1: Use SKOS to organize generic classes in taxonomies.'
     slots:
     - broader
-    - comment
     - consists_of
     - consumes
     - has_function
@@ -1166,7 +1163,6 @@ classes:
     - is_controlled_by
     - is_observed_by
     - is_target_of
-    - label
     - narrower
     - produces
     - stores
@@ -1190,7 +1186,6 @@ classes:
     - 'V3.2.1: Definition of saref:FeatureOfInterest: allValuesFrom axioms are unnecessary and have been
       deleted.'
     slots:
-    - comment
     - consists_of
     - consumes
     - has_feature_kind
@@ -1206,7 +1201,6 @@ classes:
     - is_controlled_by
     - is_observed_by
     - is_target_of
-    - label
     - made_execution
     - produces
     - stores
@@ -1229,13 +1223,11 @@ classes:
     - value: To accomplish the task of washing clothes, a washing machine should have a function for washing.
     slots:
     - broader
-    - comment
     - controls
     - has_command
     - has_mandatory_command
     - has_optional_command
     - is_function_of
-    - label
     - narrower
     - observes
     - targets
@@ -1258,13 +1250,11 @@ classes:
     notes:
     - 'V3.2.1: Introduced saref:FunctionOfInterest, parallel to saref:PropertyOfInterest.'
     slots:
-    - comment
     - controls
     - has_command
     - has_command_of_interest
     - has_function_kind
     - is_function_of_interest_of
-    - label
     - observes
     - targets
     slot_usage:
@@ -1283,8 +1273,6 @@ classes:
     mixins:
     - Device
     slots:
-    - comment
-    - label
     - observes
     slot_usage:
       observes:
@@ -1301,8 +1289,6 @@ classes:
     mixins:
     - ProcedureExecution
     slots:
-    - comment
-    - label
     - made_by
     - observes
     slot_usage:
@@ -1334,11 +1320,9 @@ classes:
         value. Another one may be dedicated to start, pause, or stop the washing cycle.
     - value: To turn on a light, send a CoAP PUT request with CBOR content 0xf5 (true)
     slots:
-    - comment
     - has_input
     - has_output
     - is_operation_of
-    - label
     - represents
     slot_usage:
       is_operation_of:
@@ -1357,9 +1341,7 @@ classes:
     mixins:
     - ProcedureExecution
     slots:
-    - comment
     - is_execution_of
-    - label
     slot_usage:
       is_execution_of:
         range: Operation
@@ -1370,13 +1352,11 @@ classes:
     notes:
     - 'V3.2.1: Introduced saref:ProcedureExecution.'
     slots:
-    - comment
     - has_input
     - has_result
     - has_result_time
     - has_timestamp
     - is_execution_of
-    - label
     - made_by
     - targets
   Profile:
@@ -1401,10 +1381,8 @@ classes:
     - 'V3.2.1: Class saref:Profile has been re-specified, to take into account findings from SAREF4ENER
       V1.2.1.'
     slots:
-    - comment
     - has_timestamp
     - is_profile_of
-    - label
     - profile_has_price
     - when_property_value
     - when_state
@@ -1430,13 +1408,11 @@ classes:
         \ by dry bulb thermometer\"@en .\n"
     slots:
     - broader
-    - comment
     - consists_of
     - is_controlled_by
     - is_observed_by
     - is_property_of
     - is_target_of
-    - label
     - narrower
     slot_usage:
       broader:
@@ -1473,7 +1449,6 @@ classes:
         \ <etsi_premises/athena> ;\n    saref:hasPropertyKind saref:Luminance ;\n    rdfs:comment \"The\
         \ luminance of amphitheatre ATHENA\"@en .\n"
     slots:
-    - comment
     - consists_of
     - has_property_kind
     - has_property_value
@@ -1481,7 +1456,6 @@ classes:
     - is_observed_by
     - is_property_of_interest_of
     - is_target_of
-    - label
     slot_usage:
       consists_of:
         any_of:
@@ -1504,12 +1478,10 @@ classes:
       without always needing it to be a measurement made by a device.'
     - 'V4.1.1: saref:hasValue is now optional on saref:PropertyValue.'
     slots:
-    - comment
     - consists_of
     - has_value
     - is_measured_in
     - is_value_of_property
-    - label
     slot_usage:
       consists_of:
         any_of:
@@ -1537,8 +1509,6 @@ classes:
     mixins:
     - Device
     slots:
-    - comment
-    - label
     - observes
     slot_usage:
       observes:
@@ -1558,10 +1528,8 @@ classes:
         through mobile phone devices that are connected to the local network (ex:SwitchOnService class).
         This "remote switching" service represents the ex:OnOffFunction.
     slots:
-    - comment
     - has_operation
     - is_offered_by
-    - label
     - represents
     slot_usage:
       is_offered_by:
@@ -1587,12 +1555,10 @@ classes:
     - value: A switch can be found in the saref:OnOffState.
     slots:
     - broader
-    - comment
     - is_controlled_by
     - is_observed_by
     - is_state_of
     - is_target_of
-    - label
     - narrower
     slot_usage:
       broader:
@@ -1615,7 +1581,6 @@ classes:
     notes:
     - 'V3.2.1: Introduced saref:StateOfInterest, parallel to saref:PropertyOfInterest.'
     slots:
-    - comment
     - has_state
     - has_state_kind
     - has_state_value
@@ -1623,7 +1588,6 @@ classes:
     - is_observed_by
     - is_state_of_interest_of
     - is_target_of
-    - label
     slot_usage:
       is_state_of_interest_of:
         required: true
@@ -1636,14 +1600,9 @@ classes:
     notes:
     - 'V4.1.1: Introduced saref:StateValue.'
     slots:
-    - comment
     - is_value_of_state
-    - label
   System:
     class_uri: s4syst:System
-    slots:
-    - comment
-    - label
   Task:
     class_uri: saref:Task
     title: Task
@@ -1654,9 +1613,7 @@ classes:
     - value: For example, a washing machine is designed for the task of washing.
     slots:
     - broader
-    - comment
     - is_accomplished_by
-    - label
     - narrower
     slot_usage:
       broader:
@@ -1665,14 +1622,8 @@ classes:
         range: Task
   TemporalEntity:
     class_uri: time:TemporalEntity
-    slots:
-    - comment
-    - label
   TemporalPosition:
     class_uri: time:TemporalPosition
-    slots:
-    - comment
-    - label
   UnitOfMeasure:
     class_uri: saref:UnitOfMeasure
     title: Unit of measure
@@ -1686,6 +1637,3 @@ classes:
     - value: 'For example, consumption power is a property and Watt is a unit of power that represents
         a definite predetermined power: when we say 10 Watt, we actually mean 10 times the definite predetermined
         power "Watt".'
-    slots:
-    - comment
-    - label

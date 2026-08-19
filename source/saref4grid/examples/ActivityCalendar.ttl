@@ -1,0 +1,176 @@
+@prefix ex: <https://saref.etsi.org/saref4grid/v2.1.1/example/ActivityCalendar/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix oneM2M: <http://www.owl-ontologies.com/oneM2M#> .
+@prefix saref: <https://saref.etsi.org/core/> .
+@prefix s4grid: <https://saref.etsi.org/saref4grid/> .
+@prefix dctype: <http://purl.org/dc/dcmitype/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+
+<https://saref.etsi.org/saref4grid/v2.1.1/example/ActivityCalendar#> a dctype:Dataset ;
+  dcterms:license <https://forge.etsi.org/etsi-software-license> ;
+  dcterms:conformsTo <https://saref.etsi.org/saref4grid/v2.1.1/> ;
+  dcterms:title "Example Activity Calendar"@en ;
+  dcterms:description "Example Activity Calendar"@en .
+  
+
+
+#################################################################
+#    Object Properties
+#################################################################
+
+s4grid:executesScript a owl:ObjectProperty .
+
+s4grid:hasActiveSeasonProfile a owl:ObjectProperty .
+
+s4grid:hasActivityCalendar a owl:ObjectProperty .
+
+s4grid:hasDaySchedule a owl:ObjectProperty .
+
+s4grid:hasMondayProfile a owl:ObjectProperty .
+
+s4grid:hasTuesdayProfile a owl:ObjectProperty .
+
+s4grid:hasWednesdayProfile a owl:ObjectProperty .
+
+s4grid:hasThursdayProfile a owl:ObjectProperty .
+
+s4grid:hasFridayProfile a owl:ObjectProperty .
+
+s4grid:hasSpecialDayProfile a owl:ObjectProperty .
+
+s4grid:hasSaturdayProfile a owl:ObjectProperty .
+
+s4grid:hasSundayProfile a owl:ObjectProperty .
+
+s4grid:hasDayProfile a owl:ObjectProperty .
+
+s4grid:hasPassiveSeasonProfile a owl:ObjectProperty .
+
+
+#################################################################
+#    Data properties
+#################################################################
+
+s4grid:hasActivatePassiveCalendarTime a owl:DatatypeProperty .
+
+s4grid:hasCalendarNameActive a owl:DatatypeProperty .
+
+s4grid:hasCalendarNamePassive a owl:DatatypeProperty .
+
+s4grid:hasObis a owl:DatatypeProperty .
+
+s4grid:hasSeasonProfileName a owl:DatatypeProperty .
+
+s4grid:hasSeasonStart a owl:DatatypeProperty .
+
+s4grid:hasSpecialDayDate a owl:DatatypeProperty .
+
+s4grid:hasStartTime a owl:DatatypeProperty .
+
+
+#################################################################
+#    Classes
+#################################################################
+
+s4grid:GridMeter a owl:Class .
+
+s4grid:ActivityCalendar a owl:Class .
+
+s4grid:RegularDayProfile a owl:Class .
+
+s4grid:Script a owl:Class .
+
+s4grid:SpecialDayProfile a owl:Class .
+
+s4grid:DaySchedule a owl:Class .
+
+s4grid:SeasonProfile a owl:Class .
+
+s4grid:DayProfile a owl:Class .
+
+
+#################################################################
+#    Individuals
+#################################################################
+
+ex:ActivityCalendarContract1-1234 a s4grid:ActivityCalendar,
+        owl:NamedIndividual ;
+    s4grid:hasActivatePassiveCalendarTime "2023-01-17T02:00:00"^^xsd:dateTime ;
+    s4grid:hasCalendarNameActive "First quarter of 2023 active"^^xsd:string ;
+    s4grid:hasCalendarNamePassive "First quarter of 2023 passive"^^xsd:string ;
+    s4grid:hasObis "0-0:13.0.1.255"^^xsd:string ;
+	s4grid:hasActiveSeasonProfile ex:SeasonActive1.
+
+ex:Meter1234 a s4grid:GridMeter,
+        owl:NamedIndividual ;
+	s4grid:hasActivityCalendar ex:ActivityCalendarContract1-1234.
+
+ex:ResetBillingPeriod1 a s4grid:Script,
+        owl:NamedIndividual .
+
+ex:ResetBillingPeriod2 a s4grid:Script,
+        owl:NamedIndividual .
+
+ex:ResetBillingPeriod3 a s4grid:Script,
+        owl:NamedIndividual .
+
+ex:SeasonActive1 a s4grid:SeasonProfile,
+        owl:NamedIndividual ;
+	s4grid:hasSeasonProfileName "January 2023 active"^^xsd:string ;
+    s4grid:hasSeasonStart "2023-01-01T00:00:00"^^xsd:dateTime ;
+	s4grid:hasMondayProfile ex:WeekDay ;
+	s4grid:hasTuesdayProfile ex:WeekDay ;
+	s4grid:hasWednesdayProfile ex:WeekDay ;
+	s4grid:hasThursdayProfile ex:WeekDay ;
+	s4grid:hasFridayProfile ex:WeekDay ;
+	s4grid:hasSpecialDayProfile ex:SpecialFriday1 ;
+	s4grid:hasSaturdayProfile ex:WeekendDay ;
+	s4grid:hasSundayProfile ex:WeekendDay .
+
+ex:SpecialFriday1 a s4grid:SpecialDayProfile,
+        owl:NamedIndividual ;
+	s4grid:hasSpecialDayDate "2023-01-06"^^xsd:date ;
+    s4grid:hasDaySchedule ex:SpecialTariffPeriod1 .
+
+ex:SpecialTariffPeriod1 a s4grid:DaySchedule,
+        owl:NamedIndividual ;
+    s4grid:executesScript ex:ResetBillingPeriod3 ;
+    s4grid:hasStartTime "09:00:00"^^xsd:time .
+
+ex:WeekDay a s4grid:RegularDayProfile,
+        owl:NamedIndividual ;
+    s4grid:hasDaySchedule ex:WeekDayTariffPeriod1 .
+
+ex:WeekendDay a s4grid:RegularDayProfile,
+        owl:NamedIndividual ;
+    s4grid:hasDaySchedule ex:WeekendTariffPeriod1 .
+
+ex:WeekDayTariffPeriod1 a s4grid:DaySchedule,
+        owl:NamedIndividual ;
+    s4grid:executesScript ex:ResetBillingPeriod1 ;
+    s4grid:hasStartTime "09:00:00"^^xsd:time .
+	
+ex:WeekendTariffPeriod1 a s4grid:DaySchedule,
+        owl:NamedIndividual ;
+    s4grid:executesScript ex:ResetBillingPeriod2 ;
+    s4grid:hasStartTime "09:00:00"^^xsd:time .
+
+
+#################################################################
+#    Added for SHACL validation, not in the ETSI original
+#################################################################
+
+# Types the shapes check with sh:class but this file never states.
+ex:WeekDay a s4grid:DayProfile .
+ex:WeekendDay a s4grid:DayProfile .
+ex:SpecialFriday1 a s4grid:DayProfile .
+
+# Nodes added only so that the required values below have something to point at
+s4grid:ActiveEnergy a s4grid:EnergyAndPowerProperty, saref:Property .  # two types: the individual's own class from saref4grid.ttl, which the validator does not read, and the class the shape asks for
+
+# Values required by sh:minCount 1.
+ex:Meter1234 saref:observes s4grid:ActiveEnergy .
+

@@ -1,4 +1,5 @@
-# Validate the LinkML schema, then check it against the SAREF source and the official examples.
+# Validate every LinkML schema, then check each one against the ontology it was converted from
+# and that ontology's own examples.
 
 name: CI
 
@@ -16,8 +17,20 @@ permissions:
 
 jobs:
   convert:
-    name: converter reproduces the schema
+    name: converter reproduces ${{ matrix.name }}
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: saref-core
+            source: source/SAREFCore/saref.ttl
+          - name: saref4bldg
+            source: source/saref4bldg/saref4bldg.ttl
+          - name: saref4ener
+            source: source/saref4ener/saref4ener.ttl
+          - name: saref4grid
+            source: source/saref4grid/saref4grid.ttl
     steps:
       - uses: actions/checkout@v4
 
@@ -27,18 +40,18 @@ jobs:
 
       - run: pip install rdflib pyyaml
 
-      - name: Regenerate the schema from saref.ttl
-        run: python bin/owl2linkml.py source/SAREFCore/saref.ttl -o "$RUNNER_TEMP/saref-core.yaml"
+      - name: Regenerate ${{ matrix.name }} from its source ontology
+        run: python bin/owl2linkml.py ${{ matrix.source }} -o "$RUNNER_TEMP/${{ matrix.name }}.yaml"
 
       - name: Checked-in schema must match what the converter produces
         run: |
-          diff -u <(grep -v '^name:' schema/saref-core.yaml) \
-                  <(grep -v '^name:' "$RUNNER_TEMP/saref-core.yaml") && exit 0
-          echo "::error file=schema/saref-core.yaml::stale - regenerate with bin/owl2linkml.py"
+          diff -u <(grep -v '^name:' schema/${{ matrix.name }}.yaml) \
+                  <(grep -v '^name:' "$RUNNER_TEMP/${{ matrix.name }}.yaml") && exit 0
+          echo "::error file=schema/${{ matrix.name }}.yaml::stale - regenerate with bin/owl2linkml.py"
           exit 1
 
   validate:
-    name: validate schema
+    name: validate schemas
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -52,9 +65,25 @@ jobs:
           ignore: "No 'tree_root' class"
 
   check:
-    name: SHACL and RDFS checks
+    name: SHACL and RDFS checks (${{ matrix.name }})
     needs: validate
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: saref-core
+            source: source/SAREFCore/saref.ttl
+            examples: source/SAREFCore/examples
+          - name: saref4bldg
+            source: source/saref4bldg/saref4bldg.ttl
+            examples: source/saref4bldg/examples
+          - name: saref4ener
+            source: source/saref4ener/saref4ener.ttl
+            examples: source/saref4ener/examples
+          - name: saref4grid
+            source: source/saref4grid/saref4grid.ttl
+            examples: source/saref4grid/examples
     steps:
       - uses: actions/checkout@v4
 
@@ -63,7 +92,7 @@ jobs:
         with:
           command: generate
           generator: shacl
-          files: "schema/*.yaml"
+          files: "schema/${{ matrix.name }}.yaml"
           output: build/shacl
 
       - name: Generate RDFS
@@ -71,7 +100,7 @@ jobs:
         with:
           command: generate
           generator: rdfs
-          files: "schema/*.yaml"
+          files: "schema/${{ matrix.name }}.yaml"
           output: build/rdfs
 
       - uses: actions/setup-python@v5
@@ -84,16 +113,31 @@ jobs:
         run: |
           set -euo pipefail
           ls -R build
-          SHACL=$(find build/shacl -type f -print -quit)
-          RDFS=$(find build/rdfs  -type f -print -quit)
-          [ -n "$SHACL" ] && [ -n "$RDFS" ] || { echo "::error::generation produced no files"; exit 1; }
-          echo "SHACL=$SHACL" >> "$GITHUB_ENV"
-          echo "RDFS=$RDFS" >> "$GITHUB_ENV"
+          for kind in shacl rdfs; do
+            count=$(find "build/$kind" -type f | wc -l)
+            if [ "$count" -ne 1 ]; then
+              echo "::error::build/$kind holds $count files, expected exactly one for ${{ matrix.name }}"
+              exit 1
+            fi
+          done
+          echo "SHACL=$(find build/shacl -type f)" >> "$GITHUB_ENV"
+          echo "RDFS=$(find build/rdfs   -type f)" >> "$GITHUB_ENV"
 
-      - name: RDFS - inheritance, domains, ranges
+      - name: RDFS - inheritance and property coverage
         if: ${{ !cancelled() }}
-        run: python checks/check-rdfs.py --rdfs "$RDFS"
+        run: |
+          python checks/check-rdfs.py \
+            --rdfs   "$RDFS" \
+            --schema schema/${{ matrix.name }}.yaml \
+            --source ${{ matrix.source }}
 
       - name: SHACL - examples must not be over-constrained
         if: ${{ !cancelled() }}
-        run: python checks/check-examples.py --shapes "$SHACL" --mode open
+        run: |
+          python checks/check-examples.py \
+            --shapes   "$SHACL" \
+            --schema   schema/${{ matrix.name }}.yaml \
+            --examples ${{ matrix.examples }} \
+            --expected tests/expected-violations-${{ matrix.name }}.yaml \
+            --build    build/${{ matrix.name }} \
+            --mode     open

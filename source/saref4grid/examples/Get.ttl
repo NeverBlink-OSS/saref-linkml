@@ -1,0 +1,229 @@
+@prefix ex: <https://saref.etsi.org/saref4grid/v2.1.1/example/Get/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix oneM2M: <http://www.owl-ontologies.com/oneM2M#> .
+@prefix saref: <https://saref.etsi.org/core/> .
+@prefix s4grid: <https://saref.etsi.org/saref4grid/> .
+@prefix dctype: <http://purl.org/dc/dcmitype/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+
+<https://saref.etsi.org/saref4grid/v2.1.1/example/Get#> a dctype:Dataset ;
+  dcterms:license <https://forge.etsi.org/etsi-software-license> ;
+  dcterms:conformsTo <https://saref.etsi.org/saref4grid/v2.1.1/> ;
+  dcterms:title "Example Get"@en ;
+  dcterms:description "Example Get"@en .
+ 
+
+
+#################################################################
+#    Object Properties
+#################################################################
+
+oneM2M:hasService a owl:ObjectProperty .
+
+saref:hasOperation a owl:ObjectProperty .
+
+saref:hasInput a owl:ObjectProperty .
+
+saref:hasOutput a owl:ObjectProperty .
+
+s4grid:hasSelectiveAccess a owl:ObjectProperty .
+
+
+#################################################################
+#    Data properties
+#################################################################
+
+s4grid:obtainInputFromObis a owl:DatatypeProperty .
+
+s4grid:hasOutputObjectType a owl:DatatypeProperty .
+
+s4grid:obtainInputForProperty a owl:DatatypeProperty .
+
+s4grid:hasOutputDataType a owl:DatatypeProperty .
+
+s4grid:obtainFromValue a owl:DatatypeProperty .
+
+s4grid:obtainToValue a owl:DatatypeProperty .
+
+s4grid:obtainFromEntry a owl:DatatypeProperty .
+
+s4grid:obtainToEntry a owl:DatatypeProperty .
+
+
+#################################################################
+#    Classes
+#################################################################
+
+s4grid:GridMeter a owl:Class .
+
+s4grid:GetService a owl:Class .
+
+s4grid:GetOperation a owl:Class .
+
+s4grid:CosemOperationInput a owl:Class .
+
+s4grid:GetOperationObjectOutput a owl:Class .
+
+s4grid:GetOperationPropertyInput a owl:Class .
+
+s4grid:GetOperationDataOutput a owl:Class .
+
+s4grid:RangeDescriptor a owl:Class ;
+	rdfs:subClassOf s4grid:SelectiveAccess .
+
+s4grid:EntryDescriptor a owl:Class ;
+	rdfs:subClassOf s4grid:SelectiveAccess .
+
+s4grid:GetOperationOutput a owl:Class .
+
+s4grid:SelectiveAccess a owl:Class .
+
+
+#################################################################
+#    Individuals
+#################################################################
+
+ex:Meter1234 a s4grid:GridMeter,
+        owl:NamedIndividual ;
+    oneM2M:hasService ex:GetServiceIncrementalLoadProfile,
+			ex:GetServiceCapturePeriodIncrementalLoadProfile,
+			ex:GetServiceDisconnectionScript ,
+			ex:GetServiceIncrementalLoadProfileRange,
+			ex:GetServiceIncrementalLoadProfileEntry .
+
+ex:GetServiceIncrementalLoadProfile a s4grid:GetService,
+        owl:NamedIndividual ;
+    saref:hasOperation ex:GetOperationIncrementalLoadProfile .
+
+ex:GetOperationIncrementalLoadProfile a s4grid:GetOperation,
+        owl:NamedIndividual ;
+    saref:hasInput ex:OperationInputIncrementalLoadProfile ;
+	saref:hasOutput ex:OutputIncrementalLoadProfile .
+
+ex:OperationInputIncrementalLoadProfile a s4grid:CosemOperationInput,
+        owl:NamedIndividual ;
+    s4grid:obtainInputFromObis "1-0:99.1.0.255"^^xsd:string .
+
+ex:OutputIncrementalLoadProfile a s4grid:GetOperationObjectOutput,
+        owl:NamedIndividual ;
+    s4grid:hasOutputObjectType "s4grid:ProfileGeneric"^^xsd:string .
+
+ex:GetServiceCapturePeriodIncrementalLoadProfile a s4grid:GetService,
+        owl:NamedIndividual ;
+    saref:hasOperation ex:GetOperationCapturePeriodIncrementalLoadProfile .
+
+ex:GetOperationCapturePeriodIncrementalLoadProfile a s4grid:GetOperation,
+        owl:NamedIndividual ;
+    saref:hasInput ex:OperationInputCapturePeriodIncrementalLoadProfile ;
+	saref:hasOutput ex:OutputCapturePeriodIncrementalLoadProfile .
+
+ex:OperationInputCapturePeriodIncrementalLoadProfile a s4grid:GetOperationPropertyInput,
+        owl:NamedIndividual ;
+    s4grid:obtainInputFromObis "1-0:99.1.0.255"^^xsd:string ;
+	s4grid:obtainInputForProperty "s4grid:hasCapturePeriod"^^xsd:string .
+
+ex:OutputCapturePeriodIncrementalLoadProfile a s4grid:GetOperationDataOutput,
+        owl:NamedIndividual ;
+    s4grid:hasOutputDataType "xsd:unsignedLong"^^xsd:string .
+
+ex:GetServiceDisconnectionScript a s4grid:GetService,
+        owl:NamedIndividual ;
+    saref:hasOperation ex:GetOperationDisconnectionScript .
+
+ex:GetOperationDisconnectionScript a s4grid:GetOperation,
+        owl:NamedIndividual ;
+    saref:hasInput ex:OperationInputDisconnectionScript ;
+	saref:hasOutput ex:OutputDisconnectionScript .
+
+ex:OperationInputDisconnectionScript a s4grid:GetOperationPropertyInput,
+        owl:NamedIndividual ;
+    s4grid:obtainInputFromObis "0-0:10.0.196.255"^^xsd:string ;
+	s4grid:obtainInputForProperty "s4grid:storesScript"^^xsd:string .
+
+ex:OutputDisconnectionScript a s4grid:GetOperationObjectOutput,
+        owl:NamedIndividual ;
+    s4grid:hasOutputObjectType "s4grid:Script"^^xsd:string .
+
+ex:GetServiceIncrementalLoadProfileRange a s4grid:GetService,
+        owl:NamedIndividual ;
+    saref:hasOperation ex:GetOperationIncrementalLoadProfileRange .
+	
+ex:GetOperationIncrementalLoadProfileRange a s4grid:GetOperation,
+        owl:NamedIndividual ;
+    saref:hasInput ex:OperationInputIncrementalLoadProfileRange ;
+	s4grid:hasSelectiveAccess ex:RangeDescriptor1 ;
+	saref:hasOutput ex:OutputIncrementalLoadProfileRange .
+
+ex:OperationInputIncrementalLoadProfileRange a s4grid:CosemOperationInput,
+        owl:NamedIndividual ;
+    s4grid:obtainInputFromObis "1-0:99.1.0.255"^^xsd:string .
+
+ex:RangeDescriptor1 a s4grid:RangeDescriptor,
+        owl:NamedIndividual ;
+    s4grid:obtainFromValue "1"^^xsd:int ;
+	s4grid:obtainToValue "10"^^xsd:int .
+
+ex:OutputIncrementalLoadProfileRange a s4grid:GetOperationObjectOutput,
+        owl:NamedIndividual ;
+    s4grid:hasOutputObjectType "s4grid:ProfileGeneric"^^xsd:string .
+
+ex:GetServiceIncrementalLoadProfileEntry a s4grid:GetService,
+        owl:NamedIndividual ;
+    saref:hasOperation ex:GetOperationIncrementalLoadProfileEntry .
+	
+ex:GetOperationIncrementalLoadProfileEntry a s4grid:GetOperation,
+        owl:NamedIndividual ;
+    saref:hasInput ex:OperationInputIncrementalLoadProfileEntry ;
+	s4grid:hasSelectiveAccess ex:EntryDescriptor1 ;
+	saref:hasOutput ex:OutputIncrementalLoadProfileEntry .
+
+ex:OperationInputIncrementalLoadProfileEntry a s4grid:CosemOperationInput,
+        owl:NamedIndividual ;
+    s4grid:obtainInputFromObis "1-0:99.1.0.255"^^xsd:string .
+
+ex:EntryDescriptor1 a s4grid:EntryDescriptor,
+        owl:NamedIndividual ;
+    s4grid:obtainFromEntry "1"^^xsd:unsignedLong ;
+	s4grid:obtainToEntry "10"^^xsd:unsignedLong .
+
+ex:OutputIncrementalLoadProfileEntry a s4grid:GetOperationObjectOutput,
+        owl:NamedIndividual ;
+    s4grid:hasOutputObjectType "s4grid:ProfileGeneric"^^xsd:string .
+
+
+#################################################################
+#    Added for SHACL validation, not in the ETSI original
+#################################################################
+
+# Types the shapes check with sh:class but this file never states.
+ex:GetOperationIncrementalLoadProfile a saref:Operation .
+ex:GetOperationCapturePeriodIncrementalLoadProfile a saref:Operation .
+ex:GetOperationDisconnectionScript a saref:Operation .
+ex:GetOperationIncrementalLoadProfileRange a saref:Operation .
+ex:GetOperationIncrementalLoadProfileEntry a saref:Operation .
+ex:GetServiceIncrementalLoadProfile a saref:Service .
+ex:GetServiceCapturePeriodIncrementalLoadProfile a saref:Service .
+ex:GetServiceDisconnectionScript a saref:Service .
+ex:GetServiceIncrementalLoadProfileRange a saref:Service .
+ex:GetServiceIncrementalLoadProfileEntry a saref:Service .
+ex:Meter1234 a saref:Device .
+
+# Nodes added only so that the required values below have something to point at
+s4grid:ActiveEnergy a s4grid:EnergyAndPowerProperty, saref:Property .
+# Values required by sh:minCount 1.
+# isOfferedBy, isOperationOf are inverses of existing statements
+ex:GetServiceIncrementalLoadProfile saref:isOfferedBy ex:Meter1234 .
+ex:GetServiceCapturePeriodIncrementalLoadProfile saref:isOfferedBy ex:Meter1234 .
+ex:GetServiceDisconnectionScript saref:isOfferedBy ex:Meter1234 .
+ex:GetServiceIncrementalLoadProfileRange saref:isOfferedBy ex:Meter1234 .
+ex:GetServiceIncrementalLoadProfileEntry saref:isOfferedBy ex:Meter1234 .
+ex:GetOperationIncrementalLoadProfile saref:isOperationOf ex:GetServiceIncrementalLoadProfile .
+ex:GetOperationCapturePeriodIncrementalLoadProfile saref:isOperationOf ex:GetServiceCapturePeriodIncrementalLoadProfile .
+ex:GetOperationDisconnectionScript saref:isOperationOf ex:GetServiceDisconnectionScript .
+ex:GetOperationIncrementalLoadProfileRange saref:isOperationOf ex:GetServiceIncrementalLoadProfileRange .
+ex:GetOperationIncrementalLoadProfileEntry saref:isOperationOf ex:GetServiceIncrementalLoadProfileEntry .
+ex:Meter1234 saref:observes s4grid:ActiveEnergy .
+

@@ -1,0 +1,150 @@
+@prefix ex: <https://saref.etsi.org/saref4grid/v2.1.1/example/Observations/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix oneM2M: <http://www.owl-ontologies.com/oneM2M#> .
+@prefix saref: <https://saref.etsi.org/core/> .
+@prefix s4grid: <https://saref.etsi.org/saref4grid/> .
+@prefix dctype: <http://purl.org/dc/dcmitype/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix om: <http://www.ontology-of-units-of-measure.org/resource/om-2/> . # typo fixed, the original has no trailing slash so om:watt read as .../om-2watt
+
+<https://saref.etsi.org/saref4grid/v2.1.1/example/Observations#> a dctype:Dataset ;
+  dcterms:license <https://forge.etsi.org/etsi-software-license> ;
+  dcterms:conformsTo <https://saref.etsi.org/saref4grid/v2.1.1/> ;
+  dcterms:title "Example Observations"@en ;
+  dcterms:description "Example Observations"@en .
+
+
+
+#################################################################
+#    Object Properties
+#################################################################
+
+saref:madeExecution a owl:ObjectProperty .
+
+saref:hasProperty a owl:ObjectProperty .
+
+saref:hasResult a owl:ObjectProperty .
+
+saref:isMeasuredIn a owl:ObjectProperty .
+
+saref:isPropertyOf a owl:ObjectProperty .
+
+saref:isObservedBy a owl:ObjectProperty .
+
+saref:observes a owl:ObjectProperty .
+
+skos:broader a owl:ObjectProperty .
+
+skos:narrower a owl:ObjectProperty .
+	
+
+#################################################################
+#    Data properties
+#################################################################
+
+s4grid:hasObis a owl:DatatypeProperty .
+
+saref:hasTimestamp a owl:DatatypeProperty .
+
+saref:hasValue a owl:DatatypeProperty .
+
+
+#################################################################
+#    Classes
+#################################################################
+
+s4grid:GridMeter a owl:Class .
+
+s4grid:PowerLine a owl:Class .
+
+saref:EnergyUnit a owl:Class .
+
+saref:Observation a owl:Class .
+
+s4grid:EnergyAndPowerProperty a owl:Class .
+
+
+#################################################################
+#    Individuals
+#################################################################
+
+om:watt a saref:EnergyUnit,
+		owl:NamedIndividual .
+
+s4grid:ActiveEnergy a s4grid:EnergyAndPowerProperty,
+        owl:NamedIndividual ;
+    skos:narrower ex:TotalIncrementalActiveEnergyImport .
+
+s4grid:DemandRegister a s4grid:EnergyAndPowerProperty,
+	owl:NamedIndividual ;
+    skos:narrower ex:MaximumDemandRegisterImportC1TP1 .
+
+ex:MaximumDemandRegisterImportC1TP1Observation136 a saref:Observation,
+        owl:NamedIndividual ;
+    saref:hasTimestamp "2023-10-20T21:01:10"^^xsd:dateTime ;
+    saref:hasResult ex:5Watt ;
+	saref:observes ex:MaximumDemandRegisterImportC1TP1 .
+
+ex:5Watt a saref:PropertyValue ;
+    saref:hasValue "5"^^xsd:unsignedLong ;
+    saref:isMeasuredIn om:watt .	
+
+ex:Meter1234 a s4grid:GridMeter,
+        owl:NamedIndividual ;
+    saref:madeExecution ex:TotalIncrementalActiveEnergyImportObservation123,
+			ex:MaximumDemandRegisterImportC1TP1Observation136 .
+
+om:wattHour a saref:UnitOfMeasure, # was saref:EnergyUnit was deprecated in Core
+        owl:NamedIndividual .
+
+ex:MaximumDemandRegisterImportC1TP1 a s4grid:EnergyAndPowerProperty,
+        owl:NamedIndividual ;
+    s4grid:hasObis "1-0:1.6.11.255"^^xsd:string ;
+    saref:isPropertyOf ex:SubstationLine23 ;
+	saref:isObservedBy ex:MaximumDemandRegisterImportC1TP1Observation136 ;
+	skos:broader s4grid:DemandRegister .
+
+ex:TotalIncrementalActiveEnergyImportObservation123 a saref:Observation,
+        owl:NamedIndividual ;
+    saref:hasTimestamp "2023-10-20T21:01:10"^^xsd:dateTime ;
+    saref:hasResult ex:5WattHour ;
+	saref:observes ex:TotalIncrementalActiveEnergyImport .
+
+ex:5WattHour a saref:PropertyValue ;
+    saref:hasValue "5"^^xsd:unsignedLong ;
+    saref:isMeasuredIn om:wattHour .	
+
+ex:SubstationLine23 a s4grid:PowerLine,
+        owl:NamedIndividual ;
+    saref:hasProperty ex:MaximumDemandRegisterImportC1TP1,
+        ex:TotalIncrementalActiveEnergyImport .
+
+ex:TotalIncrementalActiveEnergyImport a s4grid:EnergyAndPowerProperty,
+        owl:NamedIndividual ;
+    s4grid:hasObis "1-0:1.29.0.255"^^xsd:string ;
+    saref:isPropertyOf ex:SubstationLine23 ;
+	saref:isObservedBy ex:TotalIncrementalActiveEnergyImportObservation123 ;
+	skos:broader s4grid:ActiveEnergy .
+
+
+#################################################################
+#    Added for SHACL validation, not in the ETSI original
+#################################################################
+
+# Types the shapes check with sh:class but this file never states.
+ex:MaximumDemandRegisterImportC1TP1 a saref:Property .
+ex:TotalIncrementalActiveEnergyImport a saref:Property .
+s4grid:DemandRegister a saref:Property .
+s4grid:ActiveEnergy a saref:Property .
+ex:SubstationLine23 a saref:FeatureOfInterest .
+ex:MaximumDemandRegisterImportC1TP1Observation136 a saref:ProcedureExecution .
+ex:TotalIncrementalActiveEnergyImportObservation123 a saref:ProcedureExecution .
+om:watt a saref:UnitOfMeasure .
+
+# Values required by sh:minCount 1.
+ex:Meter1234 saref:observes ex:TotalIncrementalActiveEnergyImport .
+

@@ -1,0 +1,264 @@
+@prefix : <https://saref.etsi.org/saref4ener/v2.1.1/example/PowerProfileExample/>  . 
+@prefix dc: <http://purl.org/dc/terms/> .
+@prefix om-ucum: <http://www.ontology-of-units-of-measure.org/resource/om-2-ucum/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix s2: <http://ontology.tno.nl/interconnect/s2#> .
+@prefix s4ener: <https://saref.etsi.org/saref4ener/> .
+@prefix saref: <https://saref.etsi.org/core/> .
+@prefix time: <http://www.w3.org/2006/time#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix dctype: <http://purl.org/dc/dcmitype/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+
+
+<https://saref.etsi.org/saref4ener/v2.1.1/example/powerProfileExample#> 
+  a dctype:Dataset ;
+  dcterms:conformsTo <https://saref.etsi.org/saref4ener/v2.1.1/> ;
+  dcterms:abstract "This example file exemplifies how to model a Power Profile in the SAREF4ENER extension following the definition in the S2 standard." ;
+  dcterms:description "This example file exemplifies how to model a Power profile in the SAREF4ENER extension." ;
+  dcterms:title "SAREF4ENER examples for a Power Profile"@en ;
+  owl:imports saref:, s4ener: ;
+  dcterms:license <https://forge.etsi.org/etsi-software-license> ;
+
+.
+:AlternativesGroup_1
+  a s4ener:AlternativesGroup ;
+  rdfs:comment "This Alternatives Group example follows the PowerProfileDefinition example from page 28 of the S2 documentation. The difference in modelling choice is that Saref4Energy does not contain an equivalent for the PowerSequenceContainers used in S2. Therefore, the PowerSequences in this example together form the cartesian product of the PowerSequenceContainers in" ;
+  rdfs:label "Alternatives group 1" ;
+  rdfs:label "Power Sequence Container" ;
+  saref:consistsOf :PowerSequence_1 ;
+  saref:consistsOf :PowerSequence_2 ;
+  saref:consistsOf :PowerSequence_3 ;
+  saref:consistsOf :PowerSequence_4 ;
+  saref:consistsOf :PowerSequence_5 ;
+  saref:consistsOf :PowerSequence_6 ;
+  s4ener:hasEarliestStartTime "2023-02-24T17:00:00Z"^^xsd:dateTimeStamp ;
+  s4ener:hasLatestEndTime "2023-02-24T21:00:00Z"^^xsd:dateTimeStamp ;
+.
+:Device_1
+  a saref:Device ;
+  rdfs:comment "An example washing machine that exhibits the example power profile of the S2 documentation." ;
+  rdfs:label "Washing Machine" ;
+  saref:hasProfile :PowerProfile_1 ;
+.
+:Observation_1
+  a saref:Observation ;
+  rdfs:label "Observation 1" ;
+  saref:hasValue "2000" ;
+  saref:isMeasuredIn om-ucum:kilowattHour ;
+  saref:isValueOfProperty s4ener:Energy ;
+.
+:Observation_2
+  a saref:Observation ;
+  rdfs:label "Observation 2" ;
+  saref:hasValue "1500" ;
+  saref:isMeasuredIn om-ucum:kilowattHour ;
+  saref:isValueOfProperty s4ener:Power ;
+.
+:Observation_3
+  a saref:Observation ;
+  rdfs:label "Observation 3" ;
+  saref:hasValue "100" ;
+  saref:isMeasuredIn om-ucum:kilowattHour ;
+  saref:isValueOfProperty s4ener:Energy ;
+  saref:isValueOfProperty s4ener:Power ;
+.
+:PowerProfile_1
+  a s4ener:PowerProfile ;
+  rdfs:comment """The Power Profile was the only flexibility profile that was in the original saref4Ener. In this extension we added several other forms of energy flexibility drawn from the S2 standard.
+  
+  A major difference in modelling is that S2 divides a appliance task into various phases, where in each phases the Energy Management System can choose the appropriate profile. In EEBUS we (for now) only have the option of choosing the whole program before starting it. Therefore, we appended the various slots of the S2 example into six PowerSequence, each concatenating three consecutive S2 PowerSequences. """ ;
+  rdfs:label "Power profile 1" ;
+  saref:consistsOf :AlternativesGroup_1 ;
+  s4ener:belongsTo :Device_1 ;
+  s4ener:nodeRemoteControllable true ;
+  s4ener:supportsReselection true ;
+  s4ener:supportsSingleSlotSchedulingOnly true ;
+  s4ener:totalSequencesCountMax "1"^^xsd:unsignedInt ;
+.
+:PowerSequence_1
+  a s4ener:PowerSequence ;
+  s4ener:abnormalConditionOnly false ;
+  s4ener:hasPauseDurationMax "P0M"^^xsd:duration ;
+  rdfs:comment "This power sequence is the combination of the first PowerSequences of all three PowerSequenceContainers in the S2 PowerProfile example." ;
+  rdfs:label "Power sequence 1" ;
+  saref:consistsOf :Slot_1 ;
+  saref:consistsOf :Slot_2 ;
+  saref:consistsOf :Slot_3 ;
+  saref:consistsOf :Slot_4 ;
+  saref:consistsOf :Slot_5 ;
+  saref:consistsOf :Slot_6 ;
+  saref:consistsOf :Slot_7 ;
+  saref:consistsOf :Slot_8 ;
+  saref:consistsOf :Slot_9 ;
+  s4ener:hasEndTime "PT4H"^^xsd:duration ; # was "2023-02-17T21:00:00Z"^^xsd:dateTimeStamp; s4ener:hasEndTime is declared rdfs:range xsd:duration
+  s4ener:hasStartTime "2023-02-17T17:00:00Z"^^xsd:dateTimeStamp ;
+  s4ener:isPausable false ;
+.
+:PowerSequence_2
+  a s4ener:PowerSequence ;
+  rdfs:label "Power sequence 2" ;
+.
+:PowerSequence_3
+  a s4ener:PowerSequence ;
+  rdfs:label "Power sequence 3" ;
+.
+:PowerSequence_4
+  a s4ener:PowerSequence ;
+  rdfs:label "Power sequence 4" ;
+.
+:PowerSequence_5
+  a s4ener:PowerSequence ;
+  rdfs:label "Power sequence 5" ;
+.
+:PowerSequence_6
+  a s4ener:PowerSequence ;
+  rdfs:label "Power sequence 6" ;
+.
+:Slot_1
+  a s4ener:Slot ;
+  rdfs:label "Slot 1" ;
+  s4ener:belongsTo :PowerSequence_1 ;
+  s4ener:hasDefaultDuration "PT1H"^^xsd:duration ;
+  s4ener:hasDurationMin "PT30M"^^xsd:duration ;
+  s4ener:hasSlotValue :Observation_1 ;
+  s4ener:slotNumber "1"^^xsd:unsignedInt ;
+.
+:Slot_2
+  a s4ener:Slot ;
+  rdfs:label "Slot 2" ;
+  s4ener:slotNumber "2"^^xsd:unsignedInt ;
+  s4ener:belongsTo :PowerSequence_1 ;
+  s4ener:hasDefaultDuration "PT2H"^^xsd:duration ;
+  s4ener:hasDurationMin "PT10M"^^xsd:duration ;
+  s4ener:hasSlotValue :Observation_2 ;
+.
+:Slot_3
+  a s4ener:Slot ;
+  rdfs:label "Slot 3" ;
+  s4ener:slotNumber "3"^^xsd:unsignedInt ;
+  s4ener:belongsTo :PowerSequence_1 ;
+  s4ener:hasDefaultDuration "PT30M"^^xsd:duration ;
+  s4ener:hasDurationMin "PT10M"^^xsd:duration ;
+  s4ener:hasSlotValue :Observation_3 ;
+.
+:Slot_4
+  a s4ener:Slot ;
+  rdfs:label "Slot 4" ;
+  s4ener:slotNumber "4"^^xsd:unsignedInt ;
+.
+:Slot_5
+  a s4ener:Slot ;
+  rdfs:comment """The PowerProfile example has a max pause before the first slot of the only power sequence of the second power sequence container. To properly model this we add a maximum activation delay to the fifth slot.
+  
+Throughout this example we give several ways to model the duration or time, such that we can consider the pros and cons of the various options: include Time ontology or directly use the xsd:decimal datatype.""" ;
+  rdfs:label "Slot 5 maximum activation delay" ;
+  s4ener:hasActivationDelay "PT10M"^^xsd:duration ;
+  s4ener:slotNumber "5"^^xsd:unsignedInt ;
+.
+:Slot_6
+  a s4ener:Slot ;
+  rdfs:label "Slot 6" ;
+  s4ener:slotNumber "6"^^xsd:unsignedInt ;
+.
+:Slot_7
+  a s4ener:Slot ;
+  rdfs:label "Slot 7" ;
+  s4ener:slotNumber "7"^^xsd:unsignedInt ;
+.
+:Slot_8
+  a s4ener:Slot ;
+  rdfs:label "Slot 8" ;
+  s4ener:hasActivationDelay "PT5M"^^xsd:duration ;
+  s4ener:slotNumber "8"^^xsd:unsignedInt ;
+.
+:Slot_9
+  a s4ener:Slot ;
+  rdfs:label "Slot 9" ;
+  s4ener:slotNumber "9"^^xsd:unsignedInt ;
+.
+
+dcterms:abstract a owl:AnnotationProperty .
+dcterms:conformsTo a owl:AnnotationProperty .
+
+#################################################################
+#    Added for SHACL validation, not in the ETSI original
+#################################################################
+
+# Types the shapes check with sh:class but this file never states.
+om-ucum:kilowattHour a saref:UnitOfMeasure .
+s4ener:Energy a saref:Property .
+s4ener:Power a saref:Property .
+:Device_1 a s4ener:Device .
+:Observation_1 a saref:PropertyValue .
+:Observation_2 a saref:PropertyValue .
+:Observation_3 a saref:PropertyValue .
+:PowerProfile_1 a saref:Profile .
+
+# Nodes added only so that the required values below have something to point at
+s4ener:Average a s4ener:Usage .
+:AddedProperty a saref:Property .
+
+# Values required by sh:minCount 1.
+:Slot_5 s4ener:hasUsage s4ener:Average .
+:Slot_1 s4ener:hasUsage s4ener:Average .
+:Slot_2 s4ener:hasUsage s4ener:Average .
+:Slot_9 s4ener:hasUsage s4ener:Average .
+:Slot_8 s4ener:hasUsage s4ener:Average .
+:Slot_7 s4ener:hasUsage s4ener:Average .
+:Slot_6 s4ener:hasUsage s4ener:Average .
+:Slot_4 s4ener:hasUsage s4ener:Average .
+:Slot_3 s4ener:hasUsage s4ener:Average .
+:Slot_5 s4ener:belongsTo :PowerSequence_1 .
+:Slot_9 s4ener:belongsTo :PowerSequence_1 .
+:Slot_8 s4ener:belongsTo :PowerSequence_1 .
+:Slot_7 s4ener:belongsTo :PowerSequence_1 .
+:Slot_6 s4ener:belongsTo :PowerSequence_1 .
+:Slot_4 s4ener:belongsTo :PowerSequence_1 .
+:Observation_3 saref:observes :AddedProperty .
+:Observation_1 saref:observes :AddedProperty .
+:Observation_2 saref:observes :AddedProperty .
+:PowerSequence_4 saref:consistsOf :Slot_1 .
+:PowerSequence_6 saref:consistsOf :Slot_1 .
+:PowerSequence_3 saref:consistsOf :Slot_1 .
+:PowerSequence_5 saref:consistsOf :Slot_1 .
+:PowerSequence_2 saref:consistsOf :Slot_1 .
+:PowerSequence_4 s4ener:hasActiveDurationMin "PT1H"^^xsd:duration .
+:PowerSequence_6 s4ener:hasActiveDurationMin "PT1H"^^xsd:duration .
+:PowerSequence_3 s4ener:hasActiveDurationMin "PT1H"^^xsd:duration .
+:PowerSequence_5 s4ener:hasActiveDurationMin "PT1H"^^xsd:duration .
+:PowerSequence_1 s4ener:hasActiveDurationMin "PT1H"^^xsd:duration .
+:PowerSequence_2 s4ener:hasActiveDurationMin "PT1H"^^xsd:duration .
+:PowerSequence_4 s4ener:belongsTo :AlternativesGroup_1 .
+:PowerSequence_6 s4ener:belongsTo :AlternativesGroup_1 .
+:PowerSequence_3 s4ener:belongsTo :AlternativesGroup_1 .
+:PowerSequence_5 s4ener:belongsTo :AlternativesGroup_1 .
+:PowerSequence_1 s4ener:belongsTo :AlternativesGroup_1 .
+:PowerSequence_2 s4ener:belongsTo :AlternativesGroup_1 .
+:PowerSequence_4 s4ener:sequenceRemoteControllable "false"^^xsd:boolean .
+:PowerSequence_6 s4ener:sequenceRemoteControllable "false"^^xsd:boolean .
+:PowerSequence_3 s4ener:sequenceRemoteControllable "false"^^xsd:boolean .
+:PowerSequence_5 s4ener:sequenceRemoteControllable "false"^^xsd:boolean .
+:PowerSequence_1 s4ener:sequenceRemoteControllable "false"^^xsd:boolean .
+:PowerSequence_2 s4ener:sequenceRemoteControllable "false"^^xsd:boolean .
+:PowerSequence_4 s4ener:hasActiveDurationMax "PT1H"^^xsd:duration .
+:PowerSequence_6 s4ener:hasActiveDurationMax "PT1H"^^xsd:duration .
+:PowerSequence_3 s4ener:hasActiveDurationMax "PT1H"^^xsd:duration .
+:PowerSequence_5 s4ener:hasActiveDurationMax "PT1H"^^xsd:duration .
+:PowerSequence_1 s4ener:hasActiveDurationMax "PT1H"^^xsd:duration .
+:PowerSequence_2 s4ener:hasActiveDurationMax "PT1H"^^xsd:duration .
+:PowerSequence_4 s4ener:hasStartTime "2023-01-29T00:00:00Z"^^xsd:dateTimeStamp .
+:PowerSequence_6 s4ener:hasStartTime "2023-01-29T00:00:00Z"^^xsd:dateTimeStamp .
+:PowerSequence_3 s4ener:hasStartTime "2023-01-29T00:00:00Z"^^xsd:dateTimeStamp .
+:PowerSequence_5 s4ener:hasStartTime "2023-01-29T00:00:00Z"^^xsd:dateTimeStamp .
+:PowerSequence_2 s4ener:hasStartTime "2023-01-29T00:00:00Z"^^xsd:dateTimeStamp .
+:PowerSequence_4 saref:hasIdentifier "1"^^xsd:string .
+:PowerSequence_6 saref:hasIdentifier "1"^^xsd:string .
+:PowerSequence_3 saref:hasIdentifier "1"^^xsd:string .
+:PowerSequence_5 saref:hasIdentifier "1"^^xsd:string .
+:PowerSequence_1 saref:hasIdentifier "1"^^xsd:string .
+:PowerSequence_2 saref:hasIdentifier "1"^^xsd:string .
+:AlternativesGroup_1 s4ener:belongsTo :PowerProfile_1 .
+:AlternativesGroup_1 saref:hasIdentifier "1"^^xsd:unsignedInt .

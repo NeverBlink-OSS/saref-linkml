@@ -1,13 +1,7 @@
 #!/usr/bin/env python3
 """Validate the official SAREF examples against SHACL shapes generated from the LinkML schema.
 
-    ./checks/check_examples.py --mode open      # shapes must not forbid what SAREF permits
-    ./checks/check_examples.py --mode closed    # shapes must declare everything SAREF uses
-    ./checks/check_examples.py --shapes build/saref-core.shacl.ttl --mode open   # reuse in CI
-
-The examples are the only external check on the conversion: they were written against SAREF itself,
-by people who did not know this schema exists. A violation means our shapes forbid something SAREF
-permits, so the schema is wrong - not the example.
+Note: examples may be patched to align with SHACL restrictions. See source .ttl for added statements.
 
 Both modes gate; a failure in either exits nonzero:
   open    only declared constraints are checked. A failure is an over-constraint.
@@ -30,8 +24,6 @@ ROOT = Path(__file__).resolve().parents[1]
 
 def generate_shapes(schema, out):
     """Generate closed shapes with the CLI. Only used when --shapes is not supplied."""
-    # linkml-scala's --to does not truncate: writing shorter output over a longer existing file
-    # leaves the old tail behind and yields corrupt Turtle. Remove it first.
     out.unlink(missing_ok=True)
     result = subprocess.run(
         ["linkml-scala", "generate", "shacl", "--format", "ttl", "--to", str(out), str(schema)],
@@ -44,13 +36,7 @@ def generate_shapes(schema, out):
 def shapes_for(source, mode, build):
     """Write a shapes file for `mode`, derived from a default (closed) generation.
 
-    `--open` sets sh:closed false on every node shape, and that is its only effect - verified by
-    diffing both generator outputs on 0.12.1. So open mode is derived by flipping, and closed mode
-    is the generated file untouched.
-
-    Untouched matters: the default generation already emits sh:closed false for the 5 mixin classes,
-    because a mixin's instances carry the mixing class's properties too. Forcing those to true would
-    make closed mode stricter than linkml-scala ever is, and invent failures.
+    `--open` sets sh:closed false on every node shape.
     """
     graph = Graph()
     graph.parse(source)          # format inferred from the extension, so .ttl or .nt both work

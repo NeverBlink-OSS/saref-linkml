@@ -1,0 +1,307 @@
+@prefix : <https://saref.etsi.org/saref4ener/v2.1.1/example/fillRateProfile/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix s4ener: <https://saref.etsi.org/saref4ener/> .
+@prefix saref: <https://saref.etsi.org/core/> .
+@prefix time: <http://www.w3.org/2006/time#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix unit: <http://qudt.org/vocab/unit/> .
+@prefix om: <http://www.ontology-of-units-of-measure.org/resource/om-2-ucum/> . # typo fixed: the original has no trailing slash, so om:watt read as .../om-2-ucumwatt
+@prefix dctype: <http://purl.org/dc/dcmitype/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+
+<https://saref.etsi.org/saref4ener/v2.1.1/example/fillRateProfile#>
+  a dctype:Dataset ;
+  dcterms:conformsTo <https://saref.etsi.org/saref4ener/v2.1.1/> ;
+  owl:imports saref:, s4ener: ;
+  dcterms:title "SAREF4ENER Fill Rate Based Profile Example"@en ;
+  dcterms:abstract "This example file exemplifies how to model a Fill Rate Based Flexibility profile in the SAREF4ENER extension." ;
+  dcterms:description "This example file exemplifies how to model a Fill Rate Based Flexibility profile in the SAREF4ENER extension." ;
+  dcterms:license <https://forge.etsi.org/etsi-software-license> ;
+.
+
+### Device and flexibility profile ###
+
+:ThermalBuffer
+  a saref:Device, s4ener:Storage ;
+  rdfs:label "Thermal buffer" ;
+  saref:hasProfile :FillRateProfile_1 ;
+  s4ener:hasFillLevelRange :TimeSeries_3 ;
+  s4ener:hasLeakageBehaviour :LeakageBehaviour_1 ;
+  s4ener:presentFillLevel :PresentFillLevel_1 ; 
+  s4ener:hasFillLevelTargetProfile :FillLevelTargetProfile_1 ;
+  s4ener:hasUsageForecast :TimeSeries_4 ; #add TimeSeries
+  rdfs:comment "Hot water" ;
+  rdfs:label "Storage 1" ;
+.
+
+:PresentFillLevel_1
+  a saref:PropertyValue ;
+  saref:hasValue "60"^^xsd:decimal ;
+  saref:isMeasuredIn unit:PERCENT ;
+  saref:isValueOfProperty s4ener:Energy ;
+.
+
+:FillLevelTargetProfileElement_1
+  a s4ener:FillLevelTargetProfileElement ;
+  s4ener:hasDuration "P2H" ; 
+  rdfs:label "Fill level target profile element 1" ;
+.
+:FillLevelTargetProfileElement_2
+  a s4ener:FillLevelTargetProfileElement ;
+  rdfs:label "Fill level target profile element 2" ;
+.
+:FillLevelTargetProfile_1
+  a s4ener:FillLevelTargetProfile ;
+  s4ener:hasFillLevelTargetProfileElement :FillLevelTargetProfileElement_1 ;
+  s4ener:hasFillLevelTargetProfileElement :FillLevelTargetProfileElement_2 ;
+  s4ener:hasEarliestStartTime "2023-01-25T17:30:00Z"^^xsd:dateTimeStamp ;
+  rdfs:label "Fill level target profile 1" ;
+.
+
+:FillRateProfile_1
+  a s4ener:FillRateProfile ;
+  s4ener:isActuatedBy :HeatPump ;
+  s4ener:hasStorage :ThermalBuffer ;
+  s4ener:hasEarliestStartTime "2023-01-19T17:00:00Z"^^xsd:dateTimeStamp ;
+  rdfs:label "Fill rate profile 1" ;
+.
+
+#########################
+### Leakage behaviour ###
+#########################
+
+:LeakageBehaviour_1
+  a s4ener:LeakageBehaviour ;
+  s4ener:hasLeakageBehaviourElement :LeakageBehaviourElement_1 ;
+  s4ener:hasLeakageBehaviourElement :LeakageBehaviourElement_2 ;
+  s4ener:hasStartTime "2023-01-19T17:00:30Z"^^xsd:dateTimeStamp ;
+  rdfs:label "Leakage behaviour 1" ;
+.
+:LeakageBehaviourElement_1
+  a s4ener:LeakageBehaviourElement ;
+  s4ener:hasFillLevelRange :NumberRange_1 ;
+  s4ener:leakageRate :DataPoint_11 ; #"10"^^xsd:decimal ; 
+  rdfs:label "Leakage behaviour element 1" ;
+.
+:DataPoint_11 rdf:type saref:PropertyValue .
+
+:LeakageBehaviourElement_2
+  a s4ener:LeakageBehaviourElement ;
+  s4ener:hasFillLevelRange :NumberRange_2 ;
+  s4ener:leakageRate :DataPoint_12 ; # "20"^^xsd:decimal ; 
+  rdfs:label "Leakage behaviour element 2" ;
+.
+:DataPoint_12 rdf:type s4ener:DataPoint .
+
+:NumberRange_1
+  a s4ener:NumberRange ;
+  s4ener:endOfRange :PropertyValue_1 ; #"25"^^xsd:decimal ;
+  s4ener:startOfRange :PropertyValue_2 ; #"15"^^xsd:decimal ;
+  rdfs:label "Number range 1" ;
+.
+:PropertyValue_1
+  a saref:PropertyValue ;
+  saref:isValueOfProperty s4ener:Energy ;
+  saref:hasValue "25"^^xsd:decimal ;
+  saref:isMeasuredIn om:kilowatt ;
+.
+:PropertyValue_2
+  a saref:PropertyValue ;
+  saref:isValueOfProperty s4ener:Energy ;
+  saref:hasValue "15"^^xsd:decimal ;
+  saref:isMeasuredIn om:kilowatt ;
+.
+:NumberRange_2
+  a s4ener:NumberRange ;
+  s4ener:endOfRange :PropertyValue_3 ; #"35"^^xsd:decimal ;
+  s4ener:startOfRange :PropertyValue_4 ; #"25"^^xsd:decimal ;
+  rdfs:label "Number range 2" ;
+.
+:PropertyValue_3
+  a saref:PropertyValue ;
+  saref:isValueOfProperty s4ener:Energy ;
+  saref:hasValue "35"^^xsd:decimal ;
+  saref:isMeasuredIn om:kilowatt ;
+.
+:PropertyValue_4
+  a saref:PropertyValue ;
+  saref:isValueOfProperty s4ener:Energy ;
+  saref:hasValue "25"^^xsd:decimal ;
+  saref:isMeasuredIn om:kilowatt ;
+.
+
+######################
+### Usage forecast ###
+######################
+
+:TimeSeries_4
+  rdfs:label "Usage forecast" ;
+  rdfs:comment "The usage forecast of January 29th from 10 am to 16 pm." ;
+  a s4ener:TimeSeries ;
+  s4ener:hasDataPoint :DataPoint_7 ;
+  s4ener:hasDataPoint :DataPoint_8 ;
+  s4ener:hasDataPoint :DataPoint_9 ;
+  s4ener:hasDataPoint :DataPoint_10 ;
+.
+:DataPoint_7 
+  a s4ener:DataPoint ;
+  saref:hasValue "1000"^^xsd:decimal ;
+  saref:isValueOfProperty s4ener:Power ;
+  saref:isMeasuredIn om:kilowatt ;
+  saref:hasTimestamp "2023-01-29T10:00:00Z"^^xsd:dateTime; # was xsd:dateTimeStamp, see the note at the end of this file
+.
+:DataPoint_8 
+  a s4ener:DataPoint ;
+  saref:hasValue "0"^^xsd:decimal ;
+  saref:isValueOfProperty s4ener:Power ;
+  saref:isMeasuredIn om:kilowatt ;
+  saref:hasTimestamp "2023-01-29T14:00:00Z"^^xsd:dateTime; # was xsd:dateTimeStamp, see the note at the end of this file
+.
+:DataPoint_9 
+  a s4ener:DataPoint ;
+  saref:hasValue "1500"^^xsd:decimal ;
+  saref:isValueOfProperty s4ener:Power ;
+  saref:isMeasuredIn om:kilowatt ;
+  saref:hasTimestamp "2023-01-29T15:00:00Z"^^xsd:dateTime; # was xsd:dateTimeStamp, see the note at the end of this file
+.
+:DataPoint_10 
+  a s4ener:DataPoint ;
+  saref:hasValue "0"^^xsd:decimal ;
+  saref:isValueOfProperty s4ener:Power ;
+  saref:isMeasuredIn om:kilowatt ;
+  saref:hasTimestamp "2023-01-29T16:00:00Z"^^xsd:dateTime; # was xsd:dateTimeStamp, see the note at the end of this file
+.
+
+########################################
+### Actuator and its operation modes ###
+########################################
+
+:HeatPump rdf:type saref:Actuator ;
+  saref:consumes :Electricity ;
+  s4ener:hasOperationMode :OperationMode_1 ;
+  s4ener:hasTransition :Transition_1 ;
+  s4ener:hasTimer :Timer_1 ;
+  s4ener:hasActiveOperationMode :OperationMode_1 ;
+  s4ener:hasOperationModeFactor "0.8"^^xsd:decimal ;
+  s4ener:hasPreviousOperationMode :OperationMode_1 ;
+  s4ener:hasTransitionTimestamp "2023-01-29T16:55:00Z"^^xsd:dateTimeStamp ;
+.
+
+:OperationMode_1 rdf:type s4ener:OperationMode ;
+  rdfs:label "off" ;
+  s4ener:hasOperationModeElement :OperationModeElement_1 ;
+  s4ener:abnormalConditionOnly "false"^^xsd:boolean ;
+.
+
+:OperationModeElement_1 rdf:type s4ener:OperationModeElement ;
+  s4ener:hasFillLevelRange :fillLevelRange_1 ;
+  s4ener:fillRate :NumberRange_4 ;
+  s4ener:hasPowerRange :PowerRange_1 ;
+.
+:fillLevelRange_1 rdf:type s4ener:NumberRange ;
+  s4ener:startOfRange :StartOfRange_3 ;
+  s4ener:endOfRange :EndOfRange_3 ;
+  rdfs:label "Fill level range for Operation Mode Element 1" ;
+.
+
+:StartOfRange_3 rdf:type saref:PropertyValue ;
+  saref:hasValue "0"^^xsd:decimal ;
+  saref:isValueOfProperty :Occupancy ;
+  saref:isMeasuredIn om:percent ;
+.
+
+:EndOfRange_3 rdf:type saref:PropertyValue ;
+  saref:hasValue "0"^^xsd:decimal ;
+  saref:isValueOfProperty :Occupancy ;
+  saref:isMeasuredIn om:percent ;
+.
+
+:NumberRange_4 rdf:type s4ener:NumberRange ;
+  s4ener:startOfRange :StartOfRange_4 ;
+  s4ener:endOfRange :EndOfRange_4 ;
+  rdfs:label "Fill rate" ;
+.
+
+:StartOfRange_4 rdf:type saref:PropertyValue ;
+  saref:hasValue "0"^^xsd:decimal ;
+  saref:isValueOfProperty :Motion ;
+  saref:isMeasuredIn om:percent ;
+.
+
+:EndOfRange_4 rdf:type saref:PropertyValue ;
+  saref:hasValue "0"^^xsd:decimal ;
+  saref:isValueOfProperty :Motion ;
+  saref:isMeasuredIn om:percent ;
+.
+
+:PowerRange_1 rdf:type s4ener:PowerRange ;
+  s4ener:relatesToCommodity s4ener:ElectricPowerL1 ;
+  s4ener:hasNumberRange :NumberRange_5 ;
+.
+
+:NumberRange_5 rdf:type s4ener:NumberRange ;
+  s4ener:startOfRange :StartOfRange_5 ;
+  s4ener:endOfRange :EndOfRange_5 ;
+  rdfs:label "Power range" ;
+.
+
+:StartOfRange_5 rdf:type saref:PropertyValue ;
+  saref:hasValue "0"^^xsd:decimal ;
+  saref:isMeasuredIn om:watt ;
+  saref:isValueOfProperty s4ener:Power ;
+.
+
+:StartOfRange_6 rdf:type saref:PropertyValue ;
+  saref:hasValue "0"^^xsd:decimal ;
+  saref:isMeasuredIn om:watt ;
+  saref:isValueOfProperty s4ener:Power ;
+.
+
+:Transition_1 rdf:type s4ener:Transition ;
+  rdfs:comment "See the OperationModeProfile examples for an extensive example containing multiple instances the Transition class." ;
+.
+
+:Timer_1 rdf:time s4ener:Timer ;
+  rdfs:comment "See the OperationModeProfile examples for an extensive example containing multiple instances of the Transition class." ;
+.  
+  
+:Occupancy rdf:type saref:Property .
+
+dcterms:abstract a owl:AnnotationProperty .
+
+#################################################################
+#    Added for SHACL validation, not in the ETSI original
+#################################################################
+# SAREF Core types saref:hasTimestamp with rdfs:range xsd:dateTime
+
+# Types the shapes check with sh:class but this file never states.
+unit:PERCENT a saref:UnitOfMeasure .
+om:kilowatt a saref:UnitOfMeasure .
+om:percent a saref:UnitOfMeasure .
+om:watt a saref:UnitOfMeasure .
+s4ener:Energy a saref:Property .
+s4ener:Power a saref:Property .
+:DataPoint_12 a saref:PropertyValue .
+:Electricity a saref:Commodity .
+:EndOfRange_5 a saref:PropertyValue .
+:FillRateProfile_1 a saref:Profile .
+:Motion a saref:Property .
+:TimeSeries_3 a s4ener:NumberRange .
+
+# Nodes added only so that the required values below have something to point at
+:AddedInterval a time:Interval .
+
+# Values required by sh:minCount 1.
+:HeatPump saref:controls :Occupancy .
+:DataPoint_9 saref:observes :Occupancy .
+:DataPoint_12 saref:observes :Occupancy .
+:DataPoint_8 saref:observes :Occupancy .
+:DataPoint_7 saref:observes :Occupancy .
+:DataPoint_10 saref:observes :Occupancy .
+:DataPoint_9 s4ener:hasEffectivePeriod :AddedInterval .
+:DataPoint_12 s4ener:hasEffectivePeriod :AddedInterval .
+:DataPoint_8 s4ener:hasEffectivePeriod :AddedInterval .
+:DataPoint_7 s4ener:hasEffectivePeriod :AddedInterval .
+:DataPoint_10 s4ener:hasEffectivePeriod :AddedInterval .

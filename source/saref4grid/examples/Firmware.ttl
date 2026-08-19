@@ -1,0 +1,73 @@
+@prefix ex: <https://saref.etsi.org/saref4grid/v2.1.1/example/Firmware/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix oneM2M: <http://www.owl-ontologies.com/oneM2M#> .
+@prefix saref: <https://saref.etsi.org/core/> .
+@prefix s4grid: <https://saref.etsi.org/saref4grid/> .
+@prefix dctype: <http://purl.org/dc/dcmitype/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+
+<https://saref.etsi.org/saref4grid/v2.1.1/example/Firmware#> a dctype:Dataset ;
+  dcterms:license <https://forge.etsi.org/etsi-software-license> ;
+  dcterms:conformsTo <https://saref.etsi.org/saref4grid/v2.1.1/> ;
+  dcterms:title "Example Firmware"@en ;
+  dcterms:description "Example Firmware"@en .
+
+
+
+#################################################################
+#    Object Properties
+#################################################################
+
+s4grid:hasFirmware a owl:ObjectProperty .
+
+
+#################################################################
+#    Data properties
+#################################################################
+
+s4grid:hasFirmwareVersion a owl:DatatypeProperty .
+
+s4grid:hasObis a owl:DatatypeProperty .
+
+s4grid:hasProductId a owl:DatatypeProperty .
+
+s4grid:hasVendorId a owl:DatatypeProperty .
+
+
+#################################################################
+#    Classes
+#################################################################
+
+s4grid:Firmware a owl:Class .
+
+s4grid:GridMeter a owl:Class .
+
+
+#################################################################
+#    Individuals
+#################################################################
+
+ex:Meter1234 a s4grid:GridMeter,
+        owl:NamedIndividual ;
+    s4grid:hasFirmware ex:ActivePLCFirmware .
+
+ex:ActivePLCFirmware a s4grid:Firmware,
+        owl:NamedIndividual ;
+    s4grid:hasFirmwareVersion "1.0.2"^^xsd:string ;
+    s4grid:hasObis "0-0:28.7.0.255"^^xsd:string ;
+    s4grid:hasProductId "64456"^^xsd:unsignedShort ;
+    s4grid:hasVendorId "12346"^^xsd:unsignedShort .
+
+
+#################################################################
+#    Added for SHACL validation, not in the ETSI original
+#################################################################
+
+# Nodes added only so that the required values below have something to point at
+s4grid:ActiveEnergy a s4grid:EnergyAndPowerProperty, saref:Property .
+# Values required by sh:minCount 1.
+ex:Meter1234 saref:observes s4grid:ActiveEnergy .
+

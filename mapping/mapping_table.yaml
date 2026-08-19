@@ -9,47 +9,122 @@ prefixes:
   vann:    http://purl.org/vocab/vann/
   xsd:     http://www.w3.org/2001/XMLSchema#
 
+# owl:imports is resolved against the schema directory 
+imports:
+  resolve_from:  schema/ # existing schemas must be placed here
+  match:
+    - version # schema is read and matched by its version IRI, if present
+    - id
+  emit:     ./<name>
+
+# Element names must be unique within a schema *and across its imports*.
+naming:
+  # An element is named after the local name of its IRI -- whatever follows the last # or / --
+  # recased to the style named here. 
+  style:
+    class:  UpperCamelCase  # the local name with its first letter capitalised
+    slot:   snake_case      # split on case boundaries, runs of capitals kept whole
+    permissible_value:  UPPER_SNAKE_CASE  # an individual's name inside the enum that lists it
+  on_conflict_with_import:
+    class:  '<Prefix><Name>'
+    slot:   '<prefix>_<name>'
+    report: true
+  rename: {} # dict of curated renaming
+
 terms:
   owl:Class:               class
+  rdfs:Class:              class
   owl:ObjectProperty:      slot
   owl:DatatypeProperty:    slot
   owl:AnnotationProperty:  ignored   # ontology metadata is listed under documentation
+  rdfs:Datatype:           ignored   # a declaration only; the mapping is under `datatypes`
+
+# Terms the generator knows about by default, values are for documentation only
+# If term is *not* listed here or in report_ignored, and was *not* processed by generator, it will be reported as absent
+structural_terms:
+  rdf:type:              Splits the named subjects into classes, slots and individuals.
+  rdf:first:             RDF list plumbing.
+  rdf:rest:              RDF list plumbing.
+  rdfs:subClassOf:       Named parents become mixins; anonymous ones are unwrapped as restrictions.
+  rdfs:subPropertyOf:    Parents become mixins, and carry a domain or a union range down.
+  rdfs:domain:           Attaches a slot to the classes that declare it.
+  rdfs:range:            The slot's declared range.
+  owl:imports:           Resolved against the schema directory, see `imports`.
+  owl:onProperty:        Names the slot an owl:Restriction constrains.
+  owl:onClass:           Names the class an owl:Restriction constrains.
+  owl:unionOf:           A class expression, read wherever a range or a domain is expected.
+  owl:oneOf:             One source of an enum's members.
+  owl:hasValue:          Pins an individual on a slot, see `has_value`.
+  owl:Restriction:       The rdf:type of an anonymous restriction; unwrapped, never emitted.
+  owl:NamedIndividual:   Redundant next to the class that actually types an individual.
 
 # Note: Anonymous classes are not emitted.
 classes:
   rdfs:subClassOf:  mixins
   rdfs:domain:         slots
-  owl:onProperty:      slots
-  rdfs:subPropertyOf:  slots 
+  owl:equivalentClass:  exact_mappings
 
+# preserve properties when allowed by linkml
 properties:
   owl:FunctionalProperty:  {multivalued: false}
-  rdfs:subPropertyOf:  mixins
+  rdfs:subPropertyOf:  mixins   # always emit mixins; multivalued, as under `classes`
   owl:inverseOf:           inverse
+  owl:TransitiveProperty:  {transitive: true}
+  owl:SymmetricProperty:        {symmetric: true}
+  owl:AsymmetricProperty:       {asymmetric: true}
+  owl:ReflexiveProperty:        {reflexive: true}
+  owl:IrreflexiveProperty:      {irreflexive: true}
   owl:unionOf:             any_of # for range unions, for domain unions adds slot to relevant classes
 
 
 # Two reserved keys:
-#   when          the axiom's value must equal this, or the row does not apply
-#   from <axiom>  as a value: read it off the class that <axiom> points to
+#   when              the axiom's value must equal this, or the row does not apply
+#   from <axiom>      as a value: read it off the class that <axiom> points to
+#   from [<a>, <b>]   the same, trying each axiom in order; qualified cardinalities carry their
+#                     filler under owl:onClass or owl:onDataRange depending on its kind
 # Every other key is a LinkML metaslot.
+# Maps to slot_usage
 restrictions:
   owl:allValuesFrom:            {range: from owl:allValuesFrom}
-  owl:minCardinality:           {required: true}
+  owl:minCardinality:           {when: 1, required: true} # so that owl:minCardinality 0 doesnt get required: true
   owl:maxCardinality:           {when: 1, multivalued: false}
   owl:cardinality:              {when: 1, required: true, multivalued: false}
-  owl:minQualifiedCardinality:  {when: 1, required: true, range: from owl:onClass}
+  owl:minQualifiedCardinality:  {when: 1, required: true, range: 'from [owl:onClass, owl:onDataRange]'}
+  owl:someValuesFrom:           {required: true, range: from owl:someValuesFrom}
+  owl:qualifiedCardinality:     {when: 1, required: true, multivalued: false, range: 'from [owl:onClass, owl:onDataRange]'}
+  owl:maxQualifiedCardinality:  {when: 1, multivalued: false, range: 'from [owl:onClass, owl:onDataRange]'}
+
+# A cardinality of 0 is an axiom that asserts nothing.
+# linkml owl-gen has owlgen-skip-vacuous-min-zero-cardinality-default
+# this is a similar approach
+vacuous_restrictions:
+  owl:minCardinality:           [0]
+  owl:minQualifiedCardinality:  [0]
+
+has_value:
+  slot_usage:  {required: true, range: <Enum>} # this is stricter than the axiom, follows restrictions' "closing" logic (see above)
+  enum_name:   '<Class><Property>' # property's local name w/o prefix
+  strip_prefix:  has # this is the prefix that is being stripped
+
+# A class with individuals becomes an enum. 
+individuals:
+  needs_a_range:  true   # only close a class something can range over; the rest stay classes, not enums
+  one:
+    rdfs:label:    title
+    rdfs:comment:  description
 
 # `one` keeps the first value found; `many` collects every value into a list.
 documentation:
   one:
     rdfs:label:        title
     rdfs:comment:      description
+    rdfs:isDefinedBy:  source
   many:
     skos:note:         comments
     skos:historyNote:  notes
-    skos:example:      examples
+    skos:example:      {slot: examples, wrap: value}
     rdfs:seeAlso:      see_also
+    dcterms:source:    see_also   # on a term
 
 
 # rdfs:label and rdfs:comment also appear on individuals, each becomes a slot carried by every class.
@@ -58,17 +133,18 @@ instance_annotations:
   rdfs:comment:  {slot: comment, multivalued: true, range: Literal}
 
 
+# Anything not mapped here falls back to `defaults.range`.
 datatypes:
-  xsd:string:    string
-  xsd:boolean:   boolean
-  xsd:integer:   integer
-  xsd:float:     float
-  xsd:double:    double
-  xsd:decimal:   decimal
-  xsd:dateTime:  datetime
-  xsd:date:      date
-  xsd:anyURI:    uri
-
+  xsd:string:              string
+  xsd:boolean:             boolean
+  xsd:integer:             integer
+  xsd:float:               float
+  xsd:double:              double
+  xsd:decimal:             decimal
+  xsd:dateTime:            datetime
+  xsd:date:                date
+  xsd:anyURI:              uri
+  xsd:time:                time
 
 # Read from the owl:Ontology node.
 ontology:
@@ -84,6 +160,7 @@ ontology:
     dcterms:source:                 source
   many:
     dcterms:creator:                contributors
+    dcterms:contributor:            contributors  # merged into the same list, not overwriting it
     rdfs:comment:                   comments
     rdfs:seeAlso:                   see_also
 
@@ -93,18 +170,30 @@ defaults:
     owl:ObjectProperty:    uriorcurie
     owl:DatatypeProperty:  Literal
 
-# Emitted verbatim into the schema header.
+# Emitted verbatim into the schema header. 
+# Root only types are reserved for SAREF Core, so that extensions do not redeclare them
 schema:
-  imports:
-    - linkml:types
-  prefixes:
-    linkml: https://w3id.org/linkml/
-  types:
-    Literal:
-      uri: rdfs:Literal
-      typeof: string
-      description: An RDF literal of any datatype, serialised as a string.
-  default_range:  string
+  always:
+    imports:
+      - linkml:types
+    prefixes:
+      linkml: https://w3id.org/linkml/
+    default_range:  string
+  root_only:
+    types:
+      Duration:            {uri: xsd:duration,           typeof: string}
+      DateTimeStamp:       {uri: xsd:dateTimeStamp,      typeof: datetime}
+      Int:                 {uri: xsd:int,                typeof: integer}
+      Long:                {uri: xsd:long,               typeof: integer}
+      UnsignedInt:         {uri: xsd:unsignedInt,        typeof: integer}
+      UnsignedLong:        {uri: xsd:unsignedLong,       typeof: integer}
+      UnsignedShort:       {uri: xsd:unsignedShort,      typeof: integer}
+      NonNegativeInteger:  {uri: xsd:nonNegativeInteger, typeof: integer}
+      PositiveInteger:     {uri: xsd:positiveInteger,    typeof: integer}
+      Literal: # this is done due to SAREF Core aiming to support langtags and switching to rdfs:Literal
+        uri: rdfs:Literal
+        typeof: string
+        description: An RDF literal of any datatype, serialised as a string.
 
 report_ignored:
   owl:propertyChainAxiom:  Omitted, LinkML does not support property chains.
@@ -112,3 +201,10 @@ report_ignored:
   owl:priorVersion:   No LinkML counterpart.
   dcterms:publisher:  No LinkML counterpart.
   vann:preferredNamespaceUri: Same as id
+  schema1:name:          Contributor metadata, not a modelled term.
+  schema1:givenName:     Contributor metadata, not a modelled term.
+  schema1:familyName:    Contributor metadata, not a modelled term.
+  schema1:affiliation:   Contributor metadata, not a modelled term.
+  owl:Thing:  The implicit top class; dropped as a parent.
+  schema1:Person:        Contributor metadata, not a modelled term.
+  schema1:Organization:  Contributor metadata, not a modelled term.

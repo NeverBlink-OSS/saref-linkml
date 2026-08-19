@@ -1,0 +1,2763 @@
+id: https://saref.etsi.org/saref4bldg/
+name: saref4bldg
+title: 'SAREF4BLDG: an extension of SAREF for the building domain'
+description: This ontology extends the SAREF ontology for the building domain by defining building devices
+  and how they are located in a building. This extension is based on the ISO 16739:2013 Industry Foundation
+  Classes (IFC) standard for data sharing in the construction and facility management industries. The
+  descriptions of the classes and properties extracted from IFC have been taken from the IFC documentation.
+license: https://forge.etsi.org/etsi-software-license
+version: https://saref.etsi.org/saref4bldg/v2.1.1/
+created_on: '2025-04-24'
+last_updated_on: '2025-04-24'
+source: https://saref.etsi.org/sources/saref4bldg/
+contributors:
+- http://purl.org/net/mpoveda
+- http://www.garcia-castro.com/foaf.rdf#me
+- http://www.maxime-lefrancois.info/
+- https://pdi.fbk.eu/people/profile/dragoni
+comments:
+- "Information about changes compared to version 1.1.1: \n - Updated namespaces for compatibility with\
+  \ SAREF v3."
+- "Information about changes compared to version 1.1.2: \n - see https://labs.etsi.org/rep/saref/saref4bldg/-/milestones/1."
+see_also:
+- https://www.etsi.org/deliver/etsi_ts/103400_103499/10341003/02.01.01_60/ts_10341003v020101p.pdf
+prefixes:
+  dcterms: http://purl.org/dc/terms/
+  geo: http://www.opengis.net/ont/geosparql#
+  linkml: https://w3id.org/linkml/
+  owl: http://www.w3.org/2002/07/owl#
+  rdfs: http://www.w3.org/2000/01/rdf-schema#
+  s4bldg: https://saref.etsi.org/saref4bldg/
+  saref: https://saref.etsi.org/core/
+  vann: http://purl.org/vocab/vann/
+  xsd: http://www.w3.org/2001/XMLSchema#
+default_prefix: s4bldg
+default_range: string
+imports:
+- linkml:types
+- ./saref-core
+enums:
+  AirToAirHeatRecoveryProperty:
+    description: The individuals owl:hasValue pins on AirToAirHeatRecovery, and the range of the slot
+      they are pinned on.
+    see_also:
+    - saref:Property
+    permissible_values:
+      OPERATION_TEMPERATURE_MAX:
+        meaning: s4bldg:operationTemperatureMax
+        title: operation temperature range
+        description: Allowable operation ambient (air, fluid) temperature range. Usually measured in degrees
+          Kelvin (K).
+      OPERATION_TEMPERATURE_MIN:
+        meaning: s4bldg:operationTemperatureMin
+        title: operation temperature range
+        description: Allowable operation ambient (air, fluid) temperature range. Usually measured in degrees
+          Kelvin (K).
+      PRIMARY_AIR_FLOW_RATE_MAX:
+        meaning: s4bldg:primaryAirFlowRateMax
+        title: primary air flow rate range
+        description: Maximum primary airflow that can be delivered. Usually measured in m3/s.
+      PRIMARY_AIR_FLOW_RATE_MIN:
+        meaning: s4bldg:primaryAirFlowRateMin
+        title: primary air flow rate range
+        description: Minimum primary airflow that can be delivered. Usually measured in m3/s.
+      SECONDARY_AIR_FLOW_RATE_MAX:
+        meaning: s4bldg:secondaryAirFlowRateMax
+        title: secondary air flow rate range
+        description: Maximum secondary airflow that can be delivered. Usually measured in Pascals (Pa,
+          N/m2).
+      SECONDARY_AIR_FLOW_RATE_MIN:
+        meaning: s4bldg:secondaryAirFlowRateMin
+        title: secondary air flow rate range
+        description: Maximum secondary airflow that can be delivered. Usually measured in Pascals (Pa,
+          N/m2).
+  AudioVisualApplianceProperty:
+    description: The individuals owl:hasValue pins on AudioVisualAppliance, and the range of the slot
+      they are pinned on.
+    see_also:
+    - saref:Property
+    permissible_values:
+      AUDIO_VOLUME:
+        meaning: s4bldg:audioVolume
+        title: audio volume
+        description: Indicates discrete audio volume levels and corresponding sound power offsets, if
+          applicable. Missing values may be interpolated. Measured in watts.
+  BoilerProperty:
+    description: The individuals owl:hasValue pins on Boiler, and the range of the slot they are pinned
+      on.
+    see_also:
+    - saref:Property
+    permissible_values:
+      HEAT_TRANSFER_SURFACE_AREA:
+        meaning: s4bldg:heatTransferSurfaceArea
+        title: heat transfer surface area
+        description: Total heat transfer area of the vessel. Usually measured in square metre (m2).
+      NOMINAL_ENERGY_CONSUMPTION:
+        meaning: s4bldg:nominalEnergyConsumption
+        title: nominal energy consumption
+        description: Nominal fuel consumption rate required to produce the total boiler heat output. Usually
+          measured in Watts (W, J/s).
+      NOMINAL_PART_LOAD_RATIO:
+        meaning: s4bldg:nominalPartLoadRatio
+        title: nominal part load ratio
+        description: Allowable part load ratio range.
+      OUTLET_TEMPERATURE_MAX:
+        meaning: s4bldg:outletTemperatureMax
+        title: outlet temperature range
+        description: Allowable outlet temperature of either the water or the steam. Usually measured in
+          degrees Kelvin (K).
+      OUTLET_TEMPERATURE_MIN:
+        meaning: s4bldg:outletTemperatureMin
+        title: outlet temperature range
+        description: Allowable outlet temperature of either the water or the steam. Usually measured in
+          degrees Kelvin (K).
+      PRESSURE_RATING:
+        meaning: s4bldg:pressureRating
+        title: pressure rating
+        description: Nominal pressure rating of the boiler as rated by the agency having jurisdiction.
+          Usually measured in Pascals (Pa, N/m2).
+      WATER_INLET_TEMPERATURE_MAX:
+        meaning: s4bldg:waterInletTemperatureMax
+        title: water inlet temperature range
+        description: Allowable water inlet temperature range. Usually measured in degrees Kelvin (K).
+      WATER_INLET_TEMPERATURE_MIN:
+        meaning: s4bldg:waterInletTemperatureMin
+        title: water inlet temperature range
+        description: Allowable water inlet temperature range. Usually measured in degrees Kelvin (K).
+      WATER_STORAGE_CAPACITY:
+        meaning: s4bldg:waterStorageCapacity
+        title: water storage capacity
+        description: Water storage capacity. Usually measured in cubic metre (m3).
+  ChillerProperty:
+    description: The individuals owl:hasValue pins on Chiller, and the range of the slot they are pinned
+      on.
+    see_also:
+    - saref:Property
+    permissible_values:
+      NOMINAL_CAPACITY:
+        meaning: s4bldg:nominalCapacity
+        title: nominal capacity
+        description: Nominal capacity. Usually measured in Watts (W, J/s).
+      NOMINAL_CONDENSING_TEMPERATURE:
+        meaning: s4bldg:nominalCondensingTemperature
+        title: nominal condensing temperature
+        description: Chiller condensing temperature. Usually measured in degrees Kelvin (K).
+      NOMINAL_EFFICIENCY:
+        meaning: s4bldg:nominalEfficiency
+        title: nominal efficiency
+        description: 'Nominal chiller efficiency under nominal conditions. '
+      NOMINAL_EVAPORATING_TEMMPERATURE:
+        meaning: s4bldg:nominalEvaporatingTemmperature
+        title: nominal evaporating temmperature
+        description: Chiller evaporating temperature.Usually measured in degrees Kelvin (K).
+      NOMINAL_HEAT_REJECTION_RATE:
+        meaning: s4bldg:nominalHeatRejectionRate
+        title: nominal heat rejection rate
+        description: Sum of the refrigeration effect and the heat equivalent of the power input to the
+          compressor. Usually measured in Watts (W, J/s).
+      NOMINAL_POWER_CONSUMPTION:
+        meaning: s4bldg:nominalPowerConsumption
+        title: nominal power consumption
+        description: Nominal total power consumption. Usually measured in Watts (W, J/s).
+  CoilProperty:
+    description: The individuals owl:hasValue pins on Coil, and the range of the slot they are pinned
+      on.
+    see_also:
+    - saref:Property
+    permissible_values:
+      AIR_FLOW_RATE_MAX:
+        meaning: s4bldg:airFlowRateMax
+        title: air flow rate range max
+        description: Maximum allowable air flow rate. Usually measured in m3/s.
+      AIR_FLOW_RATE_MIN:
+        meaning: s4bldg:airFlowRateMin
+        title: air flow rate range min
+        description: Minimum allowable air flow rate. Usually measured in m3/s.
+      NOMINAL_LATENT_CAPACITY:
+        meaning: s4bldg:nominalLatentCapacity
+        title: nominal latent capacity
+        description: Nominal latent capacity. Usually measured in Watts (W, J/s).
+      NOMINAL_SENSIBLE_CAPACITY:
+        meaning: s4bldg:nominalSensibleCapacity
+        title: nominal sensible capacity
+        description: Nominal sensible capacity. Usually measured in Watts (W, J/s).
+      NOMINAL_UA:
+        meaning: s4bldg:nominalUa
+        title: nominal ua
+        description: Nominal UA value.
+      OPERATION_TEMPERATURE_MAX:
+        meaning: s4bldg:operationTemperatureMax
+        title: operation temperature range
+        description: Allowable operation ambient (air, fluid) temperature range. Usually measured in degrees
+          Kelvin (K).
+      OPERATION_TEMPERATURE_MIN:
+        meaning: s4bldg:operationTemperatureMin
+        title: operation temperature range
+        description: Allowable operation ambient (air, fluid) temperature range. Usually measured in degrees
+          Kelvin (K).
+  CompressorProperty:
+    description: The individuals owl:hasValue pins on Compressor, and the range of the slot they are pinned
+      on.
+    see_also:
+    - saref:Property
+    permissible_values:
+      COMPRESSOR_SPEED:
+        meaning: s4bldg:compressorSpeed
+        title: compressor speed
+        description: Compressor speed. Usually measured in cycles/s.
+      IDEAL_CAPACITY:
+        meaning: s4bldg:idealCapacity
+        title: ideal capacity
+        description: Compressor capacity under ideal conditions. Usually measured in Watts (W, J/s).
+      IDEAL_SHAFT_POWER:
+        meaning: s4bldg:idealShaftPower
+        title: ideal shaft power
+        description: Compressor shaft power under ideal conditions. Usually measured in Watts (W, J/s).
+      IMPELLER_DIAMETER:
+        meaning: s4bldg:impellerDiameter
+        title: impeller diameter
+        description: Diameter of compressor impeller - used to scale performance of geometrically similar
+          compressors. Usually measured in millimeters (mm).
+      NOMINAL_CAPACITY:
+        meaning: s4bldg:nominalCapacity
+        title: nominal capacity
+        description: Nominal capacity. Usually measured in Watts (W, J/s).
+      PART_LOAD_RATIO_MAX:
+        meaning: s4bldg:partLoadRatioMax
+        title: maximum part load ratio
+        description: Maximum part load ratio as a fraction of nominal capacity.
+      PART_LOAD_RATIO_MIN:
+        meaning: s4bldg:partLoadRatioMin
+        title: minimum part load ratio
+        description: Minimum part load ratio as a fraction of nominal capacity.
+  CondenserProperty:
+    description: The individuals owl:hasValue pins on Condenser, and the range of the slot they are pinned
+      on.
+    see_also:
+    - saref:Property
+    permissible_values:
+      EXTERNAL_SURFACE_AREA:
+        meaning: s4bldg:externalSurfaceArea
+        title: external surface area
+        description: External surface area (both primary and secondary area). Usually measured in square
+          metre (m2).
+      INTERNAL_REFRIGERANT_VOLUME:
+        meaning: s4bldg:internalRefrigerantVolume
+        title: internal refrigerant volume
+        description: Internal volume of evaporator (refrigerant side). Usually measured in cubic metre
+          (m3).
+      INTERNAL_SURFACE_AREA:
+        meaning: s4bldg:internalSurfaceArea
+        title: internal surface area
+        description: Internal surface area. Usually measured in square metre (m2).
+      INTERNAL_WATER_VOLUME:
+        meaning: s4bldg:internalWaterVolume
+        title: internal water volume
+        description: Internal volume of evaporator (water side). Usually measured in cubic metre (m3).
+      NOMINAL_HEAT_TRANSFER_AREA:
+        meaning: s4bldg:nominalHeatTransferArea
+        title: nominal heat transfer area
+        description: Nominal heat transfer surface area associated with nominal overall heat transfer
+          coefficient. Usually measured in square metre (m2).
+      NOMINAL_HEAT_TRANSFER_COEFFICIENT:
+        meaning: s4bldg:nominalHeatTransferCoefficient
+        title: nominal heat transfer coefficient
+        description: Nominal overall heat transfer coefficient associated with nominal heat transfer area.
+          Usually measured in Watts/m2 Kelvin.
+  CooledBeamProperty:
+    description: The individuals owl:hasValue pins on CooledBeam, and the range of the slot they are pinned
+      on.
+    see_also:
+    - saref:Property
+    permissible_values:
+      COIL_LENGTH:
+        meaning: s4bldg:coilLength
+        title: coil length
+        description: Length of coil. Usually measured in millimeters (mm).
+      COIL_WIDTH:
+        meaning: s4bldg:coilWidth
+        title: coil width
+        description: Width of coil. Usually measured in millimeters (mm
+      NOMINAL_COOLING_CAPACITY:
+        meaning: s4bldg:nominalCoolingCapacity
+        title: nominal cooling capacity
+        description: Nominal cooling capacity. Usually measured in Watts (W, J/s).
+      NOMINAL_HEATING_CAPACITY:
+        meaning: s4bldg:nominalHeatingCapacity
+        title: nominal heating capacity
+        description: Nominal heating capacity. Usually measured in Watts (W, J/s).
+      NOMINAL_RETURN_WATER_TEMPERATURE_COOLING:
+        meaning: s4bldg:nominalReturnWaterTemperatureCooling
+        title: nominal return water temperature cooling
+        description: Nominal return water temperature (refers to nominal cooling capacity). Usually measured
+          in degrees Kelvin (K).
+      NOMINAL_RETURN_WATER_TEMPERATURE_HEATING:
+        meaning: s4bldg:nominalReturnWaterTemperatureHeating
+        title: nominal return water temperature heating
+        description: Nominal return water temperature (refers to nominal heating capacity). Usually measured
+          in degrees Kelvin (K).
+      NOMINAL_SORROUNDING_HUMIDITY_COOLING:
+        meaning: s4bldg:nominalSorroundingHumidityCooling
+        title: nominal sorrounding humidity cooling
+        description: Nominal surrounding humidity (refers to nominal cooling capacity). Usually measured
+          in degrees Kelvin (K).
+      NOMINAL_SORROUNDING_TEMPERATURE_COOLING:
+        meaning: s4bldg:nominalSorroundingTemperatureCooling
+        title: nominal sorrounding temperature cooling
+        description: Nominal surrounding temperature (refers to nominal cooling capacity). Usually measured
+          in degrees Kelvin (K).
+      NOMINAL_SORROUNDING_TEMPERATURE_HEATING:
+        meaning: s4bldg:nominalSorroundingTemperatureHeating
+        title: nominal sorrounding temperature heating
+        description: Nominal surrounding temperature (refers to nominal heating capacity). Usually measured
+          in degrees Kelvin (K).
+      NOMINAL_SUPPLY_WATER_TEMPERATURE_COOLING:
+        meaning: s4bldg:nominalSupplyWaterTemperatureCooling
+        title: nominal supply water temperature cooling
+        description: Nominal supply water temperature (refers to nominal cooling capacity). Usually measured
+          in degrees Kelvin (K).
+      NOMINAL_SUPPLY_WATER_TEMPERATURE_HEATING:
+        meaning: s4bldg:nominalSupplyWaterTemperatureHeating
+        title: nominal supply water temperature heating
+        description: Nominal supply water temperature (refers to nominal heating capacity). Usually measured
+          in degrees Kelvin (K).
+      NOMINAL_WATER_FLOW_COOLING:
+        meaning: s4bldg:nominalWaterFlowCooling
+        title: nominal water flow cooling
+        description: Nominal water flow (refers to nominal cooling capacity). Usually measured in m3/s.
+      NOMINAL_WATER_FLOW_HEATING:
+        meaning: s4bldg:nominalWaterFlowHeating
+        title: nominal water flow heating
+        description: Nominal water flow (refers to nominal heating capacity). Usually measured in m3/s.
+      WATER_PRESSURE_MAX:
+        meaning: s4bldg:waterPressureMax
+        title: water pressure range
+        description: Allowable water circuit working pressure range. Usually measured in Pascals (Pa,
+          N/m2).
+      WATER_PRESSURE_MIN:
+        meaning: s4bldg:waterPressureMin
+        title: water pressure range
+        description: Allowable water circuit working pressure range. Usually measured in Pascals (Pa,
+          N/m2).
+  CoolingTowerProperty:
+    description: The individuals owl:hasValue pins on CoolingTower, and the range of the slot they are
+      pinned on.
+    see_also:
+    - saref:Property
+    permissible_values:
+      AMBIENT_DESIGN_DRY_BULB_TEMPERATURE:
+        meaning: s4bldg:ambientDesignDryBulbTemperature
+        title: ambient design dry bulb temperature
+        description: Ambient design dry bulb temperature used for selecting the cooling tower. Usually
+          measured in degrees Kelvin (K).
+      AMBIENT_DESIGN_WET_BULB_TEMPERATURE:
+        meaning: s4bldg:ambientDesignWetBulbTemperature
+        title: ambient design wet bulb temperature
+        description: Ambient design wet bulb temperature used for selecting the cooling tower. Usually
+          measured in degrees Kelvin (K).
+      BASIN_RESERVE_VOLUME:
+        meaning: s4bldg:basinReserveVolume
+        title: basin reserve volume
+        description: Volume between operating and overflow levels in cooling tower basin. Usually measured
+          in cubic metre (m3).
+      LIFT_ELEVATION_DIFFERENCE:
+        meaning: s4bldg:liftElevationDifference
+        title: lift elevation difference
+        description: Elevation difference between cooling tower sump and the top of the tower. Usually
+          measured in millimeters (mm).
+      NOMINAL_CAPACITY:
+        meaning: s4bldg:nominalCapacity
+        title: nominal capacity
+        description: Nominal capacity. Usually measured in Watts (W, J/s).
+      OPERATION_TEMPERATURE_MAX:
+        meaning: s4bldg:operationTemperatureMax
+        title: operation temperature range
+        description: Allowable operation ambient (air, fluid) temperature range. Usually measured in degrees
+          Kelvin (K).
+      OPERATION_TEMPERATURE_MIN:
+        meaning: s4bldg:operationTemperatureMin
+        title: operation temperature range
+        description: Allowable operation ambient (air, fluid) temperature range. Usually measured in degrees
+          Kelvin (K).
+      WATER_REQUIREMENT:
+        meaning: s4bldg:waterRequirement
+        title: water requirement
+        description: Make-up water requirement. Usually measured in m3/s.
+  DamperProperty:
+    description: The individuals owl:hasValue pins on Damper, and the range of the slot they are pinned
+      on.
+    see_also:
+    - saref:Property
+    permissible_values:
+      AIR_FLOW_RATE_MAX:
+        meaning: s4bldg:airFlowRateMax
+        title: air flow rate range max
+        description: Maximum allowable air flow rate. Usually measured in m3/s.
+      BLADE_THICKNESS:
+        meaning: s4bldg:bladeThickness
+        title: blade thickness
+        description: The thickness of the damper blade. Usually measured in millimeters (mm).
+      CLOSE_OFF_RATING:
+        meaning: s4bldg:closeOffRating
+        title: close off rating
+        description: Close off rating. Usually measured in Pascals (Pa, N/m2).
+      FACE_AREA:
+        meaning: s4bldg:faceArea
+        title: face area
+        description: Face area open to the airstream. Usually measured in square metre (m2).
+      FRAME_DEPTH:
+        meaning: s4bldg:frameDepth
+        title: frame depth
+        description: The length (or depth) of the damper frame. Usually measured in millimeters (mm).
+      FRAME_THICKNESS:
+        meaning: s4bldg:frameThickness
+        title: frame thickness
+        description: The thickness of the damper frame material. Usually measured in millimeters (mm).
+      LEAKAGE_FULLY_CLOSED:
+        meaning: s4bldg:leakageFullyClosed
+        title: leakage fully closed
+        description: Leakage when fully closed. Usually measured in m3/s.
+      NOMINAL_AIR_FLOW_RATE:
+        meaning: s4bldg:nominalAirFlowRate
+        title: nominal air flow rate
+        description: Nominal rate of air flow. Usually measured in m3/s.
+      OPEN_PRESSURE_DROP:
+        meaning: s4bldg:openPressureDrop
+        title: open pressure drop
+        description: Total pressure drop across damper. Usually measured in Pascals (Pa, N/m2).
+      OPERATION_TEMPERATURE_MAX:
+        meaning: s4bldg:operationTemperatureMax
+        title: operation temperature range
+        description: Allowable operation ambient (air, fluid) temperature range. Usually measured in degrees
+          Kelvin (K).
+      OPERATION_TEMPERATURE_MIN:
+        meaning: s4bldg:operationTemperatureMin
+        title: operation temperature range
+        description: Allowable operation ambient (air, fluid) temperature range. Usually measured in degrees
+          Kelvin (K).
+      TEMPERATURE_RATING:
+        meaning: s4bldg:temperatureRating
+        title: temperature rating
+        description: Temperature rating. Usually measured in degrees Kelvin (K).
+      WORKING_PRESSURE_MAX:
+        meaning: s4bldg:workingPressureMax
+        title: maximum working pressure
+        description: Maximum working pressure. Usually measured in Pascals (Pa, N/m2).
+  DuctSilencerProperty:
+    description: The individuals owl:hasValue pins on DuctSilencer, and the range of the slot they are
+      pinned on.
+    see_also:
+    - saref:Property
+    permissible_values:
+      AIR_FLOW_RATE_MAX:
+        meaning: s4bldg:airFlowRateMax
+        title: air flow rate range max
+        description: Maximum allowable air flow rate. Usually measured in m3/s.
+      AIR_FLOW_RATE_MIN:
+        meaning: s4bldg:airFlowRateMin
+        title: air flow rate range min
+        description: Minimum allowable air flow rate. Usually measured in m3/s.
+      HYDRAULIC_DIAMETER:
+        meaning: s4bldg:hydraulicDiameter
+        title: hydraulic diameter
+        description: Hydraulic diameter. Usually measured in millimeters (mm).
+      LENGTH:
+        meaning: s4bldg:length
+        title: length
+        description: The finished length of the device. Usually measured in millimeters (mm).
+      OPERATION_TEMPERATURE_MAX:
+        meaning: s4bldg:operationTemperatureMax
+        title: operation temperature range
+        description: Allowable operation ambient (air, fluid) temperature range. Usually measured in degrees
+          Kelvin (K).
+      OPERATION_TEMPERATURE_MIN:
+        meaning: s4bldg:operationTemperatureMin
+        title: operation temperature range
+        description: Allowable operation ambient (air, fluid) temperature range. Usually measured in degrees
+          Kelvin (K).
+      WEIGHT:
+        meaning: s4bldg:weight
+        title: weight
+        description: The weight of the device. Usually measured in kilograms (kg) or grams (g).
+      WORKING_PRESSURE_MAX:
+        meaning: s4bldg:workingPressureMax
+        title: maximum working pressure
+        description: Maximum working pressure. Usually measured in Pascals (Pa, N/m2).
+      WORKING_PRESSURE_MIN:
+        meaning: s4bldg:workingPressureMin
+        title: minimum working pressure
+        description: Allowable minimum working pressure (relative to ambient pressure). Usually measured
+          in Pascals (Pa, N/m2).
+  ElectricFlowStorageDeviceProperty:
+    description: The individuals owl:hasValue pins on ElectricFlowStorageDevice, and the range of the
+      slot they are pinned on.
+    see_also:
+    - saref:Property
+    permissible_values:
+      NOMINAL_FREQUENCY:
+        meaning: s4bldg:nominalFrequency
+        title: nominal frequency
+        description: The nominal frequency of the supply. Usually measured in cycles/s or Hertz (Hz).
+      NOMINAL_SUPPLY_VOLTAGE:
+        meaning: s4bldg:nominalSupplyVoltage
+        title: nominal supply voltage
+        description: The nominal voltage of the supply. Usually measured in Volts (V, W/A).
+      NOMINAL_SUPPLY_VOLTAGE_MIN:
+        meaning: s4bldg:nominalSupplyVoltageMin
+        title: nominal supply voltage offset
+        description: The maximum and minimum allowed voltage of the supply e.g. boundaries of 380V/440V
+          may be applied for a nominal voltage of 400V.
+  ElectricGeneratorProperty:
+    description: The individuals owl:hasValue pins on ElectricGenerator, and the range of the slot they
+      are pinned on.
+    see_also:
+    - saref:Property
+    permissible_values:
+      ELECTRIC_GENERATOR_EFFICIENCY:
+        meaning: s4bldg:electricGeneratorEfficiency
+        title: electric generator efficiency
+        description: The ratio of output capacity to intake capacity.
+      POWER_OUTPUT_MAX:
+        meaning: s4bldg:powerOutputMax
+        title: maximum power output
+        description: The maximum output power rating of the engine. Usually measured in Watts (W, J/s).
+      START_CURRENT_FACTOR:
+        meaning: s4bldg:startCurrentFactor
+        title: start current factor
+        description: IEC. Start current factor defines how large the peek starting current will become
+          on the engine. StartCurrentFactor is multiplied to NominalCurrent and we get the start current.
+  ElectricMotorProperty:
+    description: The individuals owl:hasValue pins on ElectricMotor, and the range of the slot they are
+      pinned on.
+    see_also:
+    - saref:Property
+    permissible_values:
+      ELECTRIC_MOTOR_EFFICIENCY:
+        meaning: s4bldg:electricMotorEfficiency
+        title: electric motor efficiency
+        description: The ratio of output capacity to intake capacity.
+      LOCKED_ROTOR_CURRENT:
+        meaning: s4bldg:lockedRotorCurrent
+        title: locked rotor current
+        description: Input current when a motor armature is energized but not rotating. Usually measured
+          in Ampere (A).
+      POWER_OUTPUT_MAX:
+        meaning: s4bldg:powerOutputMax
+        title: maximum power output
+        description: The maximum output power rating of the engine. Usually measured in Watts (W, J/s).
+      START_CURRENT_FACTOR:
+        meaning: s4bldg:startCurrentFactor
+        title: start current factor
+        description: IEC. Start current factor defines how large the peek starting current will become
+          on the engine. StartCurrentFactor is multiplied to NominalCurrent and we get the start current.
+      STARTING_TIME:
+        meaning: s4bldg:startingTime
+        title: starting time
+        description: The time (in s) needed for the motor to reach its rated speed with its driven equipment
+          attached, starting from standstill and at the nominal voltage applied at its terminals.
+      TE_TIME:
+        meaning: s4bldg:teTime
+        title: te time
+        description: The maximum time (in s) at which the motor could run with locked rotor when the motor
+          is used in an EX-environment. The time indicates that a protective device should trip before
+          this time when the starting current of the motor is slowing through the device.
+  EvaporativeCoolerProperty:
+    description: The individuals owl:hasValue pins on EvaporativeCooler, and the range of the slot they
+      are pinned on.
+    see_also:
+    - saref:Property
+    permissible_values:
+      HEAT_EXCHANGE_AREA:
+        meaning: s4bldg:heatExchangeArea
+        title: heat exchange area
+        description: Heat exchange area. Usually measured in square metre (m2).
+      OPERATION_TEMPERATURE_MAX:
+        meaning: s4bldg:operationTemperatureMax
+        title: operation temperature range
+        description: Allowable operation ambient (air, fluid) temperature range. Usually measured in degrees
+          Kelvin (K).
+      OPERATION_TEMPERATURE_MIN:
+        meaning: s4bldg:operationTemperatureMin
+        title: operation temperature range
+        description: Allowable operation ambient (air, fluid) temperature range. Usually measured in degrees
+          Kelvin (K).
+      WATER_REQUIREMENT:
+        meaning: s4bldg:waterRequirement
+        title: water requirement
+        description: Make-up water requirement. Usually measured in m3/s.
+  EvaporatorProperty:
+    description: The individuals owl:hasValue pins on Evaporator, and the range of the slot they are pinned
+      on.
+    see_also:
+    - saref:Property
+    permissible_values:
+      EXTERNAL_SURFACE_AREA:
+        meaning: s4bldg:externalSurfaceArea
+        title: external surface area
+        description: External surface area (both primary and secondary area). Usually measured in square
+          metre (m2).
+      INTERNAL_REFRIGERANT_VOLUME:
+        meaning: s4bldg:internalRefrigerantVolume
+        title: internal refrigerant volume
+        description: Internal volume of evaporator (refrigerant side). Usually measured in cubic metre
+          (m3).
+      INTERNAL_SURFACE_AREA:
+        meaning: s4bldg:internalSurfaceArea
+        title: internal surface area
+        description: Internal surface area. Usually measured in square metre (m2).
+      INTERNAL_WATER_VOLUME:
+        meaning: s4bldg:internalWaterVolume
+        title: internal water volume
+        description: Internal volume of evaporator (water side). Usually measured in cubic metre (m3).
+      NOMINAL_HEAT_TRANSFER_AREA:
+        meaning: s4bldg:nominalHeatTransferArea
+        title: nominal heat transfer area
+        description: Nominal heat transfer surface area associated with nominal overall heat transfer
+          coefficient. Usually measured in square metre (m2).
+      NOMINAL_HEAT_TRANSFER_COEFFICIENT:
+        meaning: s4bldg:nominalHeatTransferCoefficient
+        title: nominal heat transfer coefficient
+        description: Nominal overall heat transfer coefficient associated with nominal heat transfer area.
+          Usually measured in Watts/m2 Kelvin.
+  FanProperty:
+    description: The individuals owl:hasValue pins on Fan, and the range of the slot they are pinned on.
+    see_also:
+    - saref:Property
+    permissible_values:
+      NOMINAL_AIR_FLOW_RATE:
+        meaning: s4bldg:nominalAirFlowRate
+        title: nominal air flow rate
+        description: Nominal rate of air flow. Usually measured in m3/s.
+      NOMINAL_POWER_RATE:
+        meaning: s4bldg:nominalPowerRate
+        title: nominal power rate
+        description: Nominal fan power rate.Usually measured in Watts (W, J/s).
+      NOMINAL_ROTATION_SPEED:
+        meaning: s4bldg:nominalRotationSpeed
+        title: nominal rotation speed
+        description: Nominal fan wheel speed. Usually measured in cycles/s.
+      NOMINAL_STATIC_PRESSURE:
+        meaning: s4bldg:nominalStaticPressure
+        title: nominal static pressure
+        description: The static pressure within the air stream that the fan must overcome to insure designed
+          circulation of air. Usually measured in Pascals (Pa, N/m2).
+      NOMINAL_TOTAL_PRESSURE:
+        meaning: s4bldg:nominalTotalPressure
+        title: nominal total pressure
+        description: Nominal total pressure rise across the fan. Usually measured in Pascals (Pa, N/m2).
+      OPERATION_TEMPERATURE_MAX:
+        meaning: s4bldg:operationTemperatureMax
+        title: operation temperature range
+        description: Allowable operation ambient (air, fluid) temperature range. Usually measured in degrees
+          Kelvin (K).
+      OPERATION_TEMPERATURE_MIN:
+        meaning: s4bldg:operationTemperatureMin
+        title: operation temperature range
+        description: Allowable operation ambient (air, fluid) temperature range. Usually measured in degrees
+          Kelvin (K).
+      OPERATIONAL_RITERIAL:
+        meaning: s4bldg:operationalRiterial
+        title: operational riterial
+        description: Time of operation at maximum operational ambient air temperature. Measured in seconds
+          (s) or days (d) or other units of time.
+  FilterProperty:
+    description: The individuals owl:hasValue pins on Filter, and the range of the slot they are pinned
+      on.
+    see_also:
+    - saref:Property
+    permissible_values:
+      FINAL_RESISTANCE:
+        meaning: s4bldg:finalResistance
+        title: final resistance
+        description: Filter fluid resistance when replacement is required (i.e., Pressure drop at the
+          maximum air flowrate across the filter when the filter needs replacement per ASHRAE Standard
+          52.1). Usually measured in Pascals (Pa, N/m2).
+      FLUID_FLOW_RATE_MAX:
+        meaning: s4bldg:fluidFlowRateMax
+        title: fluid flow rate range
+        description: Possible range of fluid flowrate that can be delivered. Usually measured in m3/s.
+      FLUID_FLOW_RATE_MIN:
+        meaning: s4bldg:fluidFlowRateMin
+        title: fluid flow rate range
+        description: Possible range of fluid flowrate that can be delivered. Usually measured in m3/s.
+      INITIAL_RESISTANCE:
+        meaning: s4bldg:initialResistance
+        title: initial resistance
+        description: Initial new filter fluid resistance (i.e., pressure drop at the maximum air flowrate
+          across the filter when the filter is new per ASHRAE Standard 52.1). Usually measured in Pascals
+          (Pa, N/m2).
+      NOMINAL_FILTER_FACE_VELOCITY:
+        meaning: s4bldg:nominalFilterFaceVelocity
+        title: nominal filter face velocity
+        description: Filter face velocity. Usually measured in m/s.
+      NOMINAL_FLOW_RATE:
+        meaning: s4bldg:nominalFlowRate
+        title: nominal flow rate
+        description: Nominal fluid flow rate through the filter. Usually measured in m3/s.
+      NOMINAL_MEDIA_SURFACE_VELOCITY:
+        meaning: s4bldg:nominalMediaSurfaceVelocity
+        title: nominal media surface velocity
+        description: Average fluid velocity at the media surface. Usually measured in m/s.
+      NOMINAL_PARTICLE_GEOMETRIC_MEAN_DIAMETER:
+        meaning: s4bldg:nominalParticleGeometricMeanDiameter
+        title: nominal particle geometric mean diameter
+        description: Particle geometric mean diameter associated with nominal efficiency. Usually measured
+          in millimeters (mm).
+      NOMINAL_PARTICLE_GEOMETRIC_STANDARD_DEVIATION:
+        meaning: s4bldg:nominalParticleGeometricStandardDeviation
+        title: nominal particle geometric standard deviation
+        description: 'Particle geometric standard deviation associated with nominal efficiency. '
+      NOMINAL_PRESSURE_DROP:
+        meaning: s4bldg:nominalPressureDrop
+        title: nominal pressure drop
+        description: Total pressure drop across the filter. Usually measured in Pascals (Pa, N/m2).
+      OPERATION_TEMPERATURE_MAX:
+        meaning: s4bldg:operationTemperatureMax
+        title: operation temperature range
+        description: Allowable operation ambient (air, fluid) temperature range. Usually measured in degrees
+          Kelvin (K).
+      OPERATION_TEMPERATURE_MIN:
+        meaning: s4bldg:operationTemperatureMin
+        title: operation temperature range
+        description: Allowable operation ambient (air, fluid) temperature range. Usually measured in degrees
+          Kelvin (K).
+      WEIGHT:
+        meaning: s4bldg:weight
+        title: weight
+        description: The weight of the device. Usually measured in kilograms (kg) or grams (g).
+  HumidifierProperty:
+    description: The individuals owl:hasValue pins on Humidifier, and the range of the slot they are pinned
+      on.
+    see_also:
+    - saref:Property
+    permissible_values:
+      NOMINAL_AIR_FLOW_RATE:
+        meaning: s4bldg:nominalAirFlowRate
+        title: nominal air flow rate
+        description: Nominal rate of air flow. Usually measured in m3/s.
+      NOMINAL_MOISTURE_GAIN:
+        meaning: s4bldg:nominalMoistureGain
+        title: nominal moisture gain
+        description: Nominal rate of water vapor added into the airstream. Usually measured in kg/s.
+      WATER_REQUIREMENT:
+        meaning: s4bldg:waterRequirement
+        title: water requirement
+        description: Make-up water requirement. Usually measured in m3/s.
+      WEIGHT:
+        meaning: s4bldg:weight
+        title: weight
+        description: The weight of the device. Usually measured in kilograms (kg) or grams (g).
+  InterceptorProperty:
+    description: The individuals owl:hasValue pins on Interceptor, and the range of the slot they are
+      pinned on.
+    see_also:
+    - saref:Property
+    permissible_values:
+      COVER_LENGTH:
+        meaning: s4bldg:coverLength
+        title: cover length
+        description: The length measured along the x-axis in the local coordinate system or the radius
+          (in the case of a circular shape in plan) of the cover of the oil interceptor. Usually measured
+          in millimeters (mm).
+      COVER_WIDTH:
+        meaning: s4bldg:coverWidth
+        title: cover width
+        description: The length measured along the x-axis in the local coordinate system of the cover
+          of the oil interceptor. Usually measured in millimeters (mm).
+      INLET_CONNECTION_SIZE:
+        meaning: s4bldg:inletConnectionSize
+        title: inlet connection size
+        description: Size of the inlet connection. Usually measured in millimeters (mm).
+      NOMINAL_BODY_DEPTH:
+        meaning: s4bldg:nominalBodyDepth
+        title: nominal body depth
+        description: Nominal or quoted =length, measured along the z-axis of the local coordinate system
+          of the object, of the body of the object. Usually measured in millimeters (mm).
+      NOMINAL_BODY_LENGTH:
+        meaning: s4bldg:nominalBodyLength
+        title: nominal body length
+        description: Nominal or quoted length, measured along the x-axis of the local coordinate system
+          of the object, of the body of the object. Usually measured in millimeters (mm).
+      NOMINAL_BODY_WIDTH:
+        meaning: s4bldg:nominalBodyWidth
+        title: nominal body width
+        description: Nominal or quoted length, measured along the y-axis of the local coordinate system
+          of the object, of the body of the object. Usually measured in millimeters (mm).
+      OUTLET_CONNECTION_SIZE:
+        meaning: s4bldg:outletConnectionSize
+        title: outlet connection size
+        description: Size of the outlet connection. Usually measured in millimeters (mm).
+      VENTILATING_PIPE_SIZE:
+        meaning: s4bldg:ventilatingPipeSize
+        title: ventilating pipe size
+        description: Size of the ventilating pipe(s). Usually measured in millimeters (mm).
+  LampProperty:
+    description: The individuals owl:hasValue pins on Lamp, and the range of the slot they are pinned
+      on.
+    see_also:
+    - saref:Property
+    permissible_values:
+      COLOR_TEMPERATURE:
+        meaning: s4bldg:colorTemperature
+        title: color temperature
+        description: The color temperature of any source of radiation is defined as the temperature (in
+          Kelvin) of a black-body or Planckian radiator whose radiation has the same chromaticity as the
+          source of radiation. Often the values are only approximate color temperatures as the black-body
+          radiator cannot emit radiation of every chromaticity value. The color temperatures of the commonest
+          artificial light sources range from less than 3000K (warm white) to 4000K (intermediate) and
+          over 5000K (daylight). Usually measured in degrees Kelvin (K).
+      CONTRIBUTED_LUMINOUS_FLUX:
+        meaning: s4bldg:contributedLuminousFlux
+        title: contributed luminous flux
+        description: Luminous flux is a photometric measure of radiant flux, i.e. the volume of light
+          emitted from a light source. Luminous flux is measured either for the interior as a whole or
+          for a part of the interior (partial luminous flux for a solid angle). All other photometric
+          parameters are derivatives of luminous flux. Luminous flux is measured in lumens (lm). The luminous
+          flux is given as a nominal value for each lamp. Usually measured in Lumen (lm, Candela Steradian).
+      LAMP_MAINTENANCE_FACTOR:
+        meaning: s4bldg:lampMaintenanceFactor
+        title: lamp maintenance factor
+        description: Non recoverable losses of luminous flux of a lamp due to lamp depreciation i.e. the
+          decreasing of light output of a luminaire due to aging and dirt.
+      LIGHT_EMITTER_NOMINAL_POWER:
+        meaning: s4bldg:lightEmitterNominalPower
+        title: light emitter nominal power
+        description: Light emitter nominal power. Usually measured in Watts (W, J/s).
+      SPECTRUM_MAX:
+        meaning: s4bldg:spectrumMax
+        title: maximum spectrum
+        description: The spectrum of radiation describes its composition with regard to wavelength. Light,
+          for example, as the portion of electromagnetic radiation that is visible to the human eye, is
+          radiation with wavelengths in the range of approx. 380 to 780 nm (1 nm = 10 m). The corresponding
+          range of colours varies from violet to indigo, blue, green, yellow, orange, and red. These colours
+          form a continuous spectrum, in which the various spectral sectors merge into each other.
+      SPECTRUM_MIN:
+        meaning: s4bldg:spectrumMin
+        title: minimum spectrum
+        description: The spectrum of radiation describes its composition with regard to wavelength. Light,
+          for example, as the portion of electromagnetic radiation that is visible to the human eye, is
+          radiation with wavelengths in the range of approx. 380 to 780 nm (1 nm = 10 m). The corresponding
+          range of colours varies from violet to indigo, blue, green, yellow, orange, and red. These colours
+          form a continuous spectrum, in which the various spectral sectors merge into each other.
+  ProtectiveDeviceTrippingUnitProperty:
+    description: The individuals owl:hasValue pins on ProtectiveDeviceTrippingUnit, and the range of the
+      slot they are pinned on.
+    see_also:
+    - saref:Property
+    permissible_values:
+      LIMITING_TERMINAL_SIZE:
+        meaning: s4bldg:limitingTerminalSize
+        title: limiting terminal size
+        description: The maximum terminal size capacity of the device. Usually measured in square metre
+          (m2).
+  PumpProperty:
+    description: The individuals owl:hasValue pins on Pump, and the range of the slot they are pinned
+      on.
+    see_also:
+    - saref:Property
+    permissible_values:
+      CONNECTION_SIZE:
+        meaning: s4bldg:connectionSize
+        title: connection size
+        description: The connection size of the to and from the pump. Usually measured in millimeters
+          (mm).
+      FLOW_RESISTANCE_MAX:
+        meaning: s4bldg:flowResistanceMax
+        title: flow resistance range
+        description: Allowable range of frictional resistance against which the fluid is being pumped.
+          Usually measured in Pascals (Pa, N/m2).
+      FLOW_RESISTANCE_MIN:
+        meaning: s4bldg:flowResistanceMin
+        title: flow resistance range
+        description: Allowable range of frictional resistance against which the fluid is being pumped.
+          Usually measured in Pascals (Pa, N/m2).
+      NET_POSITIVE_SUCTION_HEAD:
+        meaning: s4bldg:netPositiveSuctionHead
+        title: net positive suction head
+        description: Minimum liquid pressure at the pump inlet to prevent cavitation. Usually measured
+          in Pascals (Pa, N/m2).
+      NOMMINAL_ROTATION_SPEED:
+        meaning: s4bldg:nomminalRotationSpeed
+        title: nomminal rotation speed
+        description: Pump rotational speed under nominal conditions. Usually measured in cycles/s.
+      OPERATION_TEMPERATURE_MAX:
+        meaning: s4bldg:operationTemperatureMax
+        title: operation temperature range
+        description: Allowable operation ambient (air, fluid) temperature range. Usually measured in degrees
+          Kelvin (K).
+      OPERATION_TEMPERATURE_MIN:
+        meaning: s4bldg:operationTemperatureMin
+        title: operation temperature range
+        description: Allowable operation ambient (air, fluid) temperature range. Usually measured in degrees
+          Kelvin (K).
+      PUMP_FLOW_RATE_MAX:
+        meaning: s4bldg:pumpFlowRateMax
+        title: pump flow rate range
+        description: Allowable range of volume of fluid being pumped against the resistance specified.
+          Usually measured in kg/s.
+      PUMP_FLOW_RATE_MIN:
+        meaning: s4bldg:pumpFlowRateMin
+        title: pump flow rate range
+        description: Allowable range of volume of fluid being pumped against the resistance specified.
+          Usually measured in kg/s.
+  ShadingDeviceProperty:
+    description: The individuals owl:hasValue pins on ShadingDevice, and the range of the slot they are
+      pinned on.
+    see_also:
+    - saref:Property
+    permissible_values:
+      SOLAR_REFLECTANCE:
+        meaning: s4bldg:solarReflectance
+        title: solar reflectance
+        description: '(Rsol): The ratio of incident solar radiation that is reflected by a shading system
+          (also named _e). Note the following equation Asol + Rsol + Tsol = 1'
+      SOLAR_TRANSMITTANCE:
+        meaning: s4bldg:solarTransmittance
+        title: solar transmittance
+        description: (Tsol) The ratio of incident solar radiation that directly passes through a shading
+          system (also named _e). Note the following equation Asol + Rsol + Tsol = 1
+      THERMAL_TRANSMITTANCE:
+        meaning: s4bldg:thermalTransmittance
+        title: thermal transmittance
+        description: Rate at which energy is transmitted through a body. Usually measured in Watts/m2
+          Kelvin.
+      VISIBLE_LIGHT_REFLECTANCE:
+        meaning: s4bldg:visibleLightReflectance
+        title: visible light reflectance
+        description: Fraction of the visible light that is reflected by the glazing at normal incidence.
+          It is a value without unit.
+      VISIBLE_LIGHT_TRANSMITTANCE:
+        meaning: s4bldg:visibleLightTransmittance
+        title: visible light transmittance
+        description: Fraction of the visible light that passes the shading system at normal incidence.
+          It is a value without unit.
+  SpaceHeaterProperty:
+    description: The individuals owl:hasValue pins on SpaceHeater, and the range of the slot they are
+      pinned on.
+    see_also:
+    - saref:Property
+    permissible_values:
+      BODY_MASS:
+        meaning: s4bldg:bodyMass
+        title: body mass
+        description: Overall body mass of the heater. Usually measured in kilograms (kg) or grams (g).
+      OUTPUT_CAPACITY:
+        meaning: s4bldg:outputCapacity
+        title: output capacity
+        description: Total nominal heat output as listed by the manufacturer. Usually measured in Watts
+          (W, J/s).
+      THERMAL_EFFICIENCY:
+        meaning: s4bldg:thermalEfficiency
+        title: thermal efficiency
+        description: Overall Thermal Efficiency is defined as gross energy output of the heat transfer
+          device divided by the energy input.
+      THERMAL_MASS_HEAT_CAPACITY:
+        meaning: s4bldg:thermalMassHeatCapacity
+        title: thermal mass heat capacity
+        description: Product of component mass and specific heat.
+  TankProperty:
+    description: The individuals owl:hasValue pins on Tank, and the range of the slot they are pinned
+      on.
+    see_also:
+    - saref:Property
+    permissible_values:
+      EFFECTIVE_CAPACITY:
+        meaning: s4bldg:effectiveCapacity
+        title: effective capacity
+        description: The total effective or actual volumetric capacity of the tank. Usually measured in
+          cubic metre (m3).B3
+      FIRST_CURVATURE_RADIUS:
+        meaning: s4bldg:firstCurvatureRadius
+        title: first curvature radius
+        description: FirstCurvatureRadius should be defined as the base or left side radius of curvature
+          value. Usually measured in millimeters (mm).
+      NOMINAL_DEPTH:
+        meaning: s4bldg:nominalDepth
+        title: nominal depth
+        description: 'The nominal depth of the tank. Note: Not required for a horizontal cylindrical tank.
+          Usually measured in millimeters (mm).'
+      NOMINAL_LENGTH_OR_DIAMETER:
+        meaning: s4bldg:nominalLengthOrDiameter
+        title: nominal length or diameter
+        description: The nominal length or, in the case of a vertical cylindrical tank, the nominal diameter
+          of the tank. Usually measured in millimeters (mm).
+      NOMINAL_VOLUMETRIC_CAPACITY:
+        meaning: s4bldg:nominalVolumetricCapacity
+        title: nominal volumetric capacity
+        description: The total nominal or design volumetric capacity of the tank. Usually measured in
+          cubic metre (m3).
+      NOMINAL_WIDTH_OR_DIAMETER:
+        meaning: s4bldg:nominalWidthOrDiameter
+        title: nominal width or diameter
+        description: 'The nominal width or, in the case of a horizontal cylindrical tank, the nominal
+          diameter of the tank. Note: Not required for a vertical cylindrical tank. Usually measured in
+          millimeters (mm).'
+      OPERATING_WEIGHT:
+        meaning: s4bldg:operatingWeight
+        title: operating weight
+        description: Operating weight of the tank including all of its contents. Usually measured in kilograms
+          (kg) or grams (g).
+      SECOND_CURVATURE_RADIUS:
+        meaning: s4bldg:secondCurvatureRadius
+        title: second curvature radius
+        description: SecondCurvatureRadius should be defined as the top or right side radius of curvature
+          value. Usually measured in millimeters (mm).
+  TransformerProperty:
+    description: The individuals owl:hasValue pins on Transformer, and the range of the slot they are
+      pinned on.
+    see_also:
+    - saref:Property
+    permissible_values:
+      APPARENT_POWER_MAX:
+        meaning: s4bldg:apparentPowerMax
+        title: maximum apparent power
+        description: Maximum apparent power/capacity in VA (volt ampere). Usually measured in Watts (W,
+          J/s).
+      IMAGINARY_IMPEDANCE_RATIO:
+        meaning: s4bldg:imaginaryImpedanceRatio
+        title: imaginary impedance ratio
+        description: The ratio between the imaginary part of the zero sequence impedance and the imaginary
+          part of the positive impedance (i.e. imaginary part of the short-circuit voltage) of the transformer.
+          Used for three-phase transformer which includes a N-conductor.
+      PRIMARY_APPARENT_POWER:
+        meaning: s4bldg:primaryApparentPower
+        title: primary apparent power
+        description: The power in VA (volt ampere) that has been transformed and that runs into the transformer
+          on the primary side. Usually measured in Watts (W, J/s).
+      PRIMARY_CURRENT:
+        meaning: s4bldg:primaryCurrent
+        title: primary current
+        description: The current that is going to be transformed and that runs into the transformer on
+          the primary side. Usually measured in Ampere (A).
+      PRIMARY_FREQUENCY:
+        meaning: s4bldg:primaryFrequency
+        title: primary frequency
+        description: The frequency that is going to be transformed and that runs into the transformer
+          on the primary side. Usually measured in cycles/s or Hertz (Hz).
+      PRIMARY_VOLTAGE:
+        meaning: s4bldg:primaryVoltage
+        title: primary voltage
+        description: The voltage that is going to be transformed and that runs into the transformer on
+          the primary side. Usually measured in Volts (V, W/A).
+      REAL_IMPEDANCE_RATIO:
+        meaning: s4bldg:realImpedanceRatio
+        title: real impedance ratio
+        description: The ratio between the real part of the zero sequence impedance and the real part
+          of the positive impedance (i.e. real part of the short-circuit voltage) of the transformer.
+          Used for three-phase transformer which includes a N-conductor.
+      SECONDARY_APPARENT_POWER:
+        meaning: s4bldg:secondaryApparentPower
+        title: secondary apparent power
+        description: The power in VA (volt ampere) that has been transformed and is running out of the
+          transformer on the secondary side. Usually measured in Watts (W, J/s).
+      SECONDARY_CURRENT:
+        meaning: s4bldg:secondaryCurrent
+        title: secondary current
+        description: The current that has been transformed and is running out of the transformer on the
+          secondary side. Usually measured in Ampere (A).
+      SECONDARY_FREQUENCY:
+        meaning: s4bldg:secondaryFrequency
+        title: secondary frequency
+        description: The frequency that has been transformed and is running out of the transformer on
+          the secondary side. Usually measured in cycles/s or Hertz (Hz).
+      SECONDARY_VOLTAGE:
+        meaning: s4bldg:secondaryVoltage
+        title: secondary voltage
+        description: The voltage that has been transformed and is running out of the transformer on the
+          secondary side. Usually measured in Volts (V, W/A).
+  TransportElementProperty:
+    description: The individuals owl:hasValue pins on TransportElement, and the range of the slot they
+      are pinned on.
+    see_also:
+    - saref:Property
+    permissible_values:
+      CAPACITY_WEIGHT:
+        meaning: s4bldg:capacityWeight
+        title: capacity weight
+        description: Capacity of the transport element measured by weight. Usually measured in kilograms
+          (kg) or grams (g).
+  TubeBundleProperty:
+    description: The individuals owl:hasValue pins on TubeBundle, and the range of the slot they are pinned
+      on.
+    see_also:
+    - saref:Property
+    permissible_values:
+      FOULING_FACTOR:
+        meaning: s4bldg:foulingFactor
+        title: fouling factor
+        description: Fouling factor of the tubes in the tube bundle. Usually measured in m2 Kelvin/Watt.
+      HORIZONTAL_SPACING:
+        meaning: s4bldg:horizontalSpacing
+        title: horizontal spacing
+        description: Horizontal spacing between tubes in the tube bundle. Usually measured in millimeters
+          (mm).
+      IN_LINE_ROW_SPACING:
+        meaning: s4bldg:inLineRowSpacing
+        title: in line row spacing
+        description: In-line tube row spacing. Usually measured in millimeters (mm).
+      INSIDE_DIAMETER:
+        meaning: s4bldg:insideDiameter
+        title: inside diameter
+        description: Actual inner diameter of the tube in the tube bundle. Usually measured in millimeters
+          (mm).
+      LENGTH:
+        meaning: s4bldg:length
+        title: length
+        description: The finished length of the device. Usually measured in millimeters (mm).
+      NOMINAL_DIAMETER:
+        meaning: s4bldg:nominalDiameter
+        title: nominal diameter
+        description: Nominal diameter or width of the tubes in the tube bundle. Usually measured in millimeters
+          (mm).
+      OUTSIDE_DIAMETER:
+        meaning: s4bldg:outsideDiameter
+        title: outside diameter
+        description: Actual outside diameter of the tube in the tube bundle. Usually measured in millimeters
+          (mm).
+      STAGGERED_ROW_SPACING:
+        meaning: s4bldg:staggeredRowSpacing
+        title: staggered row spacing
+        description: Staggered tube row spacing. Usually measured in millimeters (mm).
+      THERMAL_CONDUCTIVITY:
+        meaning: s4bldg:thermalConductivity
+        title: thermal conductivity
+        description: Fouling factor of the tubes in the tube bundle. Usually measured in m2 Kelvin/Watt.
+      VERTICAL_SPACING:
+        meaning: s4bldg:verticalSpacing
+        title: vertical spacing
+        description: Vertical spacing between tubes in the tube bundle.Usually measured in millimeters
+          (mm).
+      VOLUMEN:
+        meaning: s4bldg:volumen
+        title: volumen
+        description: Total volume of fluid in the tubes and their headers. Usually measured in cubic metre
+          (m3).
+  ValveProperty:
+    description: The individuals owl:hasValue pins on Valve, and the range of the slot they are pinned
+      on.
+    see_also:
+    - saref:Property
+    permissible_values:
+      CLOSE_OFF_RATING:
+        meaning: s4bldg:closeOffRating
+        title: close off rating
+        description: Close off rating. Usually measured in Pascals (Pa, N/m2).
+      FLOW_COEFFICIENT:
+        meaning: s4bldg:flowCoefficient
+        title: flow coefficient
+        description: Flow coefficient (the quantity of fluid that passes through a fully open valve at
+          unit pressure drop), typically expressed as the Kv or Cv value for the valve.
+      SIZE:
+        meaning: s4bldg:size
+        title: size
+        description: The size of the connection to the valve (or to each connection for faucets, mixing
+          valves, etc.). Usually measured in millimeters (mm).
+      TEST_PRESSURE:
+        meaning: s4bldg:testPressure
+        title: test pressure
+        description: The maximum pressure to which the valve has been subjected under test. Usually measured
+          in Pascals (Pa, N/m2).
+      WORKING_PRESSURE:
+        meaning: s4bldg:workingPressure
+        title: working pressure
+        description: The normally expected maximum working pressure of the valve. Usually measured in
+          Pascals (Pa, N/m2).
+  VibrationIsolatorProperty:
+    description: The individuals owl:hasValue pins on VibrationIsolator, and the range of the slot they
+      are pinned on.
+    see_also:
+    - saref:Property
+    permissible_values:
+      HEIGHT:
+        meaning: s4bldg:height
+        title: height
+        description: Height of the vibration isolator before tha application of load. Usually measured
+          in millimeters (mm).
+      ISOLATOR_COMPRESSIBILITY:
+        meaning: s4bldg:isolatorCompressibility
+        title: isolator compressibility
+        description: The compressibility of the vibration isolator.
+      ISOLATOR_STATIC_DEFLECTION:
+        meaning: s4bldg:isolatorStaticDeflection
+        title: isolator static deflection
+        description: Static deflection of the vibration isolator. Usually measured in millimeters (mm).
+      SUPPORTED_WEIGHT_MAX:
+        meaning: s4bldg:supportedWeightMax
+        title: maximum supported weight
+        description: The maximum weight that can be carried by the vibration isolator. Usually measured
+          in kilograms (kg) or grams (g).
+      VIBRATION_TRANSMISSIBILITY:
+        meaning: s4bldg:vibrationTransmissibility
+        title: vibration transmissibility
+        description: The vibration transmissibility percentage.
+slots:
+  access_type:
+    slot_uri: s4bldg:accessType
+    title: access type
+    description: Defines the types of access (or cover) to a tank that may be specified. Note that covers
+      are generally specified for rectangular tanks. For cylindrical tanks, access will normally be via
+      a manhole.
+    range: string
+    multivalued: true
+  application:
+    slot_uri: s4bldg:application
+    title: application
+    description: 'Humidifier application. Fixed: Humidifier installed in a ducted flow distribution system.
+      Portable: Humidifier is not installed in a ducted flow distribution system.'
+    range: string
+    multivalued: true
+  arrangement:
+    slot_uri: s4bldg:arrangement
+    title: arrangement
+    description: 'Defines the basic flow arrangements for the heat exchanger: COUNTERFLOW: Counterflow
+      heat exchanger arrangement. CROSSFLOW: Crossflow heat exchanger arrangement. PARALLELFLOW: Parallel
+      flow heat exchanger arrangement. MULTIPASS: Multipass flow heat exchanger arrangement. OTHER: Other
+      type of heat exchanger flow arrangement not defined above.'
+    range: string
+    multivalued: true
+  blade_action:
+    slot_uri: s4bldg:bladeAction
+    title: blade action
+    description: Blade action.
+    range: string
+    multivalued: true
+  blade_edge:
+    slot_uri: s4bldg:bladeEdge
+    title: blade edge
+    description: Blade edge.
+    range: string
+    multivalued: true
+  blade_shape:
+    slot_uri: s4bldg:bladeShape
+    title: blade shape
+    description: Blade shape. Flat means triple V-groove.
+    range: string
+    multivalued: true
+  capacity_control:
+    slot_uri: s4bldg:capacityControl
+    title: capacity control
+    description: 'FanCycling: Fan is cycled on and off to control duty. TwoSpeedFan: Fan is switched between
+      low and high speed to control duty. VariableSpeedFan: Fan speed is varied to control duty. DampersControl:
+      Dampers modulate the air flow to control duty. BypassValveControl: Bypass valve modulates the water
+      flow to control duty. MultipleSeriesPumps: Turn on/off multiple series pump to control duty. TwoSpeedPump:
+      Switch between high/low pump speed to control duty. VariableSpeedPump: vary pump speed to control
+      duty.'
+    range: string
+    multivalued: true
+  capacity_control_type:
+    slot_uri: s4bldg:capacityControlType
+    title: capacity control type
+    description: 'InletVane: Control by adjusting inlet vane. VariableSpeedDrive: Control by variable
+      speed drive. BladePitchAngle: Control by adjusting blade pitch angle. TwoSpeed: Control by switch
+      between high and low speed. DischargeDamper: Control by modulating discharge damper.'
+    range: string
+    multivalued: true
+  capacity_people:
+    slot_uri: s4bldg:capacityPeople
+    title: capacity people
+    description: Capacity of the transportation element measured in numbers of person.
+    range: NonNegativeInteger
+    multivalued: true
+  circuit_type:
+    slot_uri: s4bldg:circuitType
+    title: circuit type
+    description: 'OpenCircuit: Exposes water directly to the cooling atmosphere. CloseCircuit: The fluid
+      is separated from the atmosphere by a heat exchanger. Wet: The air stream or the heat exchange surface
+      is evaporatively cooled. Dry: No evaporation into the air stream. DryWet: A combination of a dry
+      tower and a wet tower.'
+    range: string
+    multivalued: true
+  color_appearance:
+    slot_uri: s4bldg:colorAppearance
+    title: color appearance
+    description: In both the DIN and CIE standards, artificial light sources are classified in terms of
+      their color appearance. To the human eye they all appear to be white the difference can only be
+      detected by direct comparison. Visual performance is not directly affected by differences in color
+      appearance.
+    range: string
+    multivalued: true
+  color_rendering_index:
+    slot_uri: s4bldg:colorRenderingIndex
+    title: color rendering index
+    description: The CRI indicates how well a light source renders eight standard colors compared to perfect
+      reference lamp with the same color temperature. The CRI scale ranges from 1 to 100, with 100 representing
+      perfect rendering properties.
+    range: integer
+    multivalued: true
+  contains:
+    slot_uri: s4bldg:contains
+    title: contains
+    description: A relation between a physical object and another physical object it contains.
+    range: PhysicalObject
+    multivalued: true
+    inverse: is_contained_in
+    transitive: true
+  control_strategy:
+    slot_uri: s4bldg:controlStrategy
+    title: control strategy
+    description: 'FixedExitingWaterTemp: The capacity is controlled to maintain a fixed exiting water
+      temperature. WetBulbTempReset: The set-point is reset based on the wet-bulb temperature.'
+    range: string
+    multivalued: true
+  end_shape_type:
+    slot_uri: s4bldg:endShapeType
+    title: end shape type
+    description: Defines the types of end shapes that can be used for preformed tanks. The convention
+      for reading these enumerated values is that for a vertical cylinder, the first value is the base
+      and the second is the top for a horizontal cylinder, the order of reading should be left to right.
+      For a speherical tank, the value UNSET should be used.B5
+    range: string
+    multivalued: true
+  energy_source:
+    slot_uri: s4bldg:energySource
+    title: energy source
+    description: Enumeration defining the energy source or fuel cumbusted to generate heat.
+    range: string
+    multivalued: true
+  evaporation_coolant:
+    slot_uri: s4bldg:evaporationCoolant
+    title: evaporation coolant
+    description: The fluid used for the coolant in the evaporator.
+    range: string
+    multivalued: true
+  evaporation_medium_type:
+    slot_uri: s4bldg:evaporationMediumType
+    title: evaporation medium type
+    description: 'ColdLiquid: Evaporator is using liquid type of fluid to exchange heat with refrigerant.
+      ColdAir: Evaporator is using air to exchange heat with refrigerant.'
+    range: string
+    multivalued: true
+  fail_position:
+    slot_uri: s4bldg:failPosition
+    title: fail position
+    description: Specifies the required fail-safe position of the actuator.
+    range: string
+    multivalued: true
+  finish_color:
+    slot_uri: s4bldg:finishColor
+    title: finish color
+    description: Finish color for cooled beam.
+    range: string
+    multivalued: true
+  fire_exit:
+    slot_uri: s4bldg:fireExit
+    title: fire exit
+    description: Indication whether this object is designed to serve as an exit in the case of fire (TRUE)
+      or not (FALSE). Here whether the transport element (in case of e.g., a lift) is designed to serve
+      as a fire exit, e.g., for fire escape purposes.
+    range: boolean
+    multivalued: true
+  flow_arrangement:
+    slot_uri: s4bldg:flowArrangement
+    title: flow arrangement
+    description: 'CounterFlow: Air and water flow enter in different directions. CrossFlow: Air and water
+      flow are perpendicular. ParallelFlow: air and water flow enter in same directions.'
+    range: string
+    multivalued: true
+  frame_size:
+    slot_uri: s4bldg:frameSize
+    title: frame size
+    description: Designation of the frame size according to the named range of frame sizes designated
+      at the place of use or according to a given standard.
+    range: string
+    multivalued: true
+  frame_type:
+    slot_uri: s4bldg:frameType
+    title: frame type
+    description: The type of frame used by the damper (e.g., Standard, Single Flange, Single Reversed
+      Flange, Double Flange, etc.).
+    range: string
+    multivalued: true
+  has_defrost:
+    slot_uri: s4bldg:hasDefrost
+    title: has defrost
+    description: Whether the heat exchanger has defrost function or not.
+    range: boolean
+    multivalued: true
+  has_exterior_insulation:
+    slot_uri: s4bldg:hasExteriorInsulation
+    title: has exterior insulation
+    description: TRUE if the silencer has exterior insulation. FALSE if it does not.
+    range: boolean
+    multivalued: true
+  has_hot_gas_bypass:
+    slot_uri: s4bldg:hasHotGasBypass
+    title: has hot gas bypass
+    description: Whether or not hot gas bypass is provided for the compressor. TRUE = Yes, FALSE = No.
+    range: boolean
+    multivalued: true
+  has_lock:
+    slot_uri: s4bldg:hasLock
+    title: has lock
+    description: Indication of whether a switching device has a key operated lock (=TRUE) or not (= FALSE).
+    range: boolean
+    multivalued: true
+  has_part_winding:
+    slot_uri: s4bldg:hasPartWinding
+    title: has part winding
+    description: Indication of whether the motor is single speed, i.e. has a single winding (= FALSE)
+      or multi-speed i.e.has part winding (= TRUE) .
+    range: boolean
+    multivalued: true
+  has_space:
+    slot_uri: s4bldg:hasSpace
+    title: has space
+    description: Relation between a building or a building space and the spaces it can be divided into.
+    range: uriorcurie
+    multivalued: true
+    inverse: is_space_of
+    transitive: true
+  has_turbulator:
+    slot_uri: s4bldg:hasTurbulator
+    title: has turbulator
+    description: TRUE if the tube has a turbulator, FALSE if it does not.
+    range: boolean
+    multivalued: true
+  heat_transfer_dimension:
+    slot_uri: s4bldg:heatTransferDimension
+    title: heat transfer dimension
+    description: Indicates how heat is transmitted according to the shape of the space heater.
+    range: string
+    multivalued: true
+  heat_transfer_medium:
+    slot_uri: s4bldg:heatTransferMedium
+    title: heat transfer medium
+    description: Enumeration defining the heat transfer medium if applicable.
+    range: string
+    multivalued: true
+  heat_transfer_type_enum:
+    slot_uri: s4bldg:heatTransferTypeEnum
+    title: heat transfer type enum
+    description: Type of heat transfer between the two air streams.
+    range: string
+    multivalued: true
+  integrated_lighting_type:
+    slot_uri: s4bldg:integratedLightingType
+    title: integrated lighting type
+    description: Integrated lighting in cooled beam.
+    range: string
+    multivalued: true
+  internal_control:
+    slot_uri: s4bldg:internalControl
+    title: internal control
+    description: Internal modulation control.
+    range: string
+    multivalued: true
+  is_contained_in:
+    slot_uri: s4bldg:isContainedIn
+    title: is contained in
+    description: A relation between a physical object and the physical space in which it is contained.
+    range: PhysicalObject
+    multivalued: true
+    inverse: contains
+    transitive: true
+  is_external:
+    slot_uri: s4bldg:isExternal
+    title: is external
+    description: Indication whether the element is designed for use in the exterior (TRUE) or not (FALSE).
+      If (TRUE) it is an external element and faces the outside of the building.
+    range: boolean
+    multivalued: true
+  is_free_hanging:
+    slot_uri: s4bldg:isFreeHanging
+    title: is free hanging
+    description: Is it free hanging type (not mounted in a false ceiling)?
+    range: boolean
+    multivalued: true
+  is_guarded:
+    slot_uri: s4bldg:isGuarded
+    title: is guarded
+    description: Indication of whether the motor enclosure is guarded (= TRUE) or not (= FALSE).
+    range: boolean
+    multivalued: true
+  is_illuminated:
+    slot_uri: s4bldg:isIlluminated
+    title: is illuminated
+    description: An indication of whether there is an illuminated indicator to show that the switch is
+      on (=TRUE) or not (= FALSE).
+    range: boolean
+    multivalued: true
+  is_neutral_primary_terminal_available:
+    slot_uri: s4bldg:isNeutralPrimaryTerminalAvailable
+    title: is neutral primary terminal available
+    description: An indication of whether the neutral point of the primary winding is available as a terminal
+      (=TRUE) or not (= FALSE).
+    range: boolean
+    multivalued: true
+  is_neutral_secondary_terminal_available:
+    slot_uri: s4bldg:isNeutralSecondaryTerminalAvailable
+    title: is neutral secondary terminal available
+    description: An indication of whether the neutral point of the secondary winding is available as a
+      terminal (=TRUE) or not (= FALSE).
+    range: boolean
+    multivalued: true
+  is_pluggable_outlet:
+    slot_uri: s4bldg:isPluggableOutlet
+    title: is pluggable outlet
+    description: Indication of whether the outlet accepts a loose plug connection (= TRUE) or whether
+      it is directly connected (= FALSE) or whether the form of connection has not yet been determined
+      (= UNKNOWN).
+    range: boolean
+    multivalued: true
+  is_space_of:
+    slot_uri: s4bldg:isSpaceOf
+    title: isSpaceOf
+    description: Relation between a building space and the building or building space it belongs to.
+    range: uriorcurie
+    multivalued: true
+    inverse: has_space
+    transitive: true
+  is_water_storage_heater:
+    slot_uri: s4bldg:isWaterStorageHeater
+    title: is water storage heater
+    description: This is used to identify if the boiler has storage capacity (TRUE). If FALSE, then there
+      is no storage capacity built into the boiler, such as an instantaneous hot water heater.
+    range: boolean
+    multivalued: true
+  lamp_ballast_type:
+    slot_uri: s4bldg:lampBallastType
+    title: lamp ballast type
+    description: The type of ballast used to stabilise gas discharge by limiting the current during operation
+      and to deliver the necessary striking voltage for starting. Ballasts are needed to operate Discharge
+      Lamps such as Fluorescent, Compact Fluorescent, High-pressure Mercury, Metal Halide and High-pressure
+      Sodium Lamps. Magnetic ballasts are chokes which limit the current passing through a lamp connected
+      in series on the principle of self-induction. The resultant current and power are decisive for the
+      efficient operation of the lamp. A specially designed ballast is required for every type of lamp
+      to comply with lamp rating in terms of Luminous Flux, Color Appearance and service life. The two
+      types of magnetic ballasts for fluorescent lamps are KVG Conventional (EC-A series) and VVG Low-loss
+      ballasts (EC-B series). Low-loss ballasts have a higher efficiency, which means reduced ballast
+      losses and a lower thermal load. Electronic ballasts are used to run fluorescent lamps at high frequencies
+      (approx. 35 - 40 kHz).
+    range: string
+    multivalued: true
+  lamp_compensation_type:
+    slot_uri: s4bldg:lampCompensationType
+    title: lamp compensation type
+    description: Identifies the form of compensation used for power factor correction and radio suppression.
+    range: string
+    multivalued: true
+  legend:
+    slot_uri: s4bldg:legend
+    title: legend
+    description: A text inscribed or applied to the switch as a legend to indicate purpose or function.
+    range: string
+    multivalued: true
+  manual_override:
+    slot_uri: s4bldg:manualOverride
+    title: manual override
+    description: Identifies whether hand-operated operation is provided as an override (= TRUE) or not
+      (= FALSE). Note that this value should be set to FALSE by default in the case of a Hand Operated
+      Actuator.
+    range: boolean
+    multivalued: true
+  mechanical_operated:
+    slot_uri: s4bldg:mechanicalOperated
+    title: mechanical operated
+    description: Indication whether the element is operated machanically (TRUE) or not, i.e. manually
+      (FALSE).
+    range: boolean
+    multivalued: true
+  media_source:
+    slot_uri: s4bldg:mediaSource
+    title: media source
+    description: Indicates media sources and corresponding names of ports (DistributionPort with FlowDirection=SINK
+      and PredefinedType=AUDIOVISUAL) or aggregated audio/video components (AudioVisualAppliance).
+    range: string
+    multivalued: true
+  motor_drive_type:
+    slot_uri: s4bldg:motorDriveType
+    title: motor drive type
+    description: 'Motor drive type: DIRECTDRIVE: Direct drive. BELTDRIVE: Belt drive. COUPLING: Coupling.
+      OTHER: Other type of motor drive. UNKNOWN: Unknown motor drive type. '
+    range: string
+    multivalued: true
+  motor_enclosure_type:
+    slot_uri: s4bldg:motorEnclosureType
+    title: motor enclosure type
+    description: A list of the available types of motor enclosure from which that required may be selected.
+    range: string
+    multivalued: true
+  nominal_supply_voltage_max:
+    slot_uri: s4bldg:nominalSupplyVoltageMax
+    title: nominal supply voltage offset
+    description: The maximum and minimum allowed voltage of the supply e.g. boundaries of 380V/440V may
+      be applied for a nominal voltage of 400V.
+    range: uriorcurie
+    multivalued: true
+  number_of_blades:
+    slot_uri: s4bldg:numberOfBlades
+    title: number of blades
+    description: Number of blades.
+    range: integer
+    multivalued: true
+  number_of_cells:
+    slot_uri: s4bldg:numberOfCells
+    title: number of cells
+    description: Number of cells in one cooling tower unit.
+    range: integer
+    multivalued: true
+  number_of_circuits:
+    slot_uri: s4bldg:numberOfCircuits
+    title: number of circuits
+    description: Number of parallel fluid tube circuits.
+    range: integer
+    multivalued: true
+  number_of_gangs:
+    slot_uri: s4bldg:numberOfGangs
+    title: number of gangs
+    description: Number of gangs/buttons on this switch.
+    range: integer
+    multivalued: true
+  number_of_panels:
+    slot_uri: s4bldg:numberOfPanels
+    title: number of panels
+    description: Number of panels.
+    range: integer
+    multivalued: true
+  number_of_rows:
+    slot_uri: s4bldg:numberOfRows
+    title: number of rows
+    description: Number of tube rows in the tube bundle assembly.
+    range: integer
+    multivalued: true
+  number_of_sections:
+    slot_uri: s4bldg:numberOfSections
+    title: number of sections
+    description: Number of sections used.
+    range: integer
+    multivalued: true
+  number_os_sockets:
+    slot_uri: s4bldg:numberOsSockets
+    title: number os sockets
+    description: The number of sockets that may be connected. In case of inconsistency, sockets defined
+      on ports take precedence.
+    range: integer
+    multivalued: true
+  operating_mode:
+    slot_uri: s4bldg:operatingMode
+    title: operating mode
+    description: Identifies the operating mode of the boiler.
+    range: string
+    multivalued: true
+  operation:
+    slot_uri: s4bldg:operation
+    title: operation
+    description: The operational mechanism for the damper operation.
+    range: string
+    multivalued: true
+  orientation:
+    slot_uri: s4bldg:orientation
+    title: orientation
+    description: The intended orientation for the damper as specified by the manufacturer.
+    range: string
+    multivalued: true
+  pattern_type:
+    slot_uri: s4bldg:patternType
+    title: pattern type
+    description: Defines the types of pattern (or shape of a tank that may be specified.
+    range: string
+    multivalued: true
+  pipe_connection_enum:
+    slot_uri: s4bldg:pipeConnectionEnum
+    title: pipe connection enum
+    description: The manner in which the pipe connection is made to the cooled beam.
+    range: string
+    multivalued: true
+  placement_type:
+    slot_uri: s4bldg:placementType
+    title: placement type
+    description: Indicates how the device is designed to be placed.
+    range: string
+    multivalued: true
+  power_source:
+    slot_uri: s4bldg:powerSource
+    title: power source
+    description: Type of power driving the compressor.
+    range: string
+    multivalued: true
+  read_out_type:
+    slot_uri: s4bldg:readOutType
+    title: read out type
+    description: Indication of the form that readout from the meter takes. In the case of a dial read
+      out, this may comprise multiple dials that give a cumulative reading and/or a mechanical odometer.
+    range: string
+    multivalued: true
+  refrigerant_class:
+    slot_uri: s4bldg:refrigerantClass
+    title: refrigerant class
+    description: 'Refrigerant class used by the compressor. CFC: Chlorofluorocarbons. HCFC: Hydrochlorofluorocarbons.
+      HFC: Hydrofluorocarbons.'
+    range: string
+    multivalued: true
+  remote_reading:
+    slot_uri: s4bldg:remoteReading
+    title: remote reading
+    description: Indicates whether the meter has a connection for remote reading through connection of
+      a communication device (set TRUE) or not (set FALSE).
+    range: boolean
+    multivalued: true
+  roughness:
+    slot_uri: s4bldg:roughness
+    title: roughness
+    description: A measure of the vertical deviations of the surface.
+    range: string
+    multivalued: true
+  secondary_current_type:
+    slot_uri: s4bldg:secondaryCurrentType
+    title: secondary current type
+    description: A list of the secondary current types that can result from transformer output.
+    range: string
+    multivalued: true
+  shading_device_type:
+    slot_uri: s4bldg:shadingDeviceType
+    title: shading device type
+    description: Specifies the type of shading device.
+    range: string
+    multivalued: true
+  short_circuit_voltage:
+    slot_uri: s4bldg:shortCircuitVoltage
+    title: short circuit voltage
+    description: A complex number that specifies the real and imaginary parts of the short-circuit voltage
+      at rated current of a transformer given in %.
+    range: uriorcurie
+    multivalued: true
+  spray_type:
+    slot_uri: s4bldg:sprayType
+    title: spray type
+    description: 'SprayFilled: Water is sprayed into airflow. SplashTypeFill: water cascades over successive
+      rows of splash bars. FilmTypeFill: water flows in a thin layer over closely spaced sheets.'
+    range: string
+    multivalued: true
+  standard:
+    slot_uri: s4bldg:standard
+    title: standard
+    description: The designation of the standard applicable for the definition of the characteristics
+      of the unit.
+    range: string
+    multivalued: true
+  storage_type:
+    slot_uri: s4bldg:storageType
+    title: storage type
+    description: Defines the general material category intended to be stored.
+    range: string
+    multivalued: true
+  switch_function:
+    slot_uri: s4bldg:switchFunction
+    title: switch function
+    description: Indicates types of switches which differs in functionality.
+    range: string
+    multivalued: true
+  temperature_classification:
+    slot_uri: s4bldg:temperatureClassification
+    title: temperature classification
+    description: Enumeration defining the temperature classification of the space heater surface temperature.
+      low temperature - surface temperature is relatively low, usually heated by hot water or electricity.
+      high temperature - surface temperature is relatively high, usually heated by gas or steam.
+    range: string
+    multivalued: true
+  transformer_vector_group:
+    slot_uri: s4bldg:transformerVectorGroup
+    title: transformer vector group
+    description: 'List of the possible vector groups for the transformer from which that required may
+      be set. Values in the enumeration list follow a standard international code where the first letter
+      describes how the primary windings are connected, the second letter describes how the secondary
+      windings are connected, and the numbers describe the rotation of voltages and currents from the
+      primary to the secondary side in multiples of 30 degrees. D: means that the windings are delta-connected.
+      Y: means that the windings are star-connected. Z: means that the windings are zig-zag connected
+      (a special start-connected providing low reactance of the transformer). The connectivity is only
+      relevant for three-phase transformers.'
+    range: string
+    multivalued: true
+  valve_mechanism:
+    slot_uri: s4bldg:valveMechanism
+    title: valve mechanism
+    description: 'The mechanism by which the valve function is achieved where: BALL: Valve that has a
+      ported ball that can be turned relative to the body seat ports. BUTTERFLY: Valve in which a streamlined
+      disc pivots about a diametric axis. CONFIGUREDGATE: Screwdown valve in which the closing gate is
+      shaped in a configured manner to have a more precise control of pressure and flow change across
+      the valve. GLAND: Valve with a tapered seating, in which a rotatable plug is retained by means of
+      a gland and gland packing. GLOBE: Screwdown valve that has a spherical body. LUBRICATEDPLUG: Plug
+      valve in which a lubricant is injected under pressure between the plug face and the body. NEEDLE:
+      Valve for regulating the flow in or from a pipe, in which a slender cone moves along the axis of
+      flow to close against a fixed conical seat. PARALLELSLIDE: Screwdown valve that has a machined plate
+      that slides in formed grooves to form a seal. PLUG: Valve that has a ported plug that can be turned
+      relative to the body seat ports. WEDGEGATE: Screwdown valve that has a wedge shaped plate fitting
+      into tapered guides to form a seal.'
+    range: string
+    multivalued: true
+  valve_operation:
+    slot_uri: s4bldg:valveOperation
+    title: valve operation
+    description: 'The method of valve operation where: DROPWEIGHT: A valve that is closed by the action
+      of a weighted lever being released, the weight normally being prevented from dropping by being held
+      by a wire, the closure normally being made by the action of heat on a fusible link in the wire FLOAT:
+      A valve that is opened and closed by the action of a float that rises and falls with water level.
+      The float may be a ball attached to a lever or other mechanism HYDRAULIC: A valve that is opened
+      and closed by hydraulic actuation LEVER: A valve that is opened and closed by the action of a lever
+      rotating the gate within the valve. LOCKSHIELD: A valve that requires the use of a special lockshield
+      key for opening and closing, the operating mechanism being protected by a shroud during normal operation.
+      MOTORIZED: A valve that is opened and closed by the action of an electric motor on an actuator PNEUMATIC:
+      A valve that is opened and closed by pneumatic actuation SOLENOID: A valve that is normally held
+      open by a magnetic field in a coil acting on the gate but that is closed immediately if the electrical
+      current generating the magnetic field is removed. SPRING: A valve that is normally held in position
+      by the pressure of a spring on a plate but that may be caused to open if the pressure of the fluid
+      is sufficient to overcome the spring pressure. THERMOSTATIC: A valve in which the ports are opened
+      or closed to maintain a required predetermined temperature. WHEEL: A valve that is opened and closed
+      by the action of a wheel moving the gate within the valve.'
+    range: string
+    multivalued: true
+  valve_pattern:
+    slot_uri: s4bldg:valvePattern
+    title: valve pattern
+    description: 'The configuration of the ports of a valve according to either the linear route taken
+      by a fluid flowing through the valve or by the number of ports where: SINGLEPORT: Valve that has
+      a single entry port from the system that it serves, the exit port being to the surrounding environment.
+      ANGLED_2_PORT: Valve in which the direction of flow is changed through 90 degrees. STRAIGHT_2_PORT:
+      Valve in which the flow is straight through. STRAIGHT_3_PORT: Valve with three separate ports. CROSSOVER_4_PORT:
+      Valve with 4 separate ports.'
+    range: string
+    multivalued: true
+  water_flow_control_system_type:
+    slot_uri: s4bldg:waterFlowControlSystemType
+    title: water flow control system type
+    description: Factory fitted waterflow control system.
+    range: string
+    multivalued: true
+classes:
+  AirToAirHeatRecovery:
+    class_uri: s4bldg:AirToAirHeatRecovery
+    title: Air to air heat recovery
+    description: An air-to-air heat recovery device employs a counter-flow heat exchanger between inbound
+      and outbound air flow. It is typically used to transfer heat from warmer air in one chamber to cooler
+      air in the second chamber (i.e., typically used to recover heat from the conditioned air being exhausted
+      and the outside air being supplied to a building), resulting in energy savings from reduced heating
+      (or cooling) requirements.
+    see_also:
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifchvacdomain/lexical/ifcairtoairheatrecovery.htm
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifchvacdomain/pset/pset_airtoairheatrecoverytypecommon.htm
+    mixins:
+    - EnergyConversionDevice
+    slots:
+    - has_property
+    slot_usage:
+      has_property:
+        required: true
+        range: AirToAirHeatRecoveryProperty
+  Alarm:
+    class_uri: s4bldg:Alarm
+    title: Alarm
+    description: 'An alarm is a device that signals the existence of a condition or situation that is
+      outside the boundaries of normal expectation or that activates such a device.
+
+
+      Alarms include the provision of break glass buttons and manual pull boxes that are used to activate
+      alarms.'
+    see_also:
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifcbuildingcontrolsdomain/lexical/ifcalarm.htm
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifcbuildingcontrolsdomain/pset/pset_alarmtypecommon.htm
+    mixins:
+    - DistributionControlDevice
+  AudioVisualAppliance:
+    class_uri: s4bldg:AudioVisualAppliance
+    title: Audio visual appliance
+    description: 'An audio-visual appliance is a device that displays, captures, transmits, or receives
+      audio or video.
+
+
+      Audio-visual appliances may be fixed in place or may be able to be moved from one space to another.
+      They may require an electrical supply that may be supplied either by an electrical circuit or provided
+      from a local battery source. Audio-visual appliances may be connected to data circuits including
+      specialist circuits for audio visual purposes only.'
+    see_also:
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifcelectricaldomain/lexical/ifcaudiovisualappliance.htm
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifcelectricaldomain/pset/pset_audiovisualappliancetypecommon.htm
+    mixins:
+    - FlowTerminal
+    slots:
+    - has_property
+    slot_usage:
+      has_property:
+        required: true
+        range: AudioVisualApplianceProperty
+  Boiler:
+    class_uri: s4bldg:Boiler
+    title: Boiler
+    description: A boiler is a closed, pressure-rated vessel in which water or other fluid is heated using
+      an energy source such as natural gas, heating oil, or electricity. The fluid in the vessel is then
+      circulated out of the boiler for use in various processes or heating applications.
+    see_also:
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifchvacdomain/lexical/ifcboiler.htm
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifchvacdomain/pset/pset_boilertypecommon.htm
+    mixins:
+    - EnergyConversionDevice
+    slots:
+    - has_property
+    slot_usage:
+      has_property:
+        required: true
+        range: BoilerProperty
+  Building:
+    class_uri: s4bldg:Building
+    title: Building
+    description: A building represents a structure that provides shelter for its occupants or contents
+      and stands in one place. The building is also used to provide a basic element within the spatial
+      structure hierarchy for the components of a building project (together with site, storey, and space).
+    see_also:
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifcproductextension/lexical/ifcbuilding.htm
+    mixins:
+    - SpatialThing
+    slots:
+    - has_space
+    slot_usage:
+      has_space:
+        range: BuildingSpace
+  BuildingDevice:
+    class_uri: s4bldg:BuildingDevice
+    title: Building device
+    description: A tangible object designed to accomplish a particular task in a building.
+    mixins:
+    - BuildingObject
+    - Device
+  BuildingObject:
+    class_uri: s4bldg:BuildingObject
+    title: Building object
+    description: An object in the building that can be controlled by devices, such as a door or a window
+      that can be automatically opened or closed by an actuator.  (Definition taken from SAREF 1.0)
+    mixins:
+    - PhysicalObject
+  BuildingSpace:
+    class_uri: s4bldg:BuildingSpace
+    title: Building space
+    description: An entity used to define the physical spaces of the building. A building space contains
+      devices or building objects.
+    mixins:
+    - SpatialThing
+    slots:
+    - contains
+    - has_space
+    - is_space_of
+    slot_usage:
+      contains:
+        range: PhysicalObject
+      has_space:
+        range: BuildingSpace
+      is_space_of:
+        any_of:
+        - range: Building
+        - range: BuildingSpace
+  Burner:
+    class_uri: s4bldg:Burner
+    title: Burner
+    description: A burner is a device that converts fuel into heat through combustion. It includes gas,
+      oil, and wood burners.
+    see_also:
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifchvacdomain/lexical/ifcburner.htm
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifchvacdomain/pset/pset_burnertypecommon.htm
+    mixins:
+    - EnergyConversionDevice
+  Chiller:
+    class_uri: s4bldg:Chiller
+    title: Chiller
+    description: A chiller is a device used to remove heat from a liquid via a vapor-compression or absorption
+      refrigeration cycle to cool a fluid, typically water or a mixture of water and glycol. The chilled
+      fluid is then used to cool and dehumidify air in a building.
+    see_also:
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifchvacdomain/lexical/ifcchiller.htm
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifchvacdomain/pset/pset_chillertypecommon.htm
+    mixins:
+    - EnergyConversionDevice
+    slots:
+    - has_property
+    slot_usage:
+      has_property:
+        required: true
+        range: ChillerProperty
+  Coil:
+    class_uri: s4bldg:Coil
+    title: Coil
+    description: 'A coil is a device used to provide heat transfer between non-mixing media. A common
+      example is a cooling coil, which utilizes a finned coil in which circulates chilled water, antifreeze,
+      or refrigerant that is used to remove heat from air moving across the surface of the coil. A coil
+      may be used either for heating or cooling purposes by placing a series of tubes (the coil) carrying
+      a heating or cooling fluid into an airstream. The coil may be constructed from tubes bundled in
+      a serpentine form or from finned tubes that give a extended heat transfer surface.
+
+
+      Coils may also be used for non-airflow cases such as embedded in a floor slab.'
+    see_also:
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifchvacdomain/lexical/ifccoil.htm
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifchvacdomain/pset/pset_coiltypecommon.htm
+    mixins:
+    - EnergyConversionDevice
+    slots:
+    - has_property
+    slot_usage:
+      has_property:
+        required: true
+        range: CoilProperty
+  CommunicationAppliance:
+    class_uri: s4bldg:CommunicationAppliance
+    title: Communication appliance
+    description: 'A communications appliance transmits and receives electronic or digital information
+      as data or sound.
+
+
+      Communication appliances may be fixed in place or may be able to be moved from one space to another.
+      Communication appliances require an electrical supply that may be supplied either by an electrical
+      circuit or provided from a local battery source.'
+    see_also:
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifcelectricaldomain/lexical/ifccommunicationsappliance.htm
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifcelectricaldomain/pset/pset_communicationsappliancetypecommon.htm
+    mixins:
+    - FlowTerminal
+  Compressor:
+    class_uri: s4bldg:Compressor
+    title: Compressor
+    description: A compressor is a device that compresses a fluid typically used in a refrigeration circuit.
+    see_also:
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifchvacdomain/lexical/ifccompressor.htm
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifchvacdomain/pset/pset_compressortypecommon.htm
+    mixins:
+    - FlowMovingDevice
+    slots:
+    - has_property
+    slot_usage:
+      has_property:
+        required: true
+        range: CompressorProperty
+  Condenser:
+    class_uri: s4bldg:Condenser
+    title: Condenser
+    description: A condenser is a device that is used to dissipate heat, typically by condensing a substance
+      such as a refrigerant from its gaseous to its liquid state.
+    see_also:
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifchvacdomain/lexical/ifccondenser.htm
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifchvacdomain/pset/pset_condensertypecommon.htm
+    mixins:
+    - EnergyConversionDevice
+    slots:
+    - has_property
+    slot_usage:
+      has_property:
+        required: true
+        range: CondenserProperty
+  Controller:
+    class_uri: s4bldg:Controller
+    title: Controller
+    description: 'A controller is a device that monitors inputs and controls outputs within a building
+      automation system.
+
+
+      A controller may be physical (having placement within a spatial structure) or logical (a software
+      interface or aggregated within a programmable physical controller).'
+    see_also:
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifcbuildingcontrolsdomain/lexical/ifccontroller.htm
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifcbuildingcontrolsdomain/pset/pset_controllertypecommon.htm
+    mixins:
+    - DistributionControlDevice
+  CooledBeam:
+    class_uri: s4bldg:CooledBeam
+    title: Cooled beam
+    description: A cooled beam (or chilled beam) is a device typically used to cool air by circulating
+      a fluid such as chilled water through exposed finned tubes above a space. Typically mounted overhead
+      near or within a ceiling, the cooled beam uses convection to cool the space below it by acting as
+      a heat sink for the naturally rising warm air of the space. Once cooled, the air naturally drops
+      back to the floor where the cycle begins again.
+    see_also:
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifchvacdomain/lexical/ifccooledbeam.htm
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifchvacdomain/pset/pset_cooledbeamtypecommon.htm
+    mixins:
+    - EnergyConversionDevice
+    slots:
+    - has_property
+    slot_usage:
+      has_property:
+        required: true
+        range: CooledBeamProperty
+  CoolingTower:
+    class_uri: s4bldg:CoolingTower
+    title: Cooling tower
+    description: A cooling tower is a device which rejects heat to ambient air by circulating a fluid
+      such as water through it to reduce its temperature by partial evaporation.
+    see_also:
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifchvacdomain/lexical/ifccoolingtower.htm
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifchvacdomain/pset/pset_coolingtowertypecommon.htm
+    mixins:
+    - EnergyConversionDevice
+    slots:
+    - has_property
+    slot_usage:
+      has_property:
+        required: true
+        range: CoolingTowerProperty
+  Damper:
+    class_uri: s4bldg:Damper
+    title: Damper
+    description: A damper typically participates in an HVAC duct distribution system and is used to control
+      or modulate the flow of air.
+    see_also:
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifchvacdomain/lexical/ifcdamper.htm
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifchvacdomain/pset/pset_dampertypecommon.htm
+    mixins:
+    - FlowController
+    slots:
+    - has_property
+    slot_usage:
+      has_property:
+        required: true
+        range: DamperProperty
+  DistributionControlDevice:
+    class_uri: s4bldg:DistributionControlDevice
+    title: Distribution control device
+    description: Represents devices of a building automation control system that are used to impart control
+      over elements of a distribution system. (Definition adapated from https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifcsharedbldgserviceelements/lexical/ifcdistributioncontrolelement.htm)
+    mixins:
+    - DistributionDevice
+  DistributionDevice:
+    class_uri: s4bldg:DistributionDevice
+    title: Distribution device
+    description: Generalization of all devices that participate in a distribution system. (Definition
+      adapated from https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifcproductextension/lexical/ifcdistributionelement.htm)
+    mixins:
+    - BuildingDevice
+  DistributionFlowDevice:
+    class_uri: s4bldg:DistributionFlowDevice
+    title: DistributionFlowDevice
+    description: Represents devices of a distribution system that facilitate the distribution of energy
+      or matter, such as air, water or power. (Definition adapated from https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifcsharedbldgserviceelements/lexical/ifcdistributionflowelement.htm)
+    mixins:
+    - DistributionDevice
+  DuctSilencer:
+    class_uri: s4bldg:DuctSilencer
+    title: Duct silencer
+    description: A duct silencer is a device that is typically installed inside a duct distribution system
+      for the purpose of reducing the noise levels from air movement, fan noise, etc. in the adjacent
+      space or downstream of the duct silencer device.
+    see_also:
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifchvacdomain/lexical/ifcductsilencer.htm
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifchvacdomain/pset/pset_ductsilencertypecommon.htm
+    mixins:
+    - FlowTreatmentDevice
+    slots:
+    - has_property
+    slot_usage:
+      has_property:
+        required: true
+        range: DuctSilencerProperty
+  ElectricAppliance:
+    class_uri: s4bldg:ElectricAppliance
+    title: Electric appliance
+    description: 'An electric appliance is a device intended for consumer usage that is powered by electricity.
+
+
+      Electric appliances may be fixed in place or may be able to be moved from one space to another.
+      Electric appliances require an electrical supply that may be supplied either by an electrical circuit
+      or provided from a local battery source.'
+    see_also:
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifcelectricaldomain/lexical/ifcelectricappliance.htm
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifcelectricaldomain/pset/pset_electricappliancetypecommon.htm
+    mixins:
+    - FlowTerminal
+  ElectricFlowStorageDevice:
+    class_uri: s4bldg:ElectricFlowStorageDevice
+    title: Electric flow storage device
+    description: An electric flow storage device is a device in which electrical energy is stored and
+      from which energy may be progressively released.
+    see_also:
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifcelectricaldomain/lexical/ifcelectricflowstoragedevice.htm
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifcelectricaldomain/pset/pset_electricflowstoragedevicetypecommon.htm
+    mixins:
+    - FlowStorageDevice
+    slots:
+    - has_property
+    slot_usage:
+      has_property:
+        required: true
+        range: ElectricFlowStorageDeviceProperty
+  ElectricGenerator:
+    class_uri: s4bldg:ElectricGenerator
+    title: Electric generator
+    description: An electric generator is an engine that is a machine for converting mechanical energy
+      into electrical energy.
+    see_also:
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifcelectricaldomain/lexical/ifcelectricgenerator.htm
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifcelectricaldomain/pset/pset_electricgeneratortypecommon.htm
+    mixins:
+    - EnergyConversionDevice
+    slots:
+    - has_property
+    slot_usage:
+      has_property:
+        required: true
+        range: ElectricGeneratorProperty
+  ElectricMotor:
+    class_uri: s4bldg:ElectricMotor
+    title: Electric motor
+    description: An electric motor is an engine that is a machine for converting electrical energy into
+      mechanical energy.
+    see_also:
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifcelectricaldomain/lexical/ifcelectricmotor.htm
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifcelectricaldomain/pset/pset_electricmotortypecommon.htm
+    mixins:
+    - EnergyConversionDevice
+    slots:
+    - has_property
+    slot_usage:
+      has_property:
+        required: true
+        range: ElectricMotorProperty
+  ElectricTimeControl:
+    class_uri: s4bldg:ElectricTimeControl
+    title: Electric time control
+    description: An electric time control is a device that applies control to the provision or flow of
+      electrical energy over time.
+    see_also:
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifcelectricaldomain/lexical/ifcelectrictimecontrol.htm
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifcelectricaldomain/pset/pset_electrictimecontroltypecommon.htm
+    mixins:
+    - FlowController
+  EnergyConversionDevice:
+    class_uri: s4bldg:EnergyConversionDevice
+    title: Energy conversion device
+    description: The distribution flow element EnergyConversionDevice defines the occurrence of a device
+      used to perform energy conversion or heat transfer and typically participates in a flow distribution
+      system.
+    see_also:
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifcsharedbldgserviceelements/lexical/ifcenergyconversiondevice.htm
+    mixins:
+    - DistributionFlowDevice
+  Engine:
+    class_uri: s4bldg:Engine
+    title: Engine
+    description: An engine is a device that converts fuel into mechanical energy through combustion.
+    see_also:
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifchvacdomain/lexical/ifcengine.htm
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifchvacdomain/pset/pset_enginetypecommon.htm
+    mixins:
+    - EnergyConversionDevice
+  EvaporativeCooler:
+    class_uri: s4bldg:EvaporativeCooler
+    title: Evaporative cooler
+    description: An evaporative cooler is a device that cools air by saturating it with water vapor.
+    see_also:
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifchvacdomain/lexical/ifcevaporativecooler.htm
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifchvacdomain/pset/pset_evaporativecoolertypecommon.htm
+    mixins:
+    - EnergyConversionDevice
+    slots:
+    - has_property
+    slot_usage:
+      has_property:
+        required: true
+        range: EvaporativeCoolerProperty
+  Evaporator:
+    class_uri: s4bldg:Evaporator
+    title: Evaporator
+    description: An evaporator is a device in which a liquid refrigerent is vaporized and absorbs heat
+      from the surrounding fluid.
+    see_also:
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifchvacdomain/lexical/ifcevaporator.htm
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifchvacdomain/pset/pset_evaporatortypecommon.htm
+    mixins:
+    - EnergyConversionDevice
+    slots:
+    - has_property
+    slot_usage:
+      has_property:
+        required: true
+        range: EvaporatorProperty
+  Fan:
+    class_uri: s4bldg:Fan
+    title: Fan
+    description: A fan is a device which imparts mechanical work on a gas. A typical usage of a fan is
+      to induce airflow in a building services air distribution system.
+    see_also:
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifchvacdomain/lexical/ifcfan.htm
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifchvacdomain/pset/pset_fantypecommon.htm
+    mixins:
+    - FlowMovingDevice
+    slots:
+    - has_property
+    slot_usage:
+      has_property:
+        required: true
+        range: FanProperty
+  Filter:
+    class_uri: s4bldg:Filter
+    title: Filter
+    description: A filter is an apparatus used to remove particulate or gaseous matter from fluids and
+      gases.
+    see_also:
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifchvacdomain/lexical/ifcfilter.htm
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifchvacdomain/pset/pset_filtertypecommon.htm
+    mixins:
+    - FlowTreatmentDevice
+    slots:
+    - has_property
+    slot_usage:
+      has_property:
+        required: true
+        range: FilterProperty
+  FireSuppressionTerminal:
+    class_uri: s4bldg:FireSuppressionTerminal
+    title: Fire suppression terminal
+    description: 'A fire suppression terminal has the purpose of delivering a fluid (gas or liquid) that
+      will suppress a fire.
+
+
+      A fire suppression terminal provides for all forms of sprinkler, spreader and other form of terminal
+      that is connected to a pipework system and intended to act in the role of suppressing a fire.'
+    see_also:
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifcplumbingfireprotectiondomain/lexical/ifcfiresuppressionterminal.htm
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifcplumbingfireprotectiondomain/pset/pset_firesuppressionterminaltypecommon.htm
+    mixins:
+    - FlowTerminal
+  FlowController:
+    class_uri: s4bldg:FlowController
+    title: Flow controller
+    description: The distribution flow element FlowController defines the occurrence of elements of a
+      distribution system that are used to regulate flow through a distribution system. Examples include
+      dampers, valves, switches, and relays.
+    see_also:
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifcsharedbldgserviceelements/lexical/ifcflowcontroller.htm
+    mixins:
+    - DistributionFlowDevice
+  FlowInstrument:
+    class_uri: s4bldg:FlowInstrument
+    title: Flow instrument
+    description: 'A flow instrument reads and displays the value of a particular property of a system
+      at a point, or displays the difference in the value of a property between two points.
+
+
+      Instrumentation is typically for the purpose of determining the value of the property at a point
+      in time. It is not the purpose of an instrument to record or integrate the values over time (although
+      they may be connected to recording devices that do perform such a function). This entity provides
+      for all forms of mechanical flow instrument (thermometers, pressure gauges etc.) and electrical
+      flow instruments (ammeters, voltmeters etc.)'
+    see_also:
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifcbuildingcontrolsdomain/lexical/ifcflowinstrument.htm
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifcbuildingcontrolsdomain/pset/pset_flowinstrumenttypecommon.htm
+    mixins:
+    - DistributionControlDevice
+  FlowMeter:
+    class_uri: s4bldg:FlowMeter
+    title: Flow meter
+    description: A flow meter is a device that is used to measure the flow rate in a system.
+    see_also:
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifchvacdomain/lexical/ifcflowmeter.htm
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifchvacdomain/pset/pset_flowmetertypecommon.htm
+    mixins:
+    - FlowController
+  FlowMovingDevice:
+    class_uri: s4bldg:FlowMovingDevice
+    title: Flow moving device
+    description: The distribution flow element FlowMovingDevice defines the occurrence of an apparatus
+      used to distribute, circulate or perform conveyance of fluids, including liquids and gases (such
+      as a pump or fan), and typically participates in a flow distribution system.
+    see_also:
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifcsharedbldgserviceelements/lexical/ifcflowmovingdevice.htm
+    mixins:
+    - DistributionFlowDevice
+  FlowStorageDevice:
+    class_uri: s4bldg:FlowStorageDevice
+    title: Flow storage device
+    description: The distribution flow element FlowStorageDevice defines the occurrence of a device that
+      participates in a distribution system and is used for temporary storage (such as a tank).
+    see_also:
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifcsharedbldgserviceelements/lexical/ifcflowstoragedevice.htm
+    mixins:
+    - DistributionFlowDevice
+  FlowTerminal:
+    class_uri: s4bldg:FlowTerminal
+    title: Flow terminal
+    description: The distribution flow element FlowTerminal defines the occurrence of a permanently attached
+      element that acts as a terminus or beginning of a distribution system (such as an air outlet, drain,
+      water closet, or sink). A terminal is typically a point at which a system interfaces with an external
+      environment.
+    see_also:
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifcsharedbldgserviceelements/lexical/ifcflowterminal.htm
+    mixins:
+    - DistributionFlowDevice
+  FlowTreatmentDevice:
+    class_uri: s4bldg:FlowTreatmentDevice
+    title: Flow treatment device
+    description: The distribution flow element FlowTreatmentDevice defines the occurrence of a device
+      typically used to remove unwanted matter from a fluid, either liquid or gas, and typically participates
+      in a flow distribution system.
+    see_also:
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifcsharedbldgserviceelements/lexical/ifcflowtreatmentdevice.htm
+    mixins:
+    - DistributionFlowDevice
+  HeatExchanger:
+    class_uri: s4bldg:HeatExchanger
+    title: Heat exchanger
+    description: A heat exchanger is a device used to provide heat transfer between non-mixing media such
+      as plate and shell and tube heat exchangers. HeatExchanger is commonly used on water-side distribution
+      systems to recover energy from a liquid to another liquid (typically water-based), whereas AirToAirHeatRecovery
+      is commonly used on air-side distribution systems to recover energy from a gas to a gas (usually
+      air).
+    see_also:
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifchvacdomain/lexical/ifcheatexchanger.htm
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifchvacdomain/pset/pset_heatexchangertypecommon.htm
+    mixins:
+    - EnergyConversionDevice
+  Humidifier:
+    class_uri: s4bldg:Humidifier
+    title: Humidifier
+    description: A humidifier is a device that adds moisture into the air.
+    see_also:
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifchvacdomain/lexical/ifchumidifier.htm
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifchvacdomain/pset/pset_humidifiertypecommon.htm
+    mixins:
+    - EnergyConversionDevice
+    slots:
+    - has_property
+    slot_usage:
+      has_property:
+        required: true
+        range: HumidifierProperty
+  Interceptor:
+    class_uri: s4bldg:Interceptor
+    title: Interceptor
+    description: An interceptor is a device designed and installed in order to separate and retain deleterious,
+      hazardous or undesirable matter while permitting normal sewage or liquids to discharge into a collection
+      system by gravity.
+    see_also:
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifcplumbingfireprotectiondomain/lexical/ifcinterceptor.htm
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifcplumbingfireprotectiondomain/pset/pset_interceptortypecommon.htm
+    mixins:
+    - FlowTreatmentDevice
+    slots:
+    - has_property
+    slot_usage:
+      has_property:
+        required: true
+        range: InterceptorProperty
+  Lamp:
+    class_uri: s4bldg:Lamp
+    title: Lamp
+    description: A lamp is an artificial light source such as a light bulb or tube.
+    see_also:
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifcelectricaldomain/lexical/ifclamp.htm
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifcelectricaldomain/pset/pset_lamptypecommon.htm
+    mixins:
+    - FlowTerminal
+    slots:
+    - has_property
+    slot_usage:
+      has_property:
+        required: true
+        range: LampProperty
+  MedicalDevice:
+    class_uri: s4bldg:MedicalDevice
+    title: Medical device
+    description: A medical device is attached to a medical piping system and operates upon medical gases
+      to perform a specific function. Medical gases include medical air, medical vacuum, oxygen, carbon
+      dioxide, nitrogen, and nitrous oxide.
+    see_also:
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifchvacdomain/lexical/ifcmedicaldevice.htm
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifchvacdomain/pset/pset_medicaldevicetypecommon.htm
+    mixins:
+    - FlowTerminal
+  Outlet:
+    class_uri: s4bldg:Outlet
+    title: Outlet
+    description: 'An outlet is a device installed at a point to receive one or more inserted plugs for
+      electrical power or communications.
+
+
+      Power outlets are commonly connected within a junction box; data outlets may be directly connected
+      to a wall. For power outlets sharing the same circuit within a junction box, the ports should indicate
+      the logical wiring relationship to the enclosing junction box, even though they may be physically
+      connected to a cable going to another outlet, switch, or fixture.'
+    see_also:
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifcelectricaldomain/lexical/ifcoutlet.htm
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifcelectricaldomain/pset/pset_outlettypecommon.htm
+    mixins:
+    - FlowTerminal
+  PhysicalObject:
+    class_uri: s4bldg:PhysicalObject
+    title: Physical object
+    description: Any Object that has a proper space region.  (Definition extracted from DUL ontology)
+    mixins:
+    - SpatialThing
+    slots:
+    - contains
+    - is_contained_in
+    slot_usage:
+      contains:
+        range: PhysicalObject
+      is_contained_in:
+        any_of:
+        - range: BuildingSpace
+        - range: PhysicalObject
+  ProtectiveDevice:
+    class_uri: s4bldg:ProtectiveDevice
+    title: Protective device
+    description: 'A protective device breaks an electrical circuit when a stated electric current that
+      passes through it is exceeded.
+
+
+      A protective device provides protection against electrical current only (not as a general protective
+      device). It may be used to represent the complete set of elements including both the tripping unit
+      and the breaking unit that provide the protection. This may be particularly useful at earlier stages
+      of design where the approach to breaking the electrical supply may be determined but the method
+      of tripping may not. Alternatively, this entity may be used to specifically represent the breaking
+      unit alone (in which case the tripping unit will also be specifically identified). This entity is
+      specific to dedicated protective devices and excludes electrical outlets that may have circuit protection.'
+    see_also:
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifcelectricaldomain/lexical/ifcprotectivedevice.htm
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifcelectricaldomain/pset/pset_protectivedevicetypecommon.htm
+    mixins:
+    - FlowController
+  ProtectiveDeviceTrippingUnit:
+    class_uri: s4bldg:ProtectiveDeviceTrippingUnit
+    title: Protective device tripping unit
+    description: A protective device tripping unit breaks an electrical circuit at a separate breaking
+      unit when a stated electric current that passes through the unit is exceeded.
+    see_also:
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifcelectricaldomain/lexical/ifcprotectivedevicetrippingunit.htm
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifcelectricaldomain/pset/pset_protectivedevicetrippingunittypecommon.htm
+    mixins:
+    - DistributionControlDevice
+    slots:
+    - has_property
+    slot_usage:
+      has_property:
+        required: true
+        range: ProtectiveDeviceTrippingUnitProperty
+  Pump:
+    class_uri: s4bldg:Pump
+    title: Pump
+    description: A pump is a device which imparts mechanical work on fluids or slurries to move them through
+      a channel or pipeline. A typical use of a pump is to circulate chilled water or heating hot water
+      in a building services distribution system.
+    see_also:
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifchvacdomain/lexical/ifcpump.htm
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifchvacdomain/pset/pset_pumptypecommon.htm
+    mixins:
+    - FlowMovingDevice
+    slots:
+    - has_property
+    slot_usage:
+      has_property:
+        required: true
+        range: PumpProperty
+  S4bldgActuator:
+    class_uri: s4bldg:Actuator
+    title: Actuator
+    description: An actuator is a mechanical device for moving or controlling a mechanism or system. An
+      actuator takes energy, usually created by air, electricity, or liquid, and converts that into some
+      kind of motion.
+    see_also:
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifcbuildingcontrolsdomain/lexical/ifcactuator.htm
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifcbuildingcontrolsdomain/pset/pset_actuatortypecommon.htm
+    mixins:
+    - Actuator
+    - DistributionControlDevice
+  S4bldgSensor:
+    class_uri: s4bldg:Sensor
+    title: Sensor
+    description: A sensor is a device that measures a physical quantity and converts it into a signal
+      which can be read by an observer or by an instrument.
+    see_also:
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifcbuildingcontrolsdomain/lexical/ifcsensor.htm
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifcbuildingcontrolsdomain/pset/pset_sensortypecommon.htm
+    mixins:
+    - DistributionControlDevice
+    - Sensor
+  SanitaryTerminal:
+    class_uri: s4bldg:SanitaryTerminal
+    title: Sanitary terminal
+    description: A sanitary terminal is a fixed appliance or terminal usually supplied with water and
+      used for drinking, cleaning or foul water disposal or that is an item of equipment directly used
+      with such an appliance or terminal.
+    see_also:
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifcplumbingfireprotectiondomain/lexical/ifcsanitaryterminal.htm
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifcplumbingfireprotectiondomain/pset/pset_sanitaryterminaltypecommon.htm
+    mixins:
+    - FlowTerminal
+  ShadingDevice:
+    class_uri: s4bldg:ShadingDevice
+    title: Shading device
+    description: Shading devices are purpose built devices to protect from the sunlight, from natural
+      light, or screening them from view. Shading devices can form part of the facade or can be mounted
+      inside the building, they can be fixed or operable.
+    see_also:
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifcsharedbldgelements/lexical/ifcshadingdevice.htm
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifcsharedbldgelements/pset/pset_shadingdevicecommon.htm
+    mixins:
+    - BuildingDevice
+    slots:
+    - has_property
+    slot_usage:
+      has_property:
+        required: true
+        range: ShadingDeviceProperty
+  SolarDevice:
+    class_uri: s4bldg:SolarDevice
+    title: Solar device
+    description: A solar device converts solar radiation into other energy such as electric current or
+      thermal energy.
+    see_also:
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifcelectricaldomain/lexical/ifcsolardevicetypeenum.htm
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifcelectricaldomain/pset/pset_solardevicetypecommon.htm
+    mixins:
+    - EnergyConversionDevice
+  SpaceHeater:
+    class_uri: s4bldg:SpaceHeater
+    title: Space heater
+    description: 'Space heaters utilize a combination of radiation and/or natural convection using a heating
+      source such as electricity, steam or hot water to heat a limited space or area. Examples of space
+      heaters include radiators, convectors, baseboard and finned-tube heaters.
+
+
+      UnitaryEquipment should be used for packaged units supporting a combination of heating, cooling,
+      and/or dehumidification; Coil should be used for coil-based floor heating.'
+    see_also:
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifchvacdomain/lexical/ifcspaceheater.htm
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifchvacdomain/pset/pset_spaceheatertypecommon.htm
+    mixins:
+    - FlowTerminal
+    slots:
+    - has_property
+    slot_usage:
+      has_property:
+        required: true
+        range: SpaceHeaterProperty
+  SpatialThing:
+    class_uri: geo:SpatialThing
+  SwitchingDevice:
+    class_uri: s4bldg:SwitchingDevice
+    title: Switching device
+    description: 'A switch is used in a cable distribution system (electrical circuit) to control or modulate
+      the flow of electricity.
+
+
+      Switches include those used for electrical power, communications, audio-visual, or other distribution
+      system types as determined by the available ports.'
+    see_also:
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifcelectricaldomain/lexical/ifcswitchingdevice.htm
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifcelectricaldomain/pset/pset_switchingdevicetypecommon.htm
+    mixins:
+    - FlowController
+  Tank:
+    class_uri: s4bldg:Tank
+    title: Tank
+    description: A tank is a vessel or container in which a fluid or gas is stored for later use.
+    see_also:
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifchvacdomain/lexical/ifctank.htm
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifchvacdomain/pset/pset_tanktypecommon.htm
+    mixins:
+    - FlowStorageDevice
+    slots:
+    - has_property
+    slot_usage:
+      has_property:
+        required: true
+        range: TankProperty
+  Transformer:
+    class_uri: s4bldg:Transformer
+    title: Transformer
+    description: 'A transformer is an inductive stationary device that transfers electrical energy from
+      one circuit to another.
+
+
+      Transformer is used to transform electric power; conversion of electric signals for other purposes
+      is handled at other entities: Controller converts arbitrary signals, AudioVisualAppliance converts
+      signals for audio or video streams, and CommunicationsAppliance converts signals for data or other
+      communications usage.'
+    see_also:
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifcelectricaldomain/lexical/ifctransformer.htm
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifcelectricaldomain/pset/pset_transformertypecommon.htm
+    mixins:
+    - EnergyConversionDevice
+    slots:
+    - has_property
+    slot_usage:
+      has_property:
+        required: true
+        range: TransformerProperty
+  TransportElement:
+    class_uri: s4bldg:TransportElement
+    title: Transport element
+    description: 'A transport element is a generalization of all transport related objects that move people,
+      animals or goods within a building or building complex. The TransportElement defines the occurrence
+      of a transport element. '
+    see_also:
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifcproductextension/lexical/ifctransportelement.htm
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifcproductextension/pset/pset_transportelementcommon.htm
+    mixins:
+    - Device
+    slots:
+    - capacity_people
+    - has_property
+    slot_usage:
+      capacity_people:
+        range: PositiveInteger
+      has_property:
+        required: true
+        range: TransportElementProperty
+  TubeBundle:
+    class_uri: s4bldg:TubeBundle
+    title: Tube bundle
+    description: A tube bundle is a device consisting of tubes and bundles of tubes used for heat transfer
+      and contained typically within other energy conversion devices, such as a chiller or coil.
+    see_also:
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifchvacdomain/lexical/ifctubebundle.htm
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifchvacdomain/pset/pset_tubebundletypecommon.htm
+    mixins:
+    - EnergyConversionDevice
+    slots:
+    - has_property
+    slot_usage:
+      has_property:
+        required: true
+        range: TubeBundleProperty
+  UnitaryControlElement:
+    class_uri: s4bldg:UnitaryControlElement
+    title: Unitary control element
+    description: 'A unitary control element combines a number of control components into a single product,
+      such as a thermostat or humidistat.
+
+
+      A unitary control element provides a housing for an aggregation of control or electrical distribution
+      elements that, in combination, perform a singular (unitary) purpose. Each item in the aggregation
+      may have its own geometric representation and location.'
+    see_also:
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifcbuildingcontrolsdomain/lexical/ifcunitarycontrolelement.htm
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifcbuildingcontrolsdomain/pset/pset_unitarycontrolelementtypecommon.htm
+    mixins:
+    - DistributionControlDevice
+  Valve:
+    class_uri: s4bldg:Valve
+    title: Valve
+    description: A valve is used in a building services piping distribution system to control or modulate
+      the flow of the fluid.
+    see_also:
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifchvacdomain/lexical/ifcvalve.htm
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifchvacdomain/pset/pset_valvetypecommon.htm
+    mixins:
+    - FlowController
+    slots:
+    - has_property
+    slot_usage:
+      has_property:
+        required: true
+        range: ValveProperty
+  VibrationIsolator:
+    class_uri: s4bldg:VibrationIsolator
+    title: Vibration isolator
+    description: A vibration isolator is a device used to minimize the effects of vibration transmissibility
+      in a building.
+    see_also:
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifchvacdomain/lexical/ifcvibrationisolator.htm
+    - https://standards.buildingsmart.org/IFC/RELEASE/IFC4_1/FINAL/HTML/schema/ifchvacdomain/pset/pset_vibrationisolatortypecommon.htm
+    mixins:
+    - Device
+    slots:
+    - has_property
+    slot_usage:
+      has_property:
+        required: true
+        range: VibrationIsolatorProperty

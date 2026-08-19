@@ -1,0 +1,225 @@
+@prefix ex: <https://saref.etsi.org/saref4grid/v2.1.1/example/ProfileGeneric/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix oneM2M: <http://www.owl-ontologies.com/oneM2M#> .
+@prefix saref: <https://saref.etsi.org/core/> .
+@prefix s4grid: <https://saref.etsi.org/saref4grid/> .
+@prefix dctype: <http://purl.org/dc/dcmitype/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+
+<https://saref.etsi.org/saref4grid/v2.1.1/example/ProfileGeneric#> a dctype:Dataset ;
+  dcterms:license <https://forge.etsi.org/etsi-software-license> ;
+  dcterms:conformsTo <https://saref.etsi.org/saref4grid/v2.1.1/> ;
+  dcterms:title "Example Profile Generic"@en ;
+  dcterms:description "Example Profile Generic"@en .
+
+
+
+#################################################################
+#    Object Properties
+#################################################################
+
+saref:isValueOfProperty a owl:ObjectProperty .
+
+s4grid:hasProfileGeneric a owl:ObjectProperty .
+
+s4grid:relatedClock a owl:ObjectProperty .
+
+s4grid:relatedObservation a owl:ObjectProperty .
+
+s4grid:relatedPropertyValue a owl:ObjectProperty .
+
+saref:isObservedBy a owl:ObjectProperty .
+
+saref:observes a owl:ObjectProperty .
+
+skos:broader a owl:ObjectProperty .
+
+skos:narrower a owl:ObjectProperty .
+
+
+#################################################################
+#    Data properties
+#################################################################
+
+s4grid:hasCapturePeriod a owl:DatatypeProperty .
+
+s4grid:hasObis a owl:DatatypeProperty .
+
+s4grid:hasClockBase a owl:DatatypeProperty .
+
+s4grid:hasDaylightSavingsBegin a owl:DatatypeProperty .
+
+s4grid:hasDaylightSavingsDeviation a owl:DatatypeProperty .
+
+s4grid:hasDaylightSavingsEnabled a owl:DatatypeProperty .
+
+s4grid:hasDaylightSavingsEnd a owl:DatatypeProperty .
+
+s4grid:hasStatus a owl:DatatypeProperty .
+
+s4grid:hasTime a owl:DatatypeProperty .
+
+s4grid:hasTimeZone a owl:DatatypeProperty .
+
+
+#################################################################
+#    Classes
+#################################################################
+
+s4grid:Clock a owl:Class .
+
+s4grid:GridMeter a owl:Class .
+
+saref:PropertyValue a owl:Class .
+
+saref:Property a owl:Class .
+
+s4grid:MeterProperty a owl:Class ;
+	rdfs:subClassOf saref:Property .
+
+s4grid:ProfileGeneric a owl:Class .
+
+saref:Observation a owl:Class .
+
+s4grid:EnergyAndPowerProperty a owl:Class .
+
+
+#################################################################
+#    Individuals
+#################################################################
+
+ex:IncrementalLoadProfile1234 a s4grid:ProfileGeneric,
+        owl:NamedIndividual ;
+    s4grid:hasCapturePeriod "60"^^xsd:int ;
+    s4grid:hasObis "1-0:99.1.0.255"^^xsd:string ;
+    s4grid:relatedClock ex:Clock1234 ;
+    s4grid:relatedObservation ex:Observation1,
+        ex:Observation2,
+        ex:Observation3,
+        ex:Observation4,
+        ex:Observation5,
+        ex:Observation6 ;
+    s4grid:relatedPropertyValue ex:PropertyValue1 .
+
+ex:Meter1234 a s4grid:GridMeter,
+        owl:NamedIndividual ;
+	s4grid:hasProfileGeneric ex:IncrementalLoadProfile1234 .
+
+s4grid:ReactiveEnergy a s4grid:EnergyAndPowerProperty,
+        owl:NamedIndividual ;
+    skos:narrower ex:TotalIncrementalReactiveEnergyQI1234,
+			ex:TotalIncrementalReactiveEnergyQII1234,
+			ex:TotalIncrementalReactiveEnergyQIII1234,
+			ex:TotalIncrementalReactiveEnergyQIV1234 .
+
+ex:TotalIncrementalReactiveEnergyQI1234 a s4grid:EnergyAndPowerProperty,
+        owl:NamedIndividual ;
+	saref:isObservedBy ex:Observation3 ;
+    skos:broader s4grid:ReactiveEnergy .
+
+ex:TotalIncrementalReactiveEnergyQII1234 a s4grid:EnergyAndPowerProperty,
+        owl:NamedIndividual ;
+	saref:isObservedBy ex:Observation4 ;
+    skos:broader s4grid:ReactiveEnergy .
+
+ex:TotalIncrementalReactiveEnergyQIII1234 a s4grid:EnergyAndPowerProperty,
+        owl:NamedIndividual ;
+	saref:isObservedBy ex:Observation5 ;
+    skos:broader s4grid:ReactiveEnergy .
+
+ex:TotalIncrementalReactiveEnergyQIV1234 a s4grid:EnergyAndPowerProperty,
+        owl:NamedIndividual ;
+	saref:isObservedBy ex:Observation6 ;
+    skos:broader s4grid:ReactiveEnergy .
+
+s4grid:ActiveEnergy a s4grid:EnergyAndPowerProperty,
+        owl:NamedIndividual ;
+    skos:narrower ex:TotalIncrementalActiveEnergyImport1234,
+			ex:TotalIncrementalActiveEnergyExport1234 .
+
+ex:Clock1234 a s4grid:Clock,
+        owl:NamedIndividual ;
+    s4grid:hasClockBase "4"^^xsd:int ;
+    s4grid:hasDaylightSavingsBegin "2023-03-26T02:00:00"^^xsd:dateTime ;
+    s4grid:hasDaylightSavingsDeviation "60"^^xsd:integer ;
+    s4grid:hasDaylightSavingsEnabled "true"^^xsd:boolean ;
+    s4grid:hasDaylightSavingsEnd "2023-10-29T03:00:00"^^xsd:dateTime ;
+    s4grid:hasObis "0-0:1.0.0.255"^^xsd:string ;
+    s4grid:hasStatus "1"^^xsd:int ;
+    s4grid:hasTime "2023-05-30T09:00:00"^^xsd:dateTime ;
+    s4grid:hasTimeZone "120"^^xsd:long .
+
+ex:Observation1 a saref:Observation,
+        owl:NamedIndividual ;
+    saref:observes ex:TotalIncrementalActiveEnergyImport1234 .
+
+ex:Observation2 a saref:Observation,
+        owl:NamedIndividual ;
+    saref:observes ex:TotalIncrementalActiveEnergyExport1234 .
+
+ex:Observation3 a saref:Observation,
+        owl:NamedIndividual ;
+    saref:observes ex:TotalIncrementalReactiveEnergyQI1234 .
+
+ex:Observation4 a saref:Observation,
+        owl:NamedIndividual ;
+    saref:observes ex:TotalIncrementalReactiveEnergyQII1234 .
+
+ex:Observation5 a saref:Observation,
+        owl:NamedIndividual ;
+    saref:observes ex:TotalIncrementalReactiveEnergyQIII1234 .
+
+ex:Observation6 a saref:Observation,
+        owl:NamedIndividual ;
+    saref:observes ex:TotalIncrementalReactiveEnergyQIV1234 .
+
+s4grid:ProfileStatus a s4grid:MeterProperty,
+        owl:NamedIndividual ;
+    skos:narrower ex:AMRStatusLoadProfilePeriod1-1234 .
+
+ex:PropertyValue1 a saref:PropertyValue,
+        owl:NamedIndividual ;
+    saref:isValueOfProperty ex:AMRStatusLoadProfilePeriod1-1234 .
+
+ex:TotalIncrementalActiveEnergyExport1234 a s4grid:EnergyAndPowerProperty,
+        owl:NamedIndividual ;
+	saref:isObservedBy ex:Observation2 ;
+    skos:broader s4grid:ActiveEnergy .
+
+ex:TotalIncrementalActiveEnergyImport1234 a s4grid:EnergyAndPowerProperty,
+        owl:NamedIndividual ;
+    saref:isObservedBy ex:Observation1 ;
+	skos:broader s4grid:ActiveEnergy .
+
+ex:AMRStatusLoadProfilePeriod1-1234 a s4grid:MeterProperty,
+        owl:NamedIndividual ;
+    skos:broader s4grid:ProfileStatus .
+
+
+#################################################################
+#    Added for SHACL validation, not in the ETSI original
+#################################################################
+
+# Types the shapes check with sh:class but this file never states.
+ex:TotalIncrementalReactiveEnergyQI1234 a saref:Property .
+ex:TotalIncrementalReactiveEnergyQII1234 a saref:Property .
+ex:TotalIncrementalReactiveEnergyQIII1234 a saref:Property .
+ex:TotalIncrementalReactiveEnergyQIV1234 a saref:Property .
+ex:TotalIncrementalActiveEnergyImport1234 a saref:Property .
+ex:TotalIncrementalActiveEnergyExport1234 a saref:Property .
+s4grid:ActiveEnergy a saref:Property .
+s4grid:ReactiveEnergy a saref:Property .
+ex:Observation1 a saref:ProcedureExecution .
+ex:Observation2 a saref:ProcedureExecution .
+ex:Observation3 a saref:ProcedureExecution .
+ex:Observation4 a saref:ProcedureExecution .
+ex:Observation5 a saref:ProcedureExecution .
+ex:Observation6 a saref:ProcedureExecution .
+
+# Values required by sh:minCount 1.
+ex:Meter1234 saref:observes ex:TotalIncrementalActiveEnergyImport1234 .
+
