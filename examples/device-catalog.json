@@ -1,0 +1,44 @@
+{
+  "units": [
+    { "id": "qudt-unit:DEG_C", "label": "degree Celsius" },
+    { "id": "qudt-unit:PERCENT_RH", "label": "percent relative humidity" },
+    { "id": "qudt-unit:KiloW", "label": "kilowatt" }
+  ],
+  "properties": [
+    {
+      "id": "ex:air-temperature",
+      "label": "Air temperature",
+      "narrower": ["ex:indoor-air-temperature"]
+    },
+    {
+      "id": "ex:indoor-air-temperature",
+      "label": "Indoor air temperature",
+      "broader": ["ex:air-temperature"]
+    },
+    { "id": "ex:relative-humidity", "label": "Relative humidity" },
+    { "id": "ex:active-power", "label": "Active power" }
+  ],
+  "sensors": [
+    {
+      "id": "ex:thermostat-hallway",
+      "label": "Hallway thermostat",
+      "has_manufacturer": ["Acme Climate"],
+      "has_model": ["TS-200"],
+      "observes": ["ex:indoor-air-temperature", "ex:relative-humidity"]
+    },
+    {
+      "id": "ex:weather-station-roof",
+      "label": "Roof weather station",
+      "has_manufacturer": ["Acme Outdoor"],
+      "has_model": ["WS-40"],
+      "observes": ["ex:air-temperature", "ex:relative-humidity"]
+    },
+    {
+      "id": "ex:meter-main",
+      "label": "Main electricity meter",
+      "has_manufacturer": ["Acme Metering"],
+      "has_model": ["EM-1000"],
+      "observes": ["ex:active-power"]
+    }
+  ]
+}

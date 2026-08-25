@@ -9,6 +9,9 @@ on:
   pull_request:
   # release.yml runs this whole suite before it publishes anything.
   workflow_call:
+  schedule:
+    - cron: "0 5 * * 4"
+  workflow_dispatch:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.head_ref || github.ref }}
@@ -146,3 +149,35 @@ jobs:
             --examples ${{ matrix.examples }} \
             --build    build/${{ matrix.name }} \
             --mode     open
+
+  examples:
+    name: hand-written examples (${{ matrix.name }})
+    needs: validate
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: device-catalog
+          - name: observation-log
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - run: pip install jsonschema neverblink-linkml
+
+      - name: Validate the example schema
+        uses: NeverBlink-OSS/linkml-scala-action@v0.14.0
+        with:
+          files: "examples/${{ matrix.name }}.yaml"
+          strict: true
+
+      - name: JSON document must match the generated JSON Schema
+        run: |
+          python checks/check-json.py \
+            --schema examples/${{ matrix.name }}.yaml \
+            --data   examples/${{ matrix.name }}.json \
+            --build  build/${{ matrix.name }}

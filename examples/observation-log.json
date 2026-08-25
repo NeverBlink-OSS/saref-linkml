@@ -1,0 +1,29 @@
+{
+  "catalog": "https://example.org/catalog/building-a",
+  "observations": [
+    {
+      "has_timestamp": ["2026-08-25T09:00:00Z"],
+      "made_by": ["ex:thermostat-hallway"],
+      "observes": ["ex:indoor-air-temperature"],
+      "has_result": [{ "has_value": [21.4], "is_measured_in": ["qudt-unit:DEG_C"] }]
+    },
+    {
+      "has_timestamp": ["2026-08-25T09:00:00Z"],
+      "made_by": ["ex:thermostat-hallway"],
+      "observes": ["ex:relative-humidity"],
+      "has_result": [{ "has_value": [46.0], "is_measured_in": ["qudt-unit:PERCENT_RH"] }]
+    },
+    {
+      "has_timestamp": ["2026-08-25T09:00:00Z"],
+      "made_by": ["ex:weather-station-roof"],
+      "observes": ["ex:air-temperature"],
+      "has_result": [{ "has_value": [17.9], "is_measured_in": ["qudt-unit:DEG_C"] }]
+    },
+    {
+      "has_timestamp": ["2026-08-25T09:15:00Z"],
+      "made_by": ["ex:meter-main"],
+      "observes": ["ex:active-power"],
+      "has_result": [{ "has_value": [3.2], "is_measured_in": ["qudt-unit:KiloW"] }]
+    }
+  ]
+}
