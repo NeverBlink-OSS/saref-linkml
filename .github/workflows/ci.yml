@@ -87,12 +87,19 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - run: pip install rdflib pyyaml pyshacl
+
       - name: Generate SHACL
         uses: NeverBlink-OSS/linkml-scala-action@86c1c1a217425b4b9bd18241bf89d5681aa958eb
         with:
           command: generate
           generator: shacl
           open: true
+          imports: schema
           files: "schema/${{ matrix.name }}.yaml"
           output: build/shacl
 
@@ -101,16 +108,12 @@ jobs:
         with:
           command: generate
           generator: rdfs
+          imports: schema
           files: "schema/${{ matrix.name }}.yaml"
           output: build/rdfs
 
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
-
-      - run: pip install rdflib pyyaml pyshacl
-
       - name: Resolve generated artifacts
+        id: resolve
         run: |
           set -euo pipefail
           ls -R build
@@ -125,7 +128,7 @@ jobs:
           echo "RDFS=$(find build/rdfs   -type f)" >> "$GITHUB_ENV"
 
       - name: RDFS - inheritance and property coverage
-        if: ${{ !cancelled() }}
+        if: ${{ !cancelled() && steps.resolve.outcome == 'success' }}
         run: |
           python checks/check-rdfs.py \
             --rdfs   "$RDFS" \
@@ -133,7 +136,7 @@ jobs:
             --source ${{ matrix.source }}
 
       - name: SHACL - examples must not be over-constrained
-        if: ${{ !cancelled() }}
+        if: ${{ !cancelled() && steps.resolve.outcome == 'success' }}
         run: |
           python checks/check-examples.py \
             --shapes   "$SHACL" \
