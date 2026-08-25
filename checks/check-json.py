@@ -6,9 +6,9 @@ does describe a whole JSON file:
 
     checks/check-json.py --schema examples/device-catalog.yaml --data examples/device-catalog.json
 
-The JSON Schema is generated here, either through the neverblink-linkml Python bindings or the
-linkml-scala CLI, whichever is available. Pass --json-schema to use one that was generated
-earlier.
+The schema is validated strictly first, so this covers both halves of the check: the schema has to
+be sound, and the document has to match what it generates. Either the neverblink-linkml Python
+bindings or the linkml-scala CLI will do, whichever is available.
 """
 
 import argparse
@@ -21,36 +21,56 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def generate_json_schema(schema, build):
-    """The JSON Schema for `schema`, as text.
+def build_with_bindings(schema):
+    """Validate `schema` strictly and return its JSON Schema, via the Python bindings.
 
-    Prefers the Python bindings, since that is what the other checks use, and falls back to the
-    CLI so that a local checkout with only the binary installed still works.
+    The example schemas import ../schema/saref-core, and the bindings resolve that against the
+    filesystem. The linkml-scala GitHub Action cannot: it builds an import map from the files it
+    is handed, and a path with a .. in it is not a key in that map.
     """
-    try:
-        import linkml_scala
-    except ImportError:
-        return generate_with_cli(schema, build)
+    import linkml_scala
 
     try:
-        with linkml_scala.load_file(schema) as loaded:
-            return loaded.json_schema()
+        loaded = linkml_scala.load_file(schema)
     except linkml_scala.LinkMlError as error:
-        sys.exit(f"generating JSON Schema from {schema} failed:\n{error}")
+        # A fatal problem stops the schema loading at all.
+        sys.exit(f"{schema} is not valid:\n{error}")
+
+    with loaded:
+        issues = loaded.lint().get("issues") or []
+        if issues:
+            report = "\n".join(f"  {i.get('severity', '?')}: {i.get('message', '')}"
+                               for i in issues)
+            sys.exit(f"{schema} has validation issues (strict):\n{report}")
+        return loaded.json_schema()
 
 
-def generate_with_cli(schema, build):
-    if not shutil.which("linkml-scala"):
-        sys.exit("neither neverblink-linkml nor the linkml-scala CLI is available - "
-                 "pip install neverblink-linkml")
+def build_with_cli(schema, build):
+    """The same, shelling out to the linkml-scala binary."""
+    validated = subprocess.run(["linkml-scala", "validate", "--strict", str(schema)],
+                               capture_output=True, text=True)
+    if validated.returncode != 0:
+        sys.exit(f"{schema} is not valid:\n{validated.stdout}{validated.stderr}")
 
     out = build / f"{schema.stem}.schema.json"
-    result = subprocess.run(
+    generated = subprocess.run(
         ["linkml-scala", "generate", "json-schema", "--to", str(out), str(schema)],
         capture_output=True, text=True)
-    if result.returncode != 0:
-        sys.exit(f"generating JSON Schema from {schema} failed:\n{result.stdout}{result.stderr}")
+    if generated.returncode != 0:
+        sys.exit(f"generating JSON Schema from {schema} failed:\n"
+                 f"{generated.stdout}{generated.stderr}")
     return out.read_text()
+
+
+def build(schema, build_dir):
+    try:
+        import linkml_scala  # noqa: F401
+    except ImportError:
+        if not shutil.which("linkml-scala"):
+            sys.exit("neither neverblink-linkml nor the linkml-scala CLI is available - "
+                     "pip install neverblink-linkml")
+        return build_with_cli(schema, build_dir)
+    return build_with_bindings(schema)
 
 
 def describe(error):
@@ -64,7 +84,7 @@ def main():
     ap.add_argument("--schema", type=Path, required=True, help="LinkML schema with a tree_root")
     ap.add_argument("--data", type=Path, required=True, help="JSON document to validate")
     ap.add_argument("--json-schema", type=Path, default=None,
-                    help="pre-generated JSON Schema; skips generating it from --schema")
+                    help="pre-generated JSON Schema; skips validating and generating from --schema")
     ap.add_argument("--build", type=Path, default=ROOT / "build")
     args = ap.parse_args()
 
@@ -77,7 +97,7 @@ def main():
     if args.json_schema:
         source, text = args.json_schema, args.json_schema.read_text()
     else:
-        source, text = args.schema, generate_json_schema(args.schema, args.build)
+        source, text = args.schema, build(args.schema, args.build)
         (args.build / f"{args.schema.stem}.schema.json").write_text(text)
 
     validator = jsonschema.Draft202012Validator(json.loads(text))
@@ -88,7 +108,7 @@ def main():
     print(f"data:   {args.data}")
 
     if not errors:
-        print("\nok, the document matches the schema")
+        print("\nok, the schema is valid and the document matches it")
         return 0
 
     print(f"\n{len(errors)} problem(s):")

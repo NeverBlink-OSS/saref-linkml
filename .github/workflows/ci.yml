@@ -37,9 +37,9 @@ jobs:
           - name: saref4grid
             source: source/saref4grid/saref4grid.ttl
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v7
         with:
           python-version: "3.12"
 
@@ -59,7 +59,7 @@ jobs:
     name: validate schemas
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Validate models
         uses: NeverBlink-OSS/linkml-scala-action@v0.14.0
@@ -90,9 +90,9 @@ jobs:
             source: source/saref4grid/saref4grid.ttl
             examples: source/saref4grid/examples
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v7
         with:
           python-version: "3.12"
 
@@ -161,21 +161,19 @@ jobs:
           - name: device-catalog
           - name: observation-log
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v7
         with:
           python-version: "3.12"
 
       - run: pip install jsonschema neverblink-linkml
 
-      - name: Validate the example schema
-        uses: NeverBlink-OSS/linkml-scala-action@v0.14.0
-        with:
-          files: "examples/${{ matrix.name }}.yaml"
-          strict: true
-
-      - name: JSON document must match the generated JSON Schema
+      # Not the linkml-scala action here: it builds an import map from the files it is given, and
+      # these schemas import ../schema/saref-core, which is not a key in that map. check-json.py
+      # goes through the Python bindings instead, which resolve the path, and validates the schema
+      # strictly before generating from it.
+      - name: Schema must be valid and the JSON document must match it
         run: |
           python checks/check-json.py \
             --schema examples/${{ matrix.name }}.yaml \
