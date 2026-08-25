@@ -1,0 +1,97 @@
+# 
+id: https://w3id.org/neverblink/saref-linkml/examples/device-catalog
+name: saref-device-catalog
+title: SAREF device catalogue (example)
+description: >-
+  A hand-written LinkML schema, not generated from an ontology. See examples/README.md.
+
+  This is an example of a catalogue of sensors, properties and units, which is a common 
+  use case for SAREF. It narrows down classes and properties from SAREF core, and adds a 
+  root class to define the structure of the JSON document (kind of like a JSON-LD 
+  context/frame).
+
+
+prefixes:
+  linkml: https://w3id.org/linkml/
+  rdfs: http://www.w3.org/2000/01/rdf-schema#
+  saref: https://saref.etsi.org/core/
+  ex: https://example.org/catalog/
+default_prefix: ex
+default_range: string
+
+imports:
+  - linkml:types
+  - ../schema/saref-core
+
+classes:
+
+  Identified:
+    mixin: true
+    description: >-
+      Anything in the document that other entries refer to by IRI. In RDF the id becomes the
+      subject IRI of the node, so nothing is added to the data - it is only made explicit, which
+      is what JSON needs in order to write a reference as a string.
+    attributes:
+      id:
+        identifier: true
+        range: uriorcurie
+        description: The IRI of this entry.
+      label:
+        slot_uri: rdfs:label
+        range: string
+        multivalued: false
+        description: >-
+          A human-readable name. SAREF removed saref:hasName in v3.1.1 and recommends rdfs:label
+          instead, so that is what this maps to.
+
+  CatalogUnit:
+    is_a: UnitOfMeasure
+    mixins:
+      - Identified
+    description: >-
+      A unit of measure. SAREF suggests reusing an existing vocabulary here, so in practice the id
+      is a QUDT or OM IRI and the entry carries little else.
+
+  CatalogProperty:
+    is_a: Property
+    mixins:
+      - Identified
+    description: A property the installation observes, such as air temperature.
+    slot_usage:
+      # Without it these range over Property, which has no identifier, so a reference
+      # would be written as a nested copy of the property instead of its IRI.
+      broader:
+        range: CatalogProperty
+      narrower:
+        range: CatalogProperty
+
+  CatalogSensor:
+    is_a: Sensor
+    mixins:
+      - Identified
+    description: A sensor in the installation, and the properties it observes.
+    slot_usage:
+      # SAREF leaves observes without a global range on purpose, so it would otherwise
+      # fall back to a plain string. Everything else a sensor has - hasManufacturer, hasModel,
+      # hasProfile, offers - is inherited and needs no mention here.
+      observes:
+        range: CatalogProperty
+
+  DeviceCatalog:
+    tree_root: true
+    description: >-
+      The whole document. Every sensor, property and unit the installation knows about. Entries
+      refer to each other by id, so a sensor's observes holds the IRI of a property listed here.
+    attributes:
+      sensors:
+        range: CatalogSensor
+        multivalued: true
+        inlined_as_list: true
+      properties:
+        range: CatalogProperty
+        multivalued: true
+        inlined_as_list: true
+      units:
+        range: CatalogUnit
+        multivalued: true
+        inlined_as_list: true

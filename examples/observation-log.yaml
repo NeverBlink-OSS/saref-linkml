@@ -1,0 +1,74 @@
+id: https://w3id.org/neverblink/saref-linkml/examples/observation-log
+name: saref-observation-log
+title: SAREF observation log (example)
+description: >-
+  A hand-written LinkML schema, not generated from an ontology. See examples/README.md.
+
+  This is an example of a log of readings from sensors, which is a common use case for SAREF.
+  It narrows down classes and properties from SAREF core, and adds a root class to define the
+  structure of the JSON document (kind of like a JSON-LD context/frame).
+
+prefixes:
+  linkml: https://w3id.org/linkml/
+  saref: https://saref.etsi.org/core/
+  ex: https://example.org/log/
+default_prefix: ex
+default_range: string
+
+imports:
+  - linkml:types
+  - ../schema/saref-core
+  - ./device-catalog
+
+classes:
+
+  Reading:
+    is_a: PropertyValue
+    description: >-
+      One measured value and the unit it is in. Readings have no id, so they are written inline
+      inside the observation they belong to, which is what we want - nothing else refers to them.
+    slot_usage:
+      has_value:
+        # SAREF allows any literal. A reading is a number.
+        range: double
+        required: true
+        multivalued: false
+      is_measured_in:
+        # Retargeted at CatalogUnit so the unit is written as an IRI. Left as UnitOfMeasure it
+        # would be a nested copy of the unit, because UnitOfMeasure has no identifier.
+        range: CatalogUnit
+        required: true
+        multivalued: false
+
+  LoggedObservation:
+    is_a: Observation
+    description: One act of observing - which sensor, which property, when, and the result.
+    slot_usage:
+      has_timestamp:
+        required: true
+        multivalued: false
+      made_by:
+        # Retargeted from Sensor to CatalogSensor, for the same reason as is_measured_in above.
+        range: CatalogSensor
+        required: true
+        multivalued: false
+      observes:
+        # Already required by SAREF's own restriction on Observation, so only the range is set.
+        range: CatalogProperty
+        multivalued: false
+      has_result:
+        range: Reading
+        required: true
+        multivalued: false
+
+  ObservationLog:
+    tree_root: true
+    description: The whole document - one batch of readings, and where they came from.
+    attributes:
+      catalog:
+        range: uri
+        multivalued: false
+      observations:
+        range: LoggedObservation
+        multivalued: true
+        inlined_as_list: true
