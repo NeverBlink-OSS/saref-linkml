@@ -1,0 +1,83 @@
+# Rebuild the "dev" release on every push to main, so the newest translation is always
+# downloadable without waiting for the weekly release.
+
+name: Dev release
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: dev-release-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  version:
+    name: Work out the version
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+      date: ${{ steps.version.outputs.date }}
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+
+      - run: pip install pyyaml
+
+      - id: version
+        run: |
+          set -euo pipefail
+          core=$(python bin/release-manifest.py --core-version)
+          day=$(date -u +%F)
+          # The leading 0 keeps this below any dated release of the same SAREF version:
+          # under semver a numeric identifier always loses to an alphanumeric one.
+          {
+            echo "version=$core-0.dev.$day.g$(git rev-parse --short=7 HEAD)"
+            echo "date=$day"
+          } >> "$GITHUB_OUTPUT"
+
+  build:
+    needs: version
+    uses: ./.github/workflows/build-release.yml
+    with:
+      version: ${{ needs.version.outputs.version }}
+      slug: dev
+      channel: dev
+      date: ${{ needs.version.outputs.date }}
+
+  publish:
+    name: Publish dev
+    needs: [version, build]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # to move the tag and update the release
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/download-artifact@v8
+        with:
+          name: release-dist
+          path: dist
+
+      # The release action creates a missing tag but will not move one that already
+      # exists, so move it here.
+      - name: Move the dev tag to this commit
+        run: |
+          set -euo pipefail
+          git tag -f dev "$GITHUB_SHA"
+          git push -f origin refs/tags/dev
+
+      - uses: softprops/action-gh-release@v3
+        with:
+          tag_name: dev
+          name: dev (${{ needs.version.outputs.version }})
+          files: dist/*
+          fail_on_unmatched_files: true
+          prerelease: true

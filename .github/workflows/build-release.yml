@@ -1,0 +1,168 @@
+# Build everything a release ships and package it as one workflow artifact. Called by
+# release.yml (dated releases) and release-dev.yml (the rolling dev build).
+# This workflow does not publish anything to GitHub.
+
+name: Build release artifacts
+
+on:
+  workflow_call:
+    inputs:
+      version:
+        description: Full version string, recorded in MANIFEST.json.
+        required: true
+        type: string
+      slug:
+        description: Short string used in artifact file names - the version, or "dev".
+        required: true
+        type: string
+      channel:
+        description: '"release" or "dev".'
+        required: true
+        type: string
+      date:
+        description: Release date, YYYY-MM-DD.
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+env:
+  ENGINE: NeverBlink-OSS/linkml-scala-action@v0.14.0
+
+jobs:
+  build:
+    name: Build artifacts
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+
+      - run: pip install rdflib pyyaml
+
+      # Never build a release from a schema that does not pass strict validation.
+      - name: Validate
+        uses: NeverBlink-OSS/linkml-scala-action@v0.14.0
+        with:
+          working-directory: schema
+          files: "*.yaml"
+          strict: true
+          ignore: "No 'tree_root' class"
+
+      - name: Resolve each schema
+        uses: NeverBlink-OSS/linkml-scala-action@v0.14.0
+        with:
+          command: generate
+          generator: linkml
+          imports: schema
+          files: "schema/*.yaml"
+          output: build/linkml
+
+      - name: Generate JSON Schema
+        uses: NeverBlink-OSS/linkml-scala-action@v0.14.0
+        with:
+          command: generate
+          generator: json-schema
+          open: true
+          imports: schema
+          files: "schema/*.yaml"
+          output: build/json-schema
+
+      - name: Generate SHACL
+        uses: NeverBlink-OSS/linkml-scala-action@v0.14.0
+        with:
+          command: generate
+          generator: shacl
+          open: true
+          imports: schema
+          files: "schema/*.yaml"
+          output: build/shacl
+
+      - name: Generate RDFS
+        uses: NeverBlink-OSS/linkml-scala-action@v0.14.0
+        with:
+          command: generate
+          generator: rdfs
+          imports: schema
+          files: "schema/*.yaml"
+          output: build/rdfs
+
+      - name: Every schema must have produced every artifact
+        run: |
+          set -euo pipefail
+          ls -R build
+          missing=0
+          for schema in schema/*.yaml; do
+            name=$(basename "$schema" .yaml)
+            for kind in linkml json-schema shacl rdfs; do
+              if ! compgen -G "build/$kind/$name*" > /dev/null; then
+                echo "::error::the $kind generator produced nothing for $name"
+                missing=1
+              fi
+            done
+          done
+          [ "$missing" -eq 0 ]
+
+      - name: Rewrite the RDF as Turtle
+        run: |
+          python bin/rdf2ttl.py --schema-dir schema --in build/shacl --out build/shacl-ttl --suffix shacl
+          python bin/rdf2ttl.py --schema-dir schema --in build/rdfs  --out build/rdfs-ttl  --suffix rdfs
+
+      - name: Assemble the release
+        env:
+          VERSION: ${{ inputs.version }}
+          SLUG: ${{ inputs.slug }}
+          CHANNEL: ${{ inputs.channel }}
+          DATE: ${{ inputs.date }}
+        run: |
+          set -euo pipefail
+          root="saref-linkml-$SLUG"
+          stage="stage/$root"
+          mkdir -p "$stage"/{schemas,schemas-resolved,json-schema,shacl,rdfs}
+
+          cp LICENSE README.md "$stage/"
+          cp schema/*.yaml "$stage/schemas/"
+
+          # Each generator names its output after the schema but picks its own extension,
+          # so keep the leading name and settle on one naming scheme here.
+          for file in build/linkml/*; do
+            cp "$file" "$stage/schemas-resolved/$(basename "$file" | cut -d. -f1).yaml"
+          done
+          for file in build/json-schema/*; do
+            cp "$file" "$stage/json-schema/$(basename "$file" | cut -d. -f1).schema.json"
+          done
+          cp build/shacl-ttl/*.ttl "$stage/shacl/"
+          cp build/rdfs-ttl/*.ttl  "$stage/rdfs/"
+
+          python bin/release-manifest.py \
+            --version "$VERSION" --channel "$CHANNEL" --date "$DATE" \
+            --commit "$GITHUB_SHA" --repository "$GITHUB_REPOSITORY" --engine "$ENGINE" \
+            -o "$stage/MANIFEST.json"
+
+          mkdir dist
+          # One archive per format, so nobody downloads SHACL to get JSON Schema. Each
+          # carries the licence and the manifest.
+          for part in schemas schemas-resolved json-schema shacl rdfs; do
+            tar -czf "dist/$root-$part.tar.gz" -C stage \
+              "$root/$part" "$root/LICENSE" "$root/MANIFEST.json"
+          done
+          (cd stage && zip -qr "../dist/$root.zip" "$root")
+
+          for file in "$stage"/schemas-resolved/*.yaml; do
+            cp "$file" "dist/$(basename "$file" .yaml).resolved.yaml"
+          done
+          cp "$stage/MANIFEST.json" dist/
+
+          # Written outside dist first, so the file cannot end up checksumming itself.
+          (cd dist && sha256sum -- * > ../SHA256SUMS.txt)
+          mv SHA256SUMS.txt dist/
+          ls -l dist
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: release-dist
+          path: dist
+          if-no-files-found: error

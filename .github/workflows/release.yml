@@ -1,0 +1,144 @@
+# Publish a dated release once a week, and on demand.
+#
+# The tag is v<SAREF core version>-<date>, e.g. v4.1.1-2026-08-25. The first part says
+# which upstream ontology the translation targets, the second says which translation it
+# is, so a fix to the translation alone still produces a higher version.
+
+name: Release
+
+on:
+  schedule:
+    # Mondays, 05:17 UTC
+    - cron: "17 5 * * 1"
+  workflow_dispatch:
+    inputs:
+      date:
+        description: "Release date (YYYY-MM-DD). Leave empty to use today, UTC."
+        default: ""
+      force:
+        description: "Release even if nothing has changed since the last one"
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: dated-release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  decide:
+    name: Decide whether there is anything to release
+    runs-on: ubuntu-latest
+    outputs:
+      publish: ${{ steps.decide.outputs.publish }}
+      tag: ${{ steps.decide.outputs.tag }}
+      version: ${{ steps.decide.outputs.version }}
+      date: ${{ steps.decide.outputs.date }}
+      previous_tag: ${{ steps.decide.outputs.previous_tag }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0 # tags and history, to compare against the last release
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+
+      - run: pip install pyyaml
+
+      - id: decide
+        env:
+          INPUT_DATE: ${{ inputs.date }}
+          FORCE: ${{ inputs.force }}
+          # Everything that changes what we publish: the schemas, and the code and pinned
+          # toolchain that turn them into artifacts.
+          WATCHED: "schema bin/release-manifest.py bin/rdf2ttl.py .github/workflows/release.yml .github/workflows/build-release.yml"
+        run: |
+          set -euo pipefail
+
+          day="${INPUT_DATE:-$(date -u +%F)}"
+          case "$day" in
+            [0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]) ;;
+            *) echo "::error::'$day' is not a date in YYYY-MM-DD form"; exit 1 ;;
+          esac
+
+          core=$(python bin/release-manifest.py --core-version)
+          base="v$core-$day"
+
+          tag="$base"
+          attempt=1
+          while git rev-parse -q --verify "refs/tags/$tag" >/dev/null; do
+            attempt=$((attempt + 1))
+            tag="$base.$attempt"
+          done
+
+          # The nearest release tag behind us, so the comparison is against what was
+          # last published on this line of history.
+          previous=$(git describe --tags --abbrev=0 --match 'v*' 2>/dev/null || true)
+
+          if [ "$FORCE" = "true" ]; then
+            publish=true
+            why="asked to release regardless of what changed"
+          elif [ -z "$previous" ]; then
+            publish=true
+            why="no previous release to compare against"
+          # WATCHED holds several paths, so it is deliberately left unquoted here.
+          elif git diff --quiet "$previous" HEAD -- $WATCHED; then
+            publish=false
+            why="nothing that gets published has changed since $previous"
+          else
+            publish=true
+            why="changes since $previous"
+          fi
+
+          echo "::notice::$tag: $why"
+          {
+            echo "publish=$publish"
+            echo "tag=$tag"
+            echo "version=${tag#v}"
+            echo "date=$day"
+            echo "previous_tag=$previous"
+          } >> "$GITHUB_OUTPUT"
+
+  # The full check suite, not just validation: the converter has to still reproduce the
+  # schemas, and the SAREF examples have to still pass the generated shapes.
+  checks:
+    name: CI
+    needs: decide
+    if: needs.decide.outputs.publish == 'true'
+    uses: ./.github/workflows/ci.yml
+
+  build:
+    needs: [decide, checks]
+    if: needs.decide.outputs.publish == 'true'
+    uses: ./.github/workflows/build-release.yml
+    with:
+      version: ${{ needs.decide.outputs.version }}
+      slug: ${{ needs.decide.outputs.version }}
+      channel: release
+      date: ${{ needs.decide.outputs.date }}
+
+  publish:
+    name: Publish ${{ needs.decide.outputs.tag }}
+    needs: [decide, build]
+    if: needs.decide.outputs.publish == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # to create the tag and the release. Nothing else is needed.
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          name: release-dist
+          path: dist
+
+      - uses: softprops/action-gh-release@v3
+        with:
+          tag_name: ${{ needs.decide.outputs.tag }}
+          name: ${{ needs.decide.outputs.tag }}
+          target_commitish: ${{ github.sha }}
+          files: dist/*
+          fail_on_unmatched_files: true
+          generate_release_notes: true
+          previous_tag: ${{ needs.decide.outputs.previous_tag }}
