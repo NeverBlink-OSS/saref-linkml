@@ -1,0 +1,214 @@
+@prefix : <https://saref.etsi.org/saref4ener/v2.1.1/example/operationModeProfile/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix saref: <https://saref.etsi.org/core/> .
+@prefix s4ener: <https://saref.etsi.org/saref4ener/> .
+@prefix time: <http://www.w3.org/2006/time#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix om: <http://www.ontology-of-units-of-measure.org/resource/om-2-ucum/> . # typo fixed: the original has no trailing slash, so om:watt read as .../om-2-ucumwatt
+@prefix dctype: <http://purl.org/dc/dcmitype/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+
+<https://saref.etsi.org/saref4ener/v2.1.1/example/operationModeProfile#>
+  a dctype:Dataset ;
+  dcterms:conformsTo <https://saref.etsi.org/saref4ener/v2.1.1/>  ;
+  owl:imports saref:, s4ener: ;
+  dcterms:title "SAREF4ENER Operation Mode Profile Examples"@en ;
+  dcterms:abstract "This example file exemplifies how to model an Operation Mode profile in the SAREF4ENER extension." ;
+  dcterms:description "This example file exemplifies how to model an Operation Mode profile in the SAREF4ENER extension." ;
+  dcterms:license <https://forge.etsi.org/etsi-software-license> ;
+.
+:DieselGenerator
+  a saref:Device ;
+  rdfs:comment "A Diesel Generator that exhibits a demand driven profile" ;
+  rdfs:label "Diesel generator" ;
+  saref:hasProfile :OperationModeProfile_1 ;
+.
+:OperationModeProfile_1
+  a s4ener:OperationModeProfile ;
+  s4ener:hasOperationMode :OperationMode_1 ;
+  s4ener:hasOperationMode :OperationMode_2 ;
+  s4ener:hasOperationMode :OperationMode_3 ;
+  s4ener:hasTimer :Timer_1 ;
+  s4ener:hasTimer :Timer_2 ;
+  s4ener:hasTimer :Timer_3 ;
+  s4ener:hasDemandRateForecast :TimeSeries_1 ;
+  s4ener:hasTransition :Transition_1 ;
+  s4ener:hasTransition :Transition_2 ;
+  s4ener:hasTransition :Transition_3 ;
+  s4ener:hasTransition :Transition_4 ;
+  s4ener:hasTransition :Transition_5 ;
+  s4ener:hasTransition :Transition_6 ;
+  rdfs:comment "An operation mode profile following the example in section 7.6.4 (page 28) of the S2 specification." ;
+  rdfs:label "Operation mode profile 1" ;
+.
+:OperationMode_1
+  a s4ener:OperationMode ;
+  s4ener:abnormalConditionOnly false ;
+  s4ener:hasPowerRange :NumberRange_1 ;
+  rdfs:comment "The heat pump is turned off" ;
+  rdfs:label "Off" ;
+.
+:OperationMode_2
+  a s4ener:OperationMode ;
+  s4ener:abnormalConditionOnly false ;
+  s4ener:hasPowerRange :NumberRange_2 ;
+  rdfs:comment "The heat pump runs at full power" ;
+  rdfs:label "Full power" ;
+.
+:OperationMode_3
+  a s4ener:OperationMode ;
+  s4ener:abnormalConditionOnly false ;
+  s4ener:hasPowerRange :NumberRange_3 ;
+  rdfs:comment "The machine runs at reduced power when in this state or operation mode" ;
+  rdfs:label "Reduced power" ;
+.
+:Timer_1
+  a s4ener:Timer ;
+  s4ener:hasDuration "P5M"^^xsd:duration ;
+  rdfs:comment "This timer indicates the minimum on time for this device of 5 minutes." ;
+  rdfs:label "Timer (5 minutes)" ;
+.
+:Timer_2
+  a s4ener:Timer ;
+  s4ener:hasDuration "P8M"^^xsd:duration ;
+  rdfs:comment "This timer indicates the minimum off time for this device of 8 minutes." ;
+  rdfs:label "Timer (8 minutes)" ;
+.
+:Timer_3
+  a s4ener:Timer ;
+  s4ener:hasDuration "P1M"^^xsd:duration ;
+  rdfs:comment "This timer indicates the minimun modulation time of 1 minute between switching from reduced power to full power or vice versa." ;
+  rdfs:label "Timer (1 minute)" ;
+.
+:Transition_1
+  a s4ener:Transition ;
+  s4ener:isBlockedBy :Timer_2 ;
+  s4ener:fromOperationMode :OperationMode_1 ;
+  s4ener:startsTimer :Timer_1 ;
+  s4ener:startsTimer :Timer_3 ;
+  s4ener:toOperationMode :OperationMode_2 ;
+  rdfs:label "Transition 1" ;
+.
+:Transition_2
+  a s4ener:Transition ;
+  s4ener:isBlockedBy :Timer_1 ;
+  s4ener:isBlockedBy :Timer_3 ;
+  s4ener:fromOperationMode :OperationMode_2 ;
+  s4ener:startsTimer :Timer_2 ;
+  s4ener:toOperationMode :OperationMode_1 ;
+  rdfs:label "Transition 2" ;
+.
+:Transition_3
+  a s4ener:Transition ;
+  s4ener:isBlockedBy :Timer_2 ;
+  s4ener:fromOperationMode :OperationMode_1 ;
+  s4ener:startsTimer :Timer_1 ;
+  s4ener:startsTimer :Timer_3 ;
+  s4ener:toOperationMode :OperationMode_3 ;
+  rdfs:label "Transition 3" ;
+.
+:Transition_4
+  a s4ener:Transition ;
+  s4ener:isBlockedBy :Timer_1 ;
+  s4ener:isBlockedBy :Timer_3 ;
+  s4ener:fromOperationMode :OperationMode_3 ;
+  s4ener:startsTimer :Timer_2 ;
+  s4ener:toOperationMode :OperationMode_1 ;
+  rdfs:label "Transition 4" ;
+.
+:Transition_5
+  a s4ener:Transition ;
+  s4ener:isBlockedBy :Timer_3 ;
+  s4ener:fromOperationMode :OperationMode_2 ;
+  s4ener:startsTimer :Timer_3 ;
+  s4ener:toOperationMode :OperationMode_3 ;
+  rdfs:label "Transition 5" ;
+.
+:Transition_6
+  a s4ener:Transition ;
+  s4ener:isBlockedBy :Timer_3 ;
+  s4ener:fromOperationMode :OperationMode_3 ;
+  s4ener:startsTimer :Timer_3 ;
+  s4ener:toOperationMode :OperationMode_2 ;
+  rdfs:label "Transition 6" ;
+.
+:NumberRange_1
+  a s4ener:NumberRange ; 
+  s4ener:endOfRange :EndOfRange_1 ; 
+  s4ener:startOfRange :StartOfRange_1 ; 
+  rdfs:label "Number range 1" ;
+.
+:NumberRange_2
+  a s4ener:NumberRange ;
+  s4ener:endOfRange :EndOfRange_2 ; 
+  s4ener:startOfRange :StartOfRange_2 ; 
+  rdfs:label "Number range 2" ;
+.
+:NumberRange_3
+  a s4ener:NumberRange ;
+  s4ener:endOfRange :EndOfRange_3 ; 
+  s4ener:startOfRange :StartOfRange_3 ; 
+  rdfs:label "Number range 3" ;
+.
+:StartOfRange_1 
+  a saref:PropertyValue ;
+  saref:isMeasuredIn om:watt ;
+  saref:isValueOfProperty s4ener:Power ;
+  saref:hasValue "0"^^xsd:decimal ;
+.
+
+:StartOfRange_2 
+  a saref:PropertyValue ;
+  saref:isMeasuredIn om:watt ;
+  saref:isValueOfProperty s4ener:Power ;
+  saref:hasValue "-3000"^^xsd:decimal ;
+.
+
+:StartOfRange_3 
+  a saref:PropertyValue ;
+  saref:isMeasuredIn om:watt ;
+  saref:isValueOfProperty s4ener:Power ;
+  saref:hasValue "-2500"^^xsd:decimal ;
+.
+
+:EndOfRange_1
+  a saref:PropertyValue ;
+  saref:isMeasuredIn om:watt ;
+  saref:isValueOfProperty s4ener:Power ;
+  saref:hasValue "0"^^xsd:decimal ;
+.
+
+:EndOfRange_2 
+  a saref:PropertyValue ;
+  saref:isMeasuredIn om:watt ;
+  saref:isValueOfProperty s4ener:Power ;
+  saref:hasValue "-3000"^^xsd:decimal ;
+.
+
+:EndOfRange_3
+  a saref:PropertyValue ;
+  saref:isMeasuredIn om:watt ;
+  saref:isValueOfProperty s4ener:Power ;
+  saref:hasValue "-1500"^^xsd:decimal ;
+.
+
+:TimeSeries_1 rdf:type s4ener:TimeSeries ;
+	rdfs:label "Average demand rate forecast" ; 
+	rdfs:comment "This time series can be instantiated following the other s4ener:TimeSeries examples to function as an average demand rate forecast for this operation mode. " ;
+.
+
+dcterms:abstract a owl:AnnotationProperty .
+
+#################################################################
+#    Added for SHACL validation, not in the ETSI original
+#################################################################
+
+# Types the shapes check with sh:class but this file never states.
+om:watt a saref:UnitOfMeasure .
+s4ener:Power a saref:Property .
+:NumberRange_1 a s4ener:PowerRange .
+:NumberRange_2 a s4ener:PowerRange .
+:NumberRange_3 a s4ener:PowerRange .
+:OperationModeProfile_1 a saref:Profile .

@@ -1,0 +1,314 @@
+@prefix : <https://saref.etsi.org/saref4ener/v2.1.1/example/incentiveTable/>  .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix s4ener: <https://saref.etsi.org/saref4ener/> .
+@prefix saref: <https://saref.etsi.org/core/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix time: <http://www.w3.org/2006/time#> .
+@prefix om: <http://www.ontology-of-units-of-measure.org/resource/om-2-ucum/> . # typo fixed: the original has no trailing slash, so om:watt read as .../om-2-ucumwatt
+@prefix dctype: <http://purl.org/dc/dcmitype/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+
+<https://saref.etsi.org/saref4ener/v2.1.1/example/incentiveTable#>
+  a dctype:Dataset ;
+  dcterms:conformsTo <https://saref.etsi.org/saref4ener/v2.1.1/> ;
+  dcterms:title "SAREF4ENER Incentive Table Flexilibity Profile Examples"@en ;
+  owl:imports saref:, s4ener: ;
+  dcterms:abstract "This example file exemplifies how to model an Incentive Table flexibility profile in the SAREF4ENER extension." ;
+  dcterms:description "This example file exemplifies how to model an Incentive Table flexibility profile in the SAREF4ENER extension. This Incentive Table is based on the example in EEBUS Use Case Specification Incentive-Table based power consumption management Version 1.0.0 RC3. This example has been simplified by reducing the number of slots to three." ;
+  dcterms:license <https://forge.etsi.org/etsi-software-license> ;
+.
+
+:Device_1 rdf:type saref:Device ;
+  rdfs:label "Example device" ;
+  saref:hasProfile :IncentiveTable_1;
+.
+
+:IncentiveTable_1 rdf:type s4ener:IncentiveTableProfile ;
+  rdfs:label "Incentive table" ;
+  s4ener:hasScopeType s4ener:Committed ;
+  saref:consistsOf :Slot_1, :Slot_2, :Slot_3 ;
+  s4ener:hasTier :Tier_1, :Tier_2, :Tier_3 ;
+  s4ener:requiresUpdate "false"^^xsd:boolean ;
+  s4ener:isChangeable "false"^^xsd:boolean ;
+  s4ener:hasUsageForecast :PowerPlan ;
+  s4ener:hasIncentiveType s4ener:AbsoluteCost ;
+.
+
+:Slot_1 rdf:type s4ener:IncentiveTableSlot ;
+  rdfs:label "Morning slot" ;
+  rdfs:comment "This slot covers the period from 4:00 to 12:00 during dawn when PV panels are gathering power.";
+  s4ener:hasStartTime "2023-01-29T04:00:00Z"^^xsd:dateTimeStamp ;
+  s4ener:hasEndTime "PT7H59M59S"^^xsd:duration ; # was "2023-01-29T11:59:59Z"^^xsd:dateTimeStamp; s4ener:hasEndTime is declared rdfs:range xsd:duration
+  saref:hasIdentifier "1"^^xsd:string ;
+  s4ener:hasIncentive :Incentive_1 ;
+.
+:Slot_2 rdf:type s4ener:IncentiveTableSlot ;
+  rdfs:label "Afternoon slot" ;
+  rdfs:comment "This slot covers the period from 12:00 to 21:00 when the PV panels have already gathered power." ;
+  s4ener:hasStartTime "2023-01-29T12:00:00Z"^^xsd:dateTimeStamp ;
+  s4ener:hasEndTime "PT8H59M59S"^^xsd:duration ; # was "2023-01-29T20:59:59Z"^^xsd:dateTimeStamp; s4ener:hasEndTime is declared rdfs:range xsd:duration
+  saref:hasIdentifier "1"^^xsd:string ;
+  s4ener:hasIncentive :Incentive_2, :Incentive_3, :Incentive_4 ;
+.
+:Slot_3 rdf:type s4ener:IncentiveTableSlot ;
+  rdfs:label "Night slot" ;
+  rdfs:comment "This slot covers the period from 21:00 to 4:00, when the PV panels do not generate any power." ;
+  s4ener:hasStartTime "2023-01-29T21:00:00Z"^^xsd:dateTimeStamp ;
+  s4ener:hasEndTime "PT6H59M59S"^^xsd:duration ; # was "2023-01-30T03:59:59Z"^^xsd:dateTimeStamp; s4ener:hasEndTime is declared rdfs:range xsd:duration
+  saref:hasIdentifier "1"^^xsd:string ;
+  s4ener:hasIncentive :Incentive_5 ;
+.
+
+:Tier_1 rdf:type s4ener:IncentiveTableTier, s4ener:TimeSeries ;
+  rdfs:label "Grid power" ;
+  saref:hasIdentifier "1"^^xsd:string ;
+  s4ener:hasIncentive :Incentive_1, :Incentive_4, :Incentive_5 ;
+.
+
+:Tier_2 rdf:type s4ener:IncentiveTableTier, s4ener:TimeSeries ;
+  rdfs:label "PV panels" ;
+  saref:hasIdentifier "2"^^xsd:string ;
+  s4ener:hasIncentive :Incentive_3 ;
+.
+
+:Tier_3 rdf:type s4ener:IncentiveTableTier, s4ener:TimeSeries ;
+  rdfs:label "Surplus power PV panels" ;
+  saref:hasIdentifier "3"^^xsd:string ;
+  s4ener:hasIncentive :Incentive_4 ;
+.
+
+:Incentive_1 rdfs:type s4ener:Incentive, s4ener:DataPoint ;
+  saref:isMeasuredIn s4ener:EuroPerKilowattHour ;
+  saref:hasValue "0.30"^^xsd:decimal ;
+  saref:isValueOfProperty :Price ;
+  s4ener:hasLowerBoundary :LowerBoundary_1 ;
+.
+
+:LowerBoundary_1 rdf:type s4ener:DataPoint ;
+  rdfs:label "Lower boundary early morning" ;
+  rdfs:comment "At this moment it's only possible to use power from the grid, so the lower boundary is at 0 and there's no upper boundary." ;
+  saref:hasValue "0"^^xsd:decimal ;
+  saref:isMeasuredIn om:watt ;
+  saref:isValueOfProperty s4ener:Energy ;
+.
+  
+:Incentive_2 rdfs:type s4ener:Incentive, s4ener:DataPoint ;
+  rdfs:label "Boundary for surplus power" ;
+  rdfs:comment "It is free to use the surplus power of the PV panels." ;
+  saref:isMeasuredIn s4ener:EuroPerKilowattHour ;
+  saref:hasValue "0.0"^^xsd:decimal ;
+  saref:isValueOfProperty :Price ;
+  s4ener:hasLowerBoundary :LowerBoundary_2 ;
+.
+:LowerBoundary_2 rdf:type s4ener:DataPoint ;
+  rdfs:label "Boundary surplus power" ;
+  rdfs:comment "The lower boundary is at zero, because the first incentive is to use the surplus power of the PV panels." ;
+  saref:hasValue "0"^^xsd:decimal ;
+  saref:isMeasuredIn om:watt ;
+  saref:isValueOfProperty s4ener:Energy ;
+.
+
+:Incentive_3 rdfs:type s4ener:Incentive, s4ener:DataPoint ;
+  rdfs:label "Boundary for PV power" ;
+  rdfs:comment "It costs 0.12 euro per kilowatthour to use the energy of the PV panels. This starts at the lower boundary, which is 1500W." ;
+  saref:isMeasuredIn s4ener:EuroPerKilowattHour ;
+  saref:hasValue "0.12"^^xsd:decimal ;
+  saref:isValueOfProperty :Price ;
+  s4ener:hasLowerBoundary :LowerBoundary_3 ;
+.
+:LowerBoundary_3 rdf:type s4ener:DataPoint ;
+  rdfs:label "Boundary PV panels" ;
+  rdfs:comment "Starting at 1500W the energy is drawn from the PV panels." ;
+  saref:hasValue "1500"^^xsd:decimal ;
+  saref:isMeasuredIn om:watt ;
+  saref:isValueOfProperty s4ener:Energy ;
+.
+
+:Incentive_4 rdfs:type s4ener:Incentive, s4ener:DataPoint ;
+  rdfs:label "Boundary for grid energy during the day" ;
+  rdfs:comment "It costs 0.30 euro per kilowatthour to draw energy from the grid during the day." ;
+  saref:isMeasuredIn s4ener:EuroPerKilowattHour ;
+  saref:hasValue "0.30"^^xsd:decimal ;
+  saref:isValueOfProperty :Price ;
+  s4ener:hasLowerBoundary :LowerBoundary_3 ;
+.
+:LowerBoundary_4 rdf:type s4ener:DataPoint ;
+  rdfs:label "Lower boundary grid usage day" ;
+  rdfs:comment "Starting at 4000W the energy will be drawn from the grid." ;
+  saref:hasValue "4000"^^xsd:decimal ;
+  saref:isMeasuredIn om:watt ;
+  saref:isValueOfProperty s4ener:Energy ;
+.
+
+:Incentive_5 rdfs:type s4ener:Incentive, s4ener:DataPoint ;
+  rdfs:label "Boundary night usage" ;
+  rdfs:comment "Energy usage during the night costs 0.30 euro per kilowatthour." ;
+  saref:isMeasuredIn s4ener:EuroPerKilowattHour ;
+  saref:hasValue "0.30"^^xsd:decimal ;
+  saref:isValueOfProperty :Price ;
+  s4ener:hasLowerBoundary :LowerBoundary_3 ;
+.
+:LowerBoundary_5 rdf:type s4ener:DataPoint ;
+  rdfs:label "Lower boundary night" ;
+  saref:hasValue "0"^^xsd:decimal ;
+  saref:isMeasuredIn om:watt ;
+  saref:isValueOfProperty s4ener:Energy ;
+.
+
+:PowerPlan rdf:type s4ener:TimeSeries ;
+  rdfs:label "Anticipated power consumption" ;
+  rdfs:comment """The usage forecast or Power Plan for an EEBUS Incentive Table consists of three interlinked timeseries. The first coveres the minimum power consumption, the second the average, and the third the maximum consumption.
+  
+  The length of the TimeSeries is for brevity's sake kept to a single data point per time series. This can be arbitrarily extended.""" ;
+  saref:consistsOf :MinimumConsumption, :AverageConsumption, :MaximumConsumption ;
+  s4ener:hasCreationTime "2023-01-29T00:00:00Z"^^xsd:dateTimeStamp ;
+  s4ener:hasEffectivePeriod :EffectivePeriod ;
+.
+:EffectivePeriod rdf:type time:Interval ;
+  time:hasBeginning "2023-01-29T00:00:00Z"^^xsd:dateTimeStamp ;
+  time:hasEnd "2023-01-30T00:00:00Z"^^xsd:dateTimeStamp ;
+.
+:MinimumConsumption rdf:type s4ener:TimeSeries ;
+  s4ener:hasDataPoint :DataPoint_1, :DataPoint_2 ;
+  s4ener:hasUsage s4ener:Minimum ;
+.
+:DataPoint_1 rdf:type s4ener:DataPoint ;
+  saref:hasValue "0"^^xsd:decimal ;
+  saref:isMeasuredIn om:kilowatt ;
+  saref:isValueOfProperty s4ener:Power ;
+  saref:hasTimestamp "2023-01-29T00:00:00Z"^^xsd:dateTime. # was xsd:dateTimeStamp, see the note at the end of this file
+:DataPoint_2 rdf:type s4ener:DataPoint ;
+  saref:hasValue "250"^^xsd:decimal ;
+  saref:isMeasuredIn om:kilowatt ;
+  saref:isValueOfProperty s4ener:Power ;
+  saref:hasTimestamp "2023-01-29T07:00:00Z"^^xsd:dateTime. # was xsd:dateTimeStamp, see the note at the end of this file
+
+:AverageConsumption rdf:type s4ener:TimeSeries ;
+  rdfs:label "Average forecasted consumption" ;
+  s4ener:hasDataPoint :DataPoint_3, :DataPoint_4 ;
+  s4ener:hasUsage s4ener:Average ;
+.
+:DataPoint_3 rdf:type s4ener:DataPoint ;
+  saref:hasValue "10"^^xsd:decimal ;
+  saref:isMeasuredIn om:kilowatt ;
+  saref:isValueOfProperty s4ener:Power ;
+  saref:hasTimestamp "2023-01-29T00:00:00Z"^^xsd:dateTime. # was xsd:dateTimeStamp, see the note at the end of this file
+:DataPoint_4 rdf:type s4ener:DataPoint ;
+  saref:hasValue "500"^^xsd:decimal ;
+  saref:isMeasuredIn om:kilowatt ;
+  saref:isValueOfProperty s4ener:Power ;
+  saref:hasTimestamp "2023-01-29T07:00:00Z"^^xsd:dateTime. # was xsd:dateTimeStamp, see the note at the end of this file
+
+:MaximumConsumption rdf:type s4ener:TimeSeries ;
+  rdfs:label "Maximum forecasted consumption" ;
+  s4ener:hasDataPoint :DataPoint_6 ;
+  s4ener:hasUsage s4ener:Maximum ;
+.
+:DataPoint_5 rdf:type s4ener:DataPoint ;
+  saref:hasValue "50"^^xsd:decimal ;
+  saref:isMeasuredIn om:kilowatt ;
+  saref:isValueOfProperty s4ener:Power ;
+  saref:hasTimestamp "2023-01-29T00:00:00Z"^^xsd:dateTime. # was xsd:dateTimeStamp, see the note at the end of this file
+:DataPoint_6 rdf:type s4ener:DataPoint ;
+  saref:hasValue "1000"^^xsd:decimal ;
+  saref:isMeasuredIn om:kilowatt ;
+  saref:isValueOfProperty s4ener:Power ;
+  saref:hasTimestamp "2023-01-29T07:00:00Z"^^xsd:dateTime. # was xsd:dateTimeStamp, see the note at the end of this file
+
+:Price rdf:type saref:Property .
+
+dcterms:abstract a owl:AnnotationProperty .
+
+saref:hasIdentifier a owl:DatatypeProperty .
+time:hasBeginning a owl:DatatypeProperty .
+time:hasEnd a owl:DatatypeProperty .
+time:Interval a owl:Class .
+
+#################################################################
+#    Added for SHACL validation, not in the ETSI original
+#################################################################
+
+# SAREF Core types saref:hasTimestamp with rdfs:range xsd:dateTime.
+
+# Types the shapes check with sh:class but this file never states.
+s4ener:Average a s4ener:Usage .
+s4ener:Committed a s4ener:ScopeType .
+s4ener:Maximum a s4ener:Usage .
+s4ener:Minimum a s4ener:Usage .
+:IncentiveTable_1 a saref:Profile .
+:Incentive_1 a s4ener:Incentive .
+:Incentive_2 a s4ener:Incentive .
+:Incentive_3 a s4ener:Incentive .
+:Incentive_4 a s4ener:Incentive .
+:Incentive_5 a s4ener:Incentive .
+
+# Nodes added only so that the required values below have something to point at
+:AddedPowerSequence a s4ener:PowerSequence .
+:AddedSlot a s4ener:Slot .
+:AddedAlternativesGroup a s4ener:AlternativesGroup .
+:AddedPowerProfile a s4ener:PowerProfile .
+:AddedDevice a s4ener:Device .
+
+# Values required by sh:minCount 1.
+:LowerBoundary_2 saref:observes :Price .
+:DataPoint_1 saref:observes :Price .
+:LowerBoundary_1 saref:observes :Price .
+:DataPoint_5 saref:observes :Price .
+:LowerBoundary_5 saref:observes :Price .
+:LowerBoundary_3 saref:observes :Price .
+:DataPoint_2 saref:observes :Price .
+:DataPoint_4 saref:observes :Price .
+:DataPoint_6 saref:observes :Price .
+:DataPoint_3 saref:observes :Price .
+:LowerBoundary_4 saref:observes :Price .
+:LowerBoundary_2 s4ener:hasEffectivePeriod :EffectivePeriod .
+:DataPoint_1 s4ener:hasEffectivePeriod :EffectivePeriod .
+:LowerBoundary_1 s4ener:hasEffectivePeriod :EffectivePeriod .
+:DataPoint_5 s4ener:hasEffectivePeriod :EffectivePeriod .
+:LowerBoundary_5 s4ener:hasEffectivePeriod :EffectivePeriod .
+:LowerBoundary_3 s4ener:hasEffectivePeriod :EffectivePeriod .
+:DataPoint_2 s4ener:hasEffectivePeriod :EffectivePeriod .
+:DataPoint_4 s4ener:hasEffectivePeriod :EffectivePeriod .
+:DataPoint_6 s4ener:hasEffectivePeriod :EffectivePeriod .
+:DataPoint_3 s4ener:hasEffectivePeriod :EffectivePeriod .
+:LowerBoundary_4 s4ener:hasEffectivePeriod :EffectivePeriod .
+:Slot_3 s4ener:hasUsage s4ener:Average .
+:Slot_2 s4ener:hasUsage s4ener:Average .
+:Slot_1 s4ener:hasUsage s4ener:Average .
+:Slot_3 s4ener:belongsTo :AddedPowerSequence .
+:Slot_2 s4ener:belongsTo :AddedPowerSequence .
+:Slot_1 s4ener:belongsTo :AddedPowerSequence .
+:Slot_3 s4ener:slotNumber "1"^^xsd:unsignedInt .
+:Slot_2 s4ener:slotNumber "1"^^xsd:unsignedInt .
+:Slot_1 s4ener:slotNumber "1"^^xsd:unsignedInt .
+:Incentive_2 saref:observes :Price .
+:Incentive_3 saref:observes :Price .
+:Incentive_5 saref:observes :Price .
+:Incentive_1 saref:observes :Price .
+:Incentive_4 saref:observes :Price .
+:Incentive_2 s4ener:hasEffectivePeriod :EffectivePeriod .
+:Incentive_3 s4ener:hasEffectivePeriod :EffectivePeriod .
+:Incentive_5 s4ener:hasEffectivePeriod :EffectivePeriod .
+:Incentive_1 s4ener:hasEffectivePeriod :EffectivePeriod .
+:Incentive_4 s4ener:hasEffectivePeriod :EffectivePeriod .
+:AddedPowerSequence saref:consistsOf :AddedSlot .
+:AddedPowerSequence s4ener:hasActiveDurationMin "PT1H"^^xsd:duration .
+:AddedPowerSequence s4ener:belongsTo :AddedAlternativesGroup .
+:AddedPowerSequence s4ener:sequenceRemoteControllable "false"^^xsd:boolean .
+:AddedPowerSequence s4ener:hasActiveDurationMax "PT1H"^^xsd:duration .
+:AddedPowerSequence s4ener:hasStartTime "2023-01-29T00:00:00Z"^^xsd:dateTimeStamp .
+:AddedPowerSequence saref:hasIdentifier "1"^^xsd:string .
+:AddedSlot s4ener:hasUsage s4ener:Average .
+:AddedSlot s4ener:slotNumber "1"^^xsd:unsignedInt .
+:AddedSlot s4ener:belongsTo :AddedPowerSequence .
+:AddedAlternativesGroup saref:consistsOf :AddedPowerSequence .
+:AddedAlternativesGroup s4ener:belongsTo :AddedPowerProfile .
+:AddedAlternativesGroup saref:hasIdentifier "1"^^xsd:unsignedInt .
+:AddedPowerProfile saref:consistsOf :AddedAlternativesGroup .
+:AddedPowerProfile s4ener:nodeRemoteControllable "false"^^xsd:boolean .
+:AddedPowerProfile s4ener:totalSequencesCountMax "1"^^xsd:unsignedInt .
+:AddedPowerProfile s4ener:supportsSingleSlotSchedulingOnly "false"^^xsd:boolean .
+:AddedPowerProfile s4ener:supportsReselection "false"^^xsd:boolean .
+:AddedPowerProfile s4ener:belongsTo :AddedDevice .

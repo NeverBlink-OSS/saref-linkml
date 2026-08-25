@@ -1,0 +1,150 @@
+@prefix ex: <https://saref.etsi.org/saref4grid/v2.1.1/example/Action/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix oneM2M: <http://www.owl-ontologies.com/oneM2M#> .
+@prefix saref: <https://saref.etsi.org/core/> .
+@prefix s4grid: <https://saref.etsi.org/saref4grid/> .
+@prefix dctype: <http://purl.org/dc/dcmitype/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+
+<https://saref.etsi.org/saref4grid/v2.1.1/example/Action#> a dctype:Dataset ;
+  dcterms:license <https://forge.etsi.org/etsi-software-license> ;
+  dcterms:conformsTo <https://saref.etsi.org/saref4grid/v2.1.1/> ;
+  dcterms:title "Example Action"@en ;
+  dcterms:description "Example Action"@en .
+ 
+
+
+#################################################################
+#    Object Properties
+#################################################################
+
+oneM2M:hasService a owl:ObjectProperty .
+
+saref:hasOperation a owl:ObjectProperty .
+
+saref:hasInput a owl:ObjectProperty .
+
+
+#################################################################
+#    Data properties
+#################################################################
+
+s4grid:obtainInputFromObis a owl:DatatypeProperty .
+
+s4grid:hasActionValue a owl:DatatypeProperty .
+
+s4grid:hasPresetTime a owl:DatatypeProperty .
+
+s4grid:hasValidityIntervalStart a owl:DatatypeProperty .
+
+s4grid:hasValidityIntervalEnd a owl:DatatypeProperty .
+
+s4grid:hasIndex a owl:DatatypeProperty .
+
+s4grid:hasSpecialDate a owl:DatatypeProperty .
+
+s4grid:hasDayId a owl:DatatypeProperty .
+
+
+#################################################################
+#    Classes
+#################################################################
+
+s4grid:GridMeter a owl:Class .
+
+s4grid:ActionService a owl:Class .
+
+s4grid:ActionOperation a owl:Class .
+
+s4grid:SimpleActionOperationInput a owl:Class .
+
+s4grid:PresetAdjustingTime a owl:Class .
+
+s4grid:SpecialDayEntry a owl:Class .
+
+s4grid:ComplexActionOperationInput a owl:Class .
+
+
+#################################################################
+#    Individuals
+#################################################################
+
+ex:Meter1234 a s4grid:GridMeter,
+        owl:NamedIndividual ;
+    oneM2M:hasService ex:ResetServiceRegister,
+			ex:PresetAdjustingTimeServiceClock ,
+			ex:SpecialDayEntryActivityCalendar .
+
+ex:ResetServiceRegister a s4grid:ActionService,
+        owl:NamedIndividual ;
+    saref:hasOperation ex:ResetServiceOperation .
+
+ex:ResetServiceOperation a s4grid:ActionOperation,
+        owl:NamedIndividual ;
+    saref:hasInput ex:ResetServiceOperationInput .
+
+ex:ResetServiceOperationInput a s4grid:SimpleActionOperationInput,
+        owl:NamedIndividual ;
+    s4grid:obtainInputFromObis "0-1:94.34.1.255"^^xsd:string ;
+	s4grid:hasActionValue "0"^^xsd:int .
+
+ex:PresetAdjustingTimeServiceClock a s4grid:ActionService,
+        owl:NamedIndividual ;
+    saref:hasOperation ex:PresetAdjustingTimeOperation .
+
+ex:PresetAdjustingTimeOperation a s4grid:ActionOperation,
+        owl:NamedIndividual ;
+    saref:hasInput ex:PresetAdjustingTime1 .
+
+ex:PresetAdjustingTime1 a s4grid:PresetAdjustingTime,
+        owl:NamedIndividual ;
+    s4grid:obtainInputFromObis "0-0:1.0.0.255"^^xsd:string ;
+	s4grid:hasPresetTime "2023-05-30T09:00:00"^^xsd:dateTime ;
+	s4grid:hasValidityIntervalStart "2023-05-30T10:00:00"^^xsd:dateTime ;
+	s4grid:hasValidityIntervalEnd "2023-05-30T12:00:00"^^xsd:dateTime .
+
+ex:SpecialDayEntryActivityCalendar a s4grid:ActionService,
+        owl:NamedIndividual ;
+    saref:hasOperation ex:SpecialDayEntryOperation .
+
+ex:SpecialDayEntryOperation a s4grid:ActionOperation,
+        owl:NamedIndividual ;
+    saref:hasInput ex:SpecialDayEntry1 .
+
+ex:SpecialDayEntry1 a s4grid:SpecialDayEntry,
+        owl:NamedIndividual ;
+    s4grid:obtainInputFromObis "0-0:13.0.1.255"^^xsd:string ;
+	s4grid:hasIndex "1"^^xsd:unsignedShort ;
+	s4grid:hasSpecialDate "2023-05-30"^^xsd:date ;
+	s4grid:hasDayId "235"^^xsd:int .
+
+
+#################################################################
+#    Added for SHACL validation, not in the ETSI original
+#################################################################
+
+# Types the shapes check with sh:class but this file never states.
+ex:ResetServiceOperation a saref:Operation .
+ex:PresetAdjustingTimeOperation a saref:Operation .
+ex:SpecialDayEntryOperation a saref:Operation .
+ex:ResetServiceRegister a saref:Service .
+ex:PresetAdjustingTimeServiceClock a saref:Service .
+ex:SpecialDayEntryActivityCalendar a saref:Service .
+ex:Meter1234 a saref:Device .
+
+# Nodes added only so that the required values below have something to point at
+s4grid:ActiveEnergy a s4grid:EnergyAndPowerProperty, saref:Property .
+
+# Values required by sh:minCount 1.
+# isOfferedBy, isOperationOf are inverses of existing statements
+ex:ResetServiceRegister saref:isOfferedBy ex:Meter1234 .
+ex:PresetAdjustingTimeServiceClock saref:isOfferedBy ex:Meter1234 .
+ex:SpecialDayEntryActivityCalendar saref:isOfferedBy ex:Meter1234 .
+ex:ResetServiceOperation saref:isOperationOf ex:ResetServiceRegister .
+ex:PresetAdjustingTimeOperation saref:isOperationOf ex:PresetAdjustingTimeServiceClock .
+ex:SpecialDayEntryOperation saref:isOperationOf ex:SpecialDayEntryActivityCalendar .
+ex:Meter1234 saref:observes s4grid:ActiveEnergy .
+

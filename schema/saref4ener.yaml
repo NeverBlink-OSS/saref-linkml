@@ -1,0 +1,2714 @@
+id: https://saref.etsi.org/saref4ener/
+name: saref4ener
+title: SAREF for Energy Flexibility
+description: "The flexibility ontology module (ic-flex) is by design tightly integrated with SAREF, \r\
+  \nSAREF4ENER and the following InterConnect modules: power limit (ic-pwlm), \r\nincentive table (ic-inc),\
+  \ S2 (ic-s2), data-point (ic-data) and forecast (ic-fc) \r\n\r\nThe main concept of the ic-flex module\
+  \ is the s4ener:FlexOffer, which allows to \r\nrepresent a flexibility offer (or schedule) as a combination\
+  \ of multiple time-series, data-points and forecasts. \r\n\r\nIt also allows to specify a creation time\
+  \ (s4ener:hasCreationTime), validity \r\nperiod (s4ener:hasEffectivePeriod) and provenance (s4ener:producedBy)\
+  \ for \r\nthe offer, on top of the creation time, validity period and provenance already specified for\
+  \ the time-series and data-points included in the offer.\r\n\r\nThe additional key aspect captured in\
+  \ the ic-flex module is that a flex offer can also include various categories of flexibility, which\
+  \ are modelled as subclasses of the s4ener:FlexibilityProfile class, as follows:\r\n- Power Profile\
+  \ flexibilty is modelled as s4ener:PowerProfile based on the EEBUS spec\r\n- Tariff based flexibility\
+  \ (s4ener:TariffBased) is implemented using the incentive table (ic-inc) ontology based on the EEBUS\
+  \ spec (note that tariif-based felxibility does note exist in S2)\r\n- Power limit flexibility (ic-pwlm:PowerLimit)\
+  \ is implemented using  thepower limit (ic-pwlm) ontology based on the EEBUS spec (and compliant also\
+  \ with S2)\r\n- Power Envelope flexibility (s4ener:PowerEnvelope) is implemented using theS2 (ic-s2)\
+  \ that follows the S2 specification (and compliant also with EEBUS)\r\n- Demand driven flexibility (s4ener:DemandDriven)\
+  \  flexibility (s4ener:PowerEnvelope) is implemented using theS2 (ic-s2) that follows the S2 specification\
+  \ (and compliant also with EEBUS)\r\n- Operation mode flexibility (s4ener:OperationMode) is implemented\
+  \ using theS2 (ic-s2) that follows the S2 specification (and compliant also with S2)\r\n- Fill rate\
+  \ based flexibility (s4ener:FillRateBased is implemented using theS2 (ic-s2) that follows the S2 specification\
+  \ (and compliant also with S2)"
+license: https://forge.etsi.org/etsi-software-license
+version: https://saref.etsi.org/saref4ener/v2.1.1/
+created_on: '2025-06-05'
+last_updated_on: '2025-06-05'
+source: https://saref.etsi.org/sources/saref4ener/
+contributors:
+- https://www.linkedin.com/in/ana%C3%AFs-walle-050baa159/
+- https://www.linkedin.com/in/bouterca/
+- https://www.linkedin.com/in/george-hallak-368301157/
+- https://www.linkedin.com/in/georgjung/
+- https://www.linkedin.com/in/giulia-biagioni
+- https://www.linkedin.com/in/josef-baumeister-a221422/
+- https://www.linkedin.com/in/lauradaniele
+- https://www.linkedin.com/in/mente-konsman-b0a1711/
+- https://www.linkedin.com/in/wilco-wijbrandi-3994ab4b/
+see_also:
+- https://www.etsi.org/deliver/etsi_ts/103400_103499/10341001/02.01.01_60/ts_10341001v020101p.pdf
+prefixes:
+  dcterms: http://purl.org/dc/terms/
+  foaf: http://xmlns.com/foaf/0.1/
+  linkml: https://w3id.org/linkml/
+  owl: http://www.w3.org/2002/07/owl#
+  rdfs: http://www.w3.org/2000/01/rdf-schema#
+  s4ener: https://saref.etsi.org/saref4ener/
+  saref: https://saref.etsi.org/core/
+  time: http://www.w3.org/2006/time#
+  vann: http://purl.org/vocab/vann/
+  xsd: http://www.w3.org/2001/XMLSchema#
+default_prefix: s4ener
+default_range: string
+imports:
+- linkml:types
+- ./saref-core
+enums:
+  EventActionConsume:
+    enum_uri: s4ener:EventActionConsume
+    title: Event action consume
+    description: An action type used to express a consume action to be performed as a consequence of an
+      event used to send overload warning severity level and related load control commands to a device
+      (e.g. a household appliance or a smart meter).
+    mixins:
+    - LoadControlEventAction
+    permissible_values:
+      EMERGENCY:
+        meaning: s4ener:Emergency
+        title: Emergency
+        description: Load control event action with value 'emergency'
+      INCREASE:
+        meaning: s4ener:Increase
+        title: Increase
+        description: Load control event action with value 'increase'
+      NORMAL:
+        meaning: s4ener:Normal
+        title: Normal
+        description: The value NORMAL used to instantiate the Load Control Event Action class and MeasurandState
+          class
+      PAUSE:
+        meaning: s4ener:Pause
+        title: Pause
+        description: Load control event action with value 'pause'
+      REDUCE:
+        meaning: s4ener:Reduce
+        title: Reduce
+        description: Load control event action with value 'reduce'
+      RESUME:
+        meaning: s4ener:Resume
+        title: Resume
+        description: Load control event action with value 'resume'
+  EventActionProduce:
+    enum_uri: s4ener:EventActionProduce
+    title: Event action produce
+    description: An action type used to express a produce action to be performed as a consequence of an
+      event used to send overload warning severity level and related load control commands to a device
+      (e.g. a household appliance or a smart meter).
+    mixins:
+    - LoadControlEventAction
+    permissible_values:
+      EMERGENCY:
+        meaning: s4ener:Emergency
+        title: Emergency
+        description: Load control event action with value 'emergency'
+      INCREASE:
+        meaning: s4ener:Increase
+        title: Increase
+        description: Load control event action with value 'increase'
+      NORMAL:
+        meaning: s4ener:Normal
+        title: Normal
+        description: The value NORMAL used to instantiate the Load Control Event Action class and MeasurandState
+          class
+      PAUSE:
+        meaning: s4ener:Pause
+        title: Pause
+        description: Load control event action with value 'pause'
+      REDUCE:
+        meaning: s4ener:Reduce
+        title: Reduce
+        description: Load control event action with value 'reduce'
+      RESUME:
+        meaning: s4ener:Resume
+        title: Resume
+        description: Load control event action with value 'resume'
+  EventStateConsume:
+    enum_uri: s4ener:EventStateConsume
+    title: Event state consume
+    description: In the load control, it expresses a consume state of an event used to send overload warning
+      severity level and related load control commands to a device (e.g. a household appliance or a smart
+      meter).
+    mixins:
+    - LoadControlEventState
+    permissible_values:
+      EVENT_ACCEPTED:
+        meaning: s4ener:EventAccepted
+        title: Event accepted
+        description: Load control state with value 'event accepted'
+      EVENT_CANCELLED:
+        meaning: s4ener:EventCancelled
+        title: Event cancelled
+        description: Load control state with value 'event cancelled'
+      EVENT_ERROR:
+        meaning: s4ener:EventError
+        title: Event error
+        description: Load control state with value 'event error'
+      EVENT_REJECTED:
+        meaning: s4ener:EventRejected
+        title: Event rejected
+        description: Load control state with value 'event rejected'
+      EVENT_STARTED:
+        meaning: s4ener:EventStarted
+        title: Event started
+        description: Load control state with value 'event started'
+      EVENT_STOPPED:
+        meaning: s4ener:EventStopped
+        title: Event stopped
+        description: Load control state with value 'event stopped'
+  EventStateProduce:
+    enum_uri: s4ener:EventStateProduce
+    title: Event state produce
+    description: In the load control, it expresses a produce state of an event an event used to send overload
+      warning severity level and related load control commands to a device (e.g. a household appliance
+      or a smart meter).
+    mixins:
+    - LoadControlEventState
+    permissible_values:
+      EVENT_ACCEPTED:
+        meaning: s4ener:EventAccepted
+        title: Event accepted
+        description: Load control state with value 'event accepted'
+      EVENT_CANCELLED:
+        meaning: s4ener:EventCancelled
+        title: Event cancelled
+        description: Load control state with value 'event cancelled'
+      EVENT_ERROR:
+        meaning: s4ener:EventError
+        title: Event error
+        description: Load control state with value 'event error'
+      EVENT_REJECTED:
+        meaning: s4ener:EventRejected
+        title: Event rejected
+        description: Load control state with value 'event rejected'
+      EVENT_STARTED:
+        meaning: s4ener:EventStarted
+        title: Event started
+        description: Load control state with value 'event started'
+      EVENT_STOPPED:
+        meaning: s4ener:EventStopped
+        title: Event stopped
+        description: Load control state with value 'event stopped'
+  IncentiveType:
+    enum_uri: s4ener:IncentiveType
+    title: Incentive Type
+    description: In the incentive table, an incentive type is defined  in the form of costs (relative
+      or absolute), CO2 emissions or renewable energy percentage.
+    comments:
+    - OWL leaves this class open.
+    permissible_values:
+      ABSOLUTE_COST:
+        meaning: s4ener:AbsoluteCost
+        title: Absolute cost
+        description: The incentive type ''absolute cost''  defined in the incentive table.
+      CO2_EMISSION:
+        meaning: s4ener:CO2Emission
+        title: CO2 Emission
+        description: The incentive type ''CO2 Emission'' defined in the incentive table.
+      RELATIVE_COST:
+        meaning: s4ener:RelativeCost
+        title: Relative cost
+        description: The incentive type ''relative cost'' defined in the incentive table.
+      RENEWABLE_ENERGY_PERCENTAGE:
+        meaning: s4ener:RenewableEnergyPercentage
+        title: Renewable energy percentage
+        description: The  incentive type ''renewable energy percentage'' defined in the incentive table.
+  InstructionStatus:
+    enum_uri: s4ener:InstructionStatus
+    title: Instruction Status
+    description: The status an instruction has at a specific moment.
+    comments:
+    - OWL leaves this class open.
+    permissible_values:
+      ABORTED:
+        meaning: s4ener:Aborted
+        title: Aborted
+        description: Instruction was aborted.
+      ACCEPTED:
+        meaning: s4ener:Accepted
+        title: Accepted
+        description: Instruction has been accepted
+      NEW:
+        meaning: s4ener:New
+        title: New
+        description: Instruction was newly created
+      REJECTED:
+        meaning: s4ener:Rejected
+        title: Rejected
+        description: Instruction was rejected
+      REVOKED:
+        meaning: s4ener:Revoked
+        title: Revoked
+        description: Instruction was revoked
+      STARTED:
+        meaning: s4ener:Started
+        title: Started
+        description: Instruction was executed
+      SUCCEEDED:
+        meaning: s4ener:Succeeded
+        title: Succeeded
+        description: Instruction finished successfully
+  PowerEnvelopeConsequenceType:
+    enum_uri: s4ener:PowerEnvelopeConsequenceType
+    title: Power Envelope Consequence Type
+    description: The type of consequence of limiting power, which can be Defer or Vanish.
+    comments:
+    - OWL leaves this class open.
+    permissible_values:
+      DEFER:
+        meaning: s4ener:Defer
+        title: Defer
+        description: 'Indicating that the limited load or generation will be postponed to a later moment '
+      VANISH:
+        meaning: s4ener:Vanish
+        title: Vanish
+        description: The load or generation that is limited will vanish. This is for example the case
+          with curtailing production from solar panels; the potentially generated energy is lost and will
+          never reappear.
+  PowerEnvelopeLimitType:
+    enum_uri: s4ener:PowerEnvelopeLimitType
+    title: Power Envelope Limit Type
+    description: An enumeration containing the codelist for Power Envelope Limit Types, which may be Lower
+      limit or Upper limit.
+    comments:
+    - OWL leaves this class open.
+    permissible_values:
+      LOWER_LIMIT:
+        meaning: s4ener:LowerLimit
+        title: Lower Limit
+        description: The PowerEnvelopeLimitType codelist element indicating the lower limit.
+      UPPER_LIMIT:
+        meaning: s4ener:UpperLimit
+        title: Upper Limit
+        description: The PowerEnvelopeLimitType enumeration for the upper limit.
+  PowerSequenceState:
+    enum_uri: s4ener:PowerSequenceState
+    title: Power sequence state
+    description: The current state of the power sequence. It can assume one of the values 'running', 'paused',
+      'scheduled', 'scheduled paused', 'pending', 'inactive', 'completed',  or 'invalid'.
+    comments:
+    - OWL leaves this class open.
+    mixins:
+    - State
+    permissible_values:
+      COMPLETED:
+        meaning: s4ener:Completed
+        title: Completed
+        description: Power sequence state with value 'completed'
+      INACTIVE:
+        meaning: s4ener:Inactive
+        title: Inactive
+        description: Power sequence state with value 'inactive'
+      INVALID:
+        meaning: s4ener:Invalid
+        title: Invalid
+        description: Power sequence state with value 'invalid'
+      PAUSED:
+        meaning: s4ener:Paused
+        title: Paused
+        description: Power sequence state or sensor state with value 'paused'
+      PENDING:
+        meaning: s4ener:Pending
+        title: Pending
+        description: Power sequence state with value 'pending'
+      RUNNING:
+        meaning: s4ener:Running
+        title: Running
+        description: Power sequence state with value 'running'
+      SCHEDULED:
+        meaning: s4ener:Scheduled
+        title: Scheduled
+        description: Power sequence state with value 'scheduled'
+      SCHEDULED_PAUSED:
+        meaning: s4ener:ScheduledPaused
+        title: Scheduled paused
+        description: Power sequence state with value 'scheduled paused'
+  PowerSequenceStatus:
+    enum_uri: s4ener:PowerSequenceStatus
+    title: Power sequence status
+    description: A codelist for the various Power Sequence statuses.
+    comments:
+    - OWL leaves this class open.
+    permissible_values:
+      ABORTED:
+        meaning: s4ener:Aborted
+        title: Aborted
+        description: Instruction was aborted.
+      EXECUTING:
+        meaning: s4ener:Executing
+        title: EXECUTING
+        description: The selected PPBC.PowerSequence is currently being executed
+      FINISHED:
+        meaning: s4ener:Finished
+        title: Finished
+        description: The selected PPBC.PowerSequence was executed and finished successfully
+      INTERRUPTED:
+        meaning: s4ener:Interrupted
+        title: Interrupted
+        description: The selected PPBC.PowerSequence is being executed, but is currently interrupted and
+          will continue afterwards
+      NOT_SCHEDULED:
+        meaning: s4ener:NotScheduled
+        title: NotScheduled
+        description: No PPBC.PowerSequence within the PPBC.PowerSequenceContainer is scheduled
+  PowerSource:
+    enum_uri: s4ener:PowerSource
+    title: Power source
+    description: Indicates the power source of a device. Possible values are e.g. mainsSinglePhase or
+      battery
+    comments:
+    - OWL leaves this class open.
+    permissible_values:
+      BATTERY_POWER_SOURCE:
+        meaning: s4ener:BatteryPowerSource
+        title: Battery power source
+        description: This Power Source codelist element indicates that a battery is the power source of
+          this device.
+      DC_POWER_SOURCE:
+        meaning: s4ener:DCPowerSource
+        title: DC Power source
+        description: This Power Source codelist element indicates that the type of power source is DC.
+      MAINS3_PHASE:
+        meaning: s4ener:Mains3Phase
+        title: Mains3Phase
+        description: This Power Source codelist element indicates that the power source of this device
+          is Mains 3 Phase.
+      MAINS_SINGLE_PHASE:
+        meaning: s4ener:MainsSinglePhase
+        title: Mains single phase
+        description: This codelist element of power source indicates that the power source is the mains
+          single phase.
+  RoleType:
+    enum_uri: s4ener:RoleType
+    title: Role Type
+    description: 'An enumeration containing the various roles a device can take up: consumer, producer,
+      or storage.'
+    comments:
+    - OWL leaves this class open.
+    permissible_values:
+      ENERGY_CONSUMER:
+        meaning: s4ener:EnergyConsumer
+        title: Energy Consumer
+        description: Identifier for RoleType Consumer
+      ENERGY_PRODUCER:
+        meaning: s4ener:EnergyProducer
+        title: Energy Producer
+        description: Identifier for RoleType Producer
+      ENERGY_STORAGE:
+        meaning: s4ener:EnergyStorage
+        title: Energy Storage
+        description: Identifier for RoleType Storage
+  ScopeType:
+    enum_uri: s4ener:ScopeType
+    title: Scope Type
+    description: An incentive table may additionally define a scope type to indicate whether it is a preliminary
+      or committed version.
+    comments:
+    - OWL leaves this class open.
+    permissible_values:
+      COMMITTED:
+        meaning: s4ener:Committed
+        title: Committed
+        description: The committed version of this concept, usually an incentive table or power plan
+      PRELIMINARY:
+        meaning: s4ener:Preliminary
+        title: Preliminary
+        description: The preliminary version of this concept, usually an incentive table or power plan
+  Usage:
+    enum_uri: s4ener:Usage
+    title: Usage
+    description: The usage of a datapoint, time series or message.
+    comments:
+    - OWL leaves this class open.
+    permissible_values:
+      AVERAGE:
+        meaning: s4ener:Average
+        title: Average
+        description: The datapoint indicates an average value aggregated over a number of values.
+      BASE_LINE:
+        meaning: s4ener:BaseLine
+        title: Baseline
+        description: This datapoint indicates the baseline.
+      CONSUMPTION:
+        meaning: s4ener:Consumption
+        title: Consumption
+        description: This datapoint indicates the consumption.
+      DOWNFLEX:
+        meaning: s4ener:Downflex
+        title: Downflex
+        description: This datapoint indicates the down flexibility.
+      LOWER_LIMIT:
+        meaning: s4ener:LowerLimit
+        title: Lower Limit
+        description: The PowerEnvelopeLimitType codelist element indicating the lower limit.
+      MAXIMUM:
+        meaning: s4ener:Maximum
+        title: Maximum
+        description: The usage of this datapoint is the Maximum value.
+      MINIMUM:
+        meaning: s4ener:Minimum
+        title: Minimum
+        description: The usage of this datapoint is the Minimum value.
+      PRODUCTION:
+        meaning: s4ener:Production
+        title: Production
+        description: This datapoint indicates the energy production.
+      SET_POINT:
+        meaning: s4ener:SetPoint
+        title: Setpoint
+        description: This datapoint indicates a setpoint.
+      SKEWNESS:
+        meaning: s4ener:Skewness
+        title: Skewness
+        description: The usage of this datapoint is the power skewness (assymetry of the distribution).
+      UPFLEX:
+        meaning: s4ener:Upflex
+        title: Upflex
+        description: This datapoint indicates the upper flexibility.
+      UPPER_LIMIT:
+        meaning: s4ener:UpperLimit
+        title: Upper Limit
+        description: The PowerEnvelopeLimitType enumeration for the upper limit.
+  ValueSource:
+    enum_uri: s4ener:ValueSource
+    title: Value source
+    description: 'Indicates the source (origin/foundation) of the observation forecasted values for a
+      power sequence. If absent, the source is undefined. Remark: This element shall express the reliability
+      of the forecast.'
+    comments:
+    - OWL leaves this class open.
+    permissible_values:
+      CALCULATED:
+        meaning: s4ener:Calculated
+        title: Calculated
+        description: This value source codelist element indicates that this observation has been calculated
+          instead of measured or empirical.
+      EMPIRICAL:
+        meaning: s4ener:Empirical
+        title: Empirical
+        description: This value source codelist element indicates this value is an empirical value instead
+          of a calculated or measured value.
+      MEASURED:
+        meaning: s4ener:Measured
+        title: Measured
+        description: The value source type indicates that this data point has been measured by a device.
+  ValueTendency:
+    enum_uri: s4ener:ValueTendency
+    title: Value tendency
+    description: This type indicates a codelist for the s4ener:valueTendency property about whether the
+      tendency of an observation is rising, stable or falling.
+    comments:
+    - OWL leaves this class open.
+    permissible_values:
+      FALLING:
+        meaning: s4ener:Falling
+        title: Falling
+        description: This value tendency codelist element indicates that the tendency of this observation
+          indicates that the value is decreasing (i.e., falling).
+      RISING:
+        meaning: s4ener:Rising
+        title: Rising
+        description: This value tendency codelist element indicates that the tendency of this observation
+          indicates that the value is increasing (i.e., rising).
+      STABLE:
+        meaning: s4ener:Stable
+        title: Stable
+        description: This value tendency codelist element indicates that the tendency this observation
+          has is to stay stable, instead of rising or falling.
+slots:
+  abnormal_condition:
+    slot_uri: s4ener:abnormalCondition
+    title: abnormal condition
+    description: Indicates if this is an instruction during an abnormal condition
+    range: boolean
+    multivalued: true
+  abnormal_condition_only:
+    slot_uri: s4ener:abnormalConditionOnly
+    title: Abnormal Condition Only
+    description: "Indicates if this element can only be used during an abnormal condition.\r\n\r\nIn SAREF4ENER\
+      \ this property is intended to be used on the following properties:\r\n- s4ener:OperationMode\r\n\
+      - s4ener:Transition\r\n- s4ener:AllowedLimitRange\r\n- s4ener:PowerSequence"
+    range: boolean
+    multivalued: true
+  activate_slot:
+    slot_uri: s4ener:activateSlot
+    title: activate slot
+    description: Indicates whether a slot is used (activateSlot = true) or not (activateSlot = false).
+      SHALL be present if a slot is optional (i.e., the property s4ee:optionalSlot is TRUE), otherwise
+      SHALL be absent (i.e. in case the slot is mandatory).
+    range: boolean
+    multivalued: true
+  active_repetition_number:
+    slot_uri: s4ener:activeRepetitionNumber
+    title: active repetition number
+    description: 'Indicates the current repetition of the sequence of slots. SHALL be present if a power
+      sequence can repeat its sequence of slots (i.e., if s4ee:repetitionTotal is present and has a value
+      > 1). Otherwise, it SHALL be absent. '
+    range: UnsignedInt
+    multivalued: true
+  active_slot_number:
+    slot_uri: s4ener:activeSlotNumber
+    title: active slot number
+    description: Indicates the currently active slot number, if the power sequence state is set to 'running'
+      or 'paused'. Otherwise it SHALL be omitted.
+    range: UnsignedInt
+    multivalued: true
+  allowed_limit_range:
+    slot_uri: s4ener:allowedLimitRange
+    title: allowed limit range
+    description: This property indicates the various AllowedLimitRanges or PowerLimits that this PowerConstraint
+      object consists of.
+    range: AllowedLimitRange
+    multivalued: true
+  belongs_to:
+    slot_uri: s4ener:belongsTo
+    title: belongs to
+    description: 'A relationship identifying the ownership of an entity. In particular, a slot belongs
+      to a power sequence, a power sequence belongs to an alternative, an alternative  belongs to a power
+      profile, a power profile belongs to a device.  '
+    range: uriorcurie
+    multivalued: true
+  belongs_to_time_series:
+    slot_uri: s4ener:belongsToTimeSeries
+    title: belongs to time series
+    description: The relationship that connects a data point to a time series.
+    range: TimeSeries
+    multivalued: true
+    inverse: has_data_point
+  brand_name:
+    slot_uri: s4ener:brandName
+    title: brand name
+    description: Provides the name of the brand of a device. Useful where the name of the brand and the
+      vendor differs.
+    range: string
+    multivalued: true
+  cheapest:
+    slot_uri: s4ener:cheapest
+    title: cheapest
+    description: 'Indicates whether a power sequence applies a configuration that minimises the user''s
+      energy bill (if set to TRUE). MAY be present. Absence of this element is equal to the presence with
+      value FALSE. '
+    range: boolean
+    multivalued: true
+  device_code:
+    slot_uri: s4ener:deviceCode
+    title: device code
+    description: Provides a device code for the device as defined by the manufacturer.
+    range: string
+    multivalued: true
+  device_name:
+    slot_uri: s4ener:deviceName
+    title: device name
+    description: Provides the name of the device as defined by the manufacturer.
+    range: string
+    multivalued: true
+  end_of_range:
+    slot_uri: s4ener:endOfRange
+    title: end of range
+    description: This property indicates the end of a number range.
+    range: PropertyValue
+    multivalued: true
+  fill_rate:
+    slot_uri: s4ener:fillRate
+    title: Fill Rate Level
+    description: Indicates the change in fill_level per second. The lower_boundary of the NumberRange
+      is associated with an operation_mode_factor of 0, the upper_boundary is associated with an operation_mode_factor
+      of 1.
+    range: NumberRange
+    multivalued: true
+  firmware_version:
+    slot_uri: s4ener:firmwareVersion
+    title: has firmware version
+    description: Version identifier of the firmware used in the device (provided by the manufacturer)
+    range: string
+    multivalued: true
+  from_operation_mode:
+    slot_uri: s4ener:fromOperationMode
+    title: from operation mode
+    description: ID of the OperationMode (exact type differs per ControlType) that should be switched
+      from.
+    range: OperationMode
+    multivalued: true
+  greenest:
+    slot_uri: s4ener:greenest
+    title: greenest
+    description: 'Indicates whether a power sequence optimises the configuration towards the maximum availability
+      of renewable energy (if set to TRUE). MAY be present. Absence of this element is equal to the presence
+      with value FALSE. '
+    range: boolean
+    multivalued: true
+  hardware_revision:
+    slot_uri: s4ener:hardwareRevision
+    title: 'hardware revision '
+    description: Indicates the hardware revision of the device as defined by the manufacturer.
+    range: string
+    multivalued: true
+  has_activation_delay:
+    slot_uri: s4ener:hasActivationDelay
+    title: has activation delay
+    description: The scheduled activation delay for a slot.
+    range: Duration
+    multivalued: true
+  has_active_duration_max:
+    slot_uri: s4ener:hasActiveDurationMax
+    title: has active duration max
+    description: "The active maximum duration a power sequence can run without interruption.\r\n\r\nThis\
+      \ property is suggested to be added to SAREF4Ener_v2 to replace the time:TemporalEntity and/or time:DurationDescription."
+    mixins:
+    - has_duration
+    range: Duration
+    multivalued: true
+  has_active_duration_min:
+    slot_uri: s4ener:hasActiveDurationMin
+    title: has active duration min
+    description: "The active mininum duration a power sequence can run without interruption.\r\n\r\nThis\
+      \ property is suggested to be added to SAREF4Ener_v2 to replace the time:TemporalEntity and/or time:DurationDescription."
+    mixins:
+    - has_duration
+    range: Duration
+    multivalued: true
+  has_active_duration_sum_max:
+    slot_uri: s4ener:hasActiveDurationSumMax
+    title: has active duration sum max
+    description: "The active maximum duration a power sequence can run in total (summation of all active\
+      \ times).\r\n\r\nThis property is suggested to be added to SAREF4Ener_v2 to replace the time:TemporalEntity\
+      \ and/or time:DurationDescription."
+    mixins:
+    - has_duration
+    range: Duration
+    multivalued: true
+  has_active_duration_sum_min:
+    slot_uri: s4ener:hasActiveDurationSumMin
+    title: has active duration sum min
+    description: "The active minimum duration a power sequence must run in total (summation of all active\
+      \ times).\r\n\r\nThis property is suggested to be added to SAREF4Ener_v2 to replace the time:TemporalEntity\
+      \ and/or time:DurationDescription."
+    mixins:
+    - has_duration
+    range: Duration
+    multivalued: true
+  has_active_operation_mode:
+    slot_uri: s4ener:hasActiveOperationMode
+    title: has active operation mode
+    description: A reference to the OperationMode that is presently active
+    range: OperationMode
+    multivalued: true
+  has_applied_event_action_consume:
+    slot_uri: s4ener:hasAppliedEventActionConsume
+    title: has applied event action consume
+    description: A relationship between the state of a load control event consume and the action to be
+      performed as a consequence of this event.
+    range: uriorcurie
+    multivalued: true
+  has_applied_event_action_produce:
+    slot_uri: s4ener:hasAppliedEventActionProduce
+    title: has applied event action produce
+    description: A relationship between the state of a load control event produce and the action to be
+      performed as a consequence of this event.
+    range: uriorcurie
+    multivalued: true
+  has_commodity:
+    slot_uri: s4ener:hasCommodity
+    title: Uses commodity
+    description: An indication of which commodity this Role is a consumer, producer, or storer of.
+    range: Commodity
+    multivalued: true
+  has_consequence_type:
+    slot_uri: s4ener:hasConsequenceType
+    title: Has Consequence Type
+    description: The consequence type associated with this Power Constraint, which can be Defer or Vanish.
+    range: PowerEnvelopeConsequenceType
+    multivalued: true
+  has_constraints:
+    slot_uri: s4ener:hasConstraints
+    title: has constraints
+    description: 'This property relates a Power Envelop Instruction or Profile to the constraints it needs
+      to follow. There are two types of constraints modelled: Power constraints and energy constraints.'
+    any_of:
+    - range: PowerConstraint
+    - range: EnergyConstraint
+    multivalued: true
+  has_contractual_consumption_max:
+    slot_uri: s4ener:hasContractualConsumptionMax
+    title: has contractual consumption Max
+    description: The relationship between the contractual power limit and the value indicating the max
+      limit consumption.
+    mixins:
+    - has_power_limit_consumption_max
+    range: PropertyValue
+    multivalued: true
+  has_contractual_production_max:
+    slot_uri: s4ener:hasContractualProductionMax
+    title: has contractual production Max
+    description: The relationship between the contractual power limit and the value indicating the max
+      limit production.
+    mixins:
+    - has_power_limit_production_max
+    range: PropertyValue
+    multivalued: true
+  has_cost:
+    slot_uri: s4ener:hasCost
+    title: has cost
+    description: ' Additional costs per second (e.g. wear, services) associated with this operation mode
+      in the currency defined by the ResourceManagerDetails , excluding the commodity cost. The range
+      is expressing uncertainty and is not linked to the operation_mode_factor.'
+    range: DataPoint
+    multivalued: true
+  has_creation_time:
+    slot_uri: s4ener:hasCreationTime
+    title: has creation time
+    description: "The time instant that defines the creation time of a data point or quantity or forecast\
+      \ or similar entities. This is not the same as the time at which the quantity is in effect. For\
+      \ example, if a temperature is forecasted today at 12:30 (creation time of the forecast) for the\
+      \ following day at 14:45 (time when the temperature is expected to be in effect), the this instant\
+      \ should be 12:30 of today.\r\n\r\nA creation time (instant). This is the point in time when the\
+      \ data point was created, which is not necessarily the time for which it is valid. In the case of\
+      \ soft-sensors or forecasters, a data point might have been created ahead of time, in the case of\
+      \ a direct observation a data point might created at its time of validity (or at the end of its\
+      \ validity time interval) and in the case of an archived value the data point might have been created\
+      \ after the fact."
+    range: DateTimeStamp
+    multivalued: true
+  has_data_point:
+    slot_uri: s4ener:hasDataPoint
+    title: has data point
+    description: This relationship connects a time series to data point.
+    range: DataPoint
+    multivalued: true
+  has_default_duration:
+    slot_uri: s4ener:hasDefaultDuration
+    title: has default duration
+    description: "The duration of a slot (SHALL be present in case of 'determined slot'). If a slot has\
+      \ a configurable lenght, this element SHALL reflect the currently configured lenght\r\n\r\nThis\
+      \ property is suggested to be added to SAREF4Ener_v2 to replace the time:TemporalEntity and/or time:DurationDescription."
+    mixins:
+    - has_duration
+    range: Duration
+    multivalued: true
+  has_demand_rate:
+    slot_uri: s4ener:hasDemandRate
+    title: has demand rate
+    description: The present demand rate that needs to be satisfied by the system
+    range: NumberRange
+    multivalued: true
+  has_demand_rate_forecast:
+    slot_uri: s4ener:hasDemandRateForecast
+    title: has average demand rate forecast
+    description: This property relates a Demand Driven Profile to a TimeSeries object that indicates a
+      forecast of the average demand rate.
+    range: TimeSeries
+    multivalued: true
+  has_device:
+    slot_uri: s4ener:hasDevice
+    title: has device
+    description: A relationship between a load control event (used to send overload warning severity level
+      and related load control commands) and the device interested by this event.
+    range: uriorcurie
+    multivalued: true
+  has_duration:
+    slot_uri: s4ener:hasDuration
+    title: 'duration in xsd '
+    description: "This property is added to the  time:DurationDescription class to allow to express time\
+      \ duration also as xsd:duration. This is necessary because in the EEBus/E@h model time is always\
+      \ expressed as xsd:duration. We use this property to express the following time information in the\
+      \ EEBus/E@h model:\r\n\r\n- the startTime of the power sequence (in the PowerSequence class). SHALL\
+      \ be present\r\n- the endTime of the power sequence (in the PowerSequence class). If the value is\
+      \ available, it SHALL be denoted here. Otherwise the element SHALL be omitted.\r\n- the startTime\
+      \ of observation as absolute or relative value (in the Observation class).\r\n- the endTime of observation\
+      \ as absolute or relative value (in the Observation class).\r\n\r\nThe duration is expected to be\
+      \ described as in xsd:duration"
+    range: Duration
+    multivalued: true
+  has_duration_min:
+    slot_uri: s4ener:hasDurationMin
+    title: duration minimum
+    description: "The minimum duration for some component\r\n\r\nThis property is suggested to be added\
+      \ in SAREF4ENER_V2"
+    mixins:
+    - has_duration
+    range: Duration
+    multivalued: true
+  has_duration_uncertainty:
+    slot_uri: s4ener:hasDurationUncertainty
+    title: Duration uncertainty
+    description: The uncertainty of the duration given in the s4ener:defaultDuration property.
+    mixins:
+    - has_duration
+    range: Duration
+    multivalued: true
+  has_earliest_start_time:
+    slot_uri: s4ener:hasEarliestStartTime
+    title: has earliest start time
+    description: "The earliest possible start time for a power sequence or a slot. Only 'xs:duration'\
+      \ value types SHALL be used to denote a relative time which relates to 'now' as time 0.\r\n\r\n\
+      Note: This element applies to the first repetition of the slot number only.\r\n\r\nThis property\
+      \ is suggested to be added to SAREF4Ener_v2 to replace the time:TemporalEntity and/or time:DurationDescription."
+    mixins:
+    - has_timestamp
+    range: DateTimeStamp
+    multivalued: true
+  has_effective_period:
+    slot_uri: s4ener:hasEffectivePeriod
+    title: has effective period
+    description: "This connects to the temporal entity which describes when (time interval) the quantity\
+      \ of this data point was, is, or will be in effect. This is the time interval which is covered by\
+      \ the forecast.\r\nThis should be equivalent to the time interval covered by the time-series that\
+      \ express the forecast."
+    range: Interval
+    multivalued: true
+  has_elapsed_slot_time:
+    slot_uri: s4ener:hasElapsedSlotTime
+    title: has elapsed slot time
+    description: If state is set to 'running' or 'paused' AND the slot is determined, this property CAN
+      contain the time the slot has already been in 'running' state (this also means the value remains
+      constant during a 'paused' state). Otherwise it SHALL be omitted.
+    range: TemporalEntity
+    multivalued: true
+  has_end_time:
+    slot_uri: s4ener:hasEndTime
+    title: end time
+    description: "The endTime of a power sequence. If the value is available, it SHALL be denoted here.\
+      \ Otherwise the element SHALL be omitted.\r\nThe end time of a slot MAY be stated in this element.\
+      \ The following equation SHALL apply: endTime - startTime = defaultDuration."
+    mixins:
+    - has_timestamp
+    range: Duration
+    multivalued: true
+  has_energy:
+    slot_uri: s4ener:hasEnergy
+    title: has energy
+    description: A relationship between a power sequence and its energy (in terms of value and unit of
+      measure)
+    range: PropertyValue
+    multivalued: true
+  has_envelope:
+    slot_uri: s4ener:hasEnvelope
+    title: has envelope
+    description: This property relates a Power Envelope to the Timeseries object that describes the envelope
+    range: TimeSeries
+    multivalued: true
+  has_event_state_consume:
+    slot_uri: s4ener:hasEventStateConsume
+    title: has event state consume
+    description: A relationship between the specification of the state of a load control event consume
+      and the value that this state can assume.
+    mixins:
+    - has_state
+    multivalued: true
+  has_event_state_produce:
+    slot_uri: s4ener:hasEventStateProduce
+    title: has event state produce
+    description: A relationship between the specification of the state of a load control event produce
+      and the value that this state can assume.
+    mixins:
+    - has_state
+    multivalued: true
+  has_execution_time:
+    slot_uri: s4ener:hasExecutionTime
+    title: has execution time
+    description: Start time of the instruction
+    mixins:
+    - has_timestamp
+    range: DateTimeStamp
+    multivalued: true
+  has_failsafe_consumption_max:
+    slot_uri: s4ener:hasFailsafeConsumptionMax
+    title: has failsafe consumption max
+    description: The relationship between the failsafe power limit and the value indicating its consumption.
+    mixins:
+    - has_power_limit_consumption_max
+    range: PropertyValue
+    multivalued: true
+  has_failsafe_duration:
+    slot_uri: s4ener:hasFailsafeDuration
+    title: has failsafe duration
+    description: The relationship between the failsafe power limit and its duration. This property indicates
+      the minimum duration the fail safe state will take once a device has entered that state.
+    mixins:
+    - has_duration
+    range: Duration
+    multivalued: true
+  has_failsafe_production_max:
+    slot_uri: s4ener:hasFailsafeProductionMax
+    title: has failsafe production max
+    description: The relationship between the failsafe power limit and the value indicating its production.
+    mixins:
+    - has_power_limit_production_max
+    range: PropertyValue
+    multivalued: true
+  has_fill_level_range:
+    slot_uri: s4ener:hasFillLevelRange
+    title: Fill Level Range
+    description: "The range of the fill level for which this FRBC.OperationModeElement applies. \r\n\r\
+      \nIf this concept is applied on a Storage it indicated the range in which a storage should remain."
+    range: NumberRange
+    multivalued: true
+  has_fill_level_target_profile:
+    slot_uri: s4ener:hasFillLevelTargetProfile
+    title: has fill level target profile
+    description: "The Fill Level Target Profile of the storage that the current Fill Rate Profile tries\
+      \ to accomodate for. \r\n\r\nNB. This cannot be modelled as a TimeSeries, since the x-axis is not\
+      \ time."
+    range: FillLevelTargetProfile
+    multivalued: true
+  has_fill_level_target_profile_element:
+    slot_uri: s4ener:hasFillLevelTargetProfileElement
+    title: has fill level target profile element
+    description: The various Fill Level Target Profile Elements detailing the Fill Level Target Profile
+      that the current Fill Level Based Profile tries to accomodate for.
+    range: FillLevelTargetProfileElement
+    multivalued: true
+  has_incentive:
+    slot_uri: s4ener:hasIncentive
+    title: has incentive
+    description: This property relates an IncentiveTable element, such as an IncentiveTableSlot or an
+      IncentiveTableTier to the boundaries that it consists of.
+    range: Incentive
+    multivalued: true
+  has_incentive_type:
+    slot_uri: s4ener:hasIncentiveType
+    title: has incentive type
+    description: The relationship between the tier and its incentive type
+    range: IncentiveType
+    multivalued: true
+  has_index:
+    slot_uri: s4ener:hasIndex
+    title: has index
+    description: Gives the index for elements that are an array in the S2 specification. Can be used regularly
+      as well as in RDF* manner on properties.
+    range: integer
+    multivalued: true
+  has_instruction_status:
+    slot_uri: s4ener:hasInstructionStatus
+    title: has Instruction Status
+    description: Present status of this instruction.
+    range: InstructionStatus
+    multivalued: true
+  has_interruption_end_time:
+    slot_uri: s4ener:hasInterruptionEndTime
+    title: has end time Interruption
+    description: The end time included in an Interruption Instruction message indicating when the interruption
+      should end.
+    mixins:
+    - has_timestamp
+    range: DateTimeStamp
+    multivalued: true
+  has_interruption_start_time:
+    slot_uri: s4ener:hasInterruptionStartTime
+    title: Has Interruption Start Time
+    description: The start time included in an Interruption Instruction message indicating when the interruption
+      should start.
+    mixins:
+    - has_timestamp
+    range: DateTimeStamp
+    multivalued: true
+  has_latest_end_time:
+    slot_uri: s4ener:hasLatestEndTime
+    title: has latest end time
+    description: "The latest possible end time for a power sequence or a slot. Only 'xs:duration' value\
+      \ types SHALL be used to denote a relative time which relates to 'now' as time 0.\r\n\r\nNote: This\
+      \ element applies to the first repetition of the slot number only.\r\n\r\nThis property is suggested\
+      \ to be added to SAREF4Ener_v2 to replace the time:TemporalEntity and/or time:DurationDescription."
+    mixins:
+    - has_timestamp
+    multivalued: true
+  has_leakage_behaviour:
+    slot_uri: s4ener:hasLeakageBehaviour
+    title: has leakage behaviour
+    description: The Leakage Behaviour associated with this storage.
+    range: LeakageBehaviour
+    multivalued: true
+  has_leakage_behaviour_element:
+    slot_uri: s4ener:hasLeakageBehaviourElement
+    title: has leakage behaviour element
+    description: This property relates the LeakageBehaviour description to the LeakageBehaviourElements
+      indicating the detailed description.
+    range: LeakageBehaviourElement
+    multivalued: true
+  has_lower_average_power:
+    slot_uri: s4ener:hasLowerAveragePower
+    title: has lower average power
+    description: The lower average power associated with this Energy constraint.
+    range: integer
+    multivalued: true
+  has_lower_boundary:
+    slot_uri: s4ener:hasLowerBoundary
+    title: has lower boundary
+    description: This property relates an IncentiveTableBoundary to the datapoint describing its lower
+      boundary or starting point at which this boundary becomes active.
+    range: DataPoint
+    multivalued: true
+  has_manufacturer_node_identification:
+    slot_uri: s4ener:hasManufacturerNodeIdentification
+    title: has manufacturer node identification
+    description: A node identification for the device as defined by the manufacturer. This could be used
+      for the identification of a device, even if it was removed from the network and re-joined later
+      with changed node address.
+    mixins:
+    - has_identifier
+    multivalued: true
+  has_max_duration:
+    slot_uri: s4ener:hasMaxDuration
+    title: has max duration
+    description: 'If a slot has a configurable duration, it SHALL be present and denote the maximum supported
+      configuration. Note: This element applies to the first repetition of the slot number only'
+    mixins:
+    - has_duration
+    range: Duration
+    multivalued: true
+  has_max_pause_before:
+    slot_uri: s4ener:hasMaxPauseBefore
+    title: max pause before
+    description: The maximum duration for which a device can be paused between the end of the previous
+      running sequence and the start of this one
+    mixins:
+    - has_duration
+    range: Duration
+    multivalued: true
+  has_min_duration:
+    slot_uri: s4ener:hasMinDuration
+    title: has min duration
+    description: 'If a slot has a configurable duration, it SHALL be present and denote the minimum supported
+      configuration. Note: This element applies to the first repetition of the slot number only.'
+    mixins:
+    - has_duration
+    range: Duration
+    multivalued: true
+  has_nominal_consumption:
+    slot_uri: s4ener:hasNominalConsumption
+    title: has nominal consumption Max
+    description: The relationship between the nominal power limit and the value indicating the max limit
+      consumption.
+    mixins:
+    - has_power_limit_consumption_max
+    range: PropertyValue
+    multivalued: true
+  has_nominal_production:
+    slot_uri: s4ener:hasNominalProduction
+    title: has nominal production Max
+    description: The relationship between the nominal power limit and the value indicating the max limit
+      production.
+    mixins:
+    - has_power_limit_production_max
+    range: PropertyValue
+    multivalued: true
+  has_number_range:
+    slot_uri: s4ener:hasNumberRange
+    title: has number range
+    description: This property provides the association between a power range and its number range.
+    range: NumberRange
+    multivalued: true
+  has_operation_mode:
+    slot_uri: s4ener:hasOperationMode
+    title: has Operation Modes
+    description: "This property indicates the s4ener:OperationMode inidicated by this Actuator, Instruction,\
+      \ or OperationModeProfile.\r\n\r\nThe SAREF4ENER extension expects the following classes to be used\
+      \ as domain:\r\n- saref:Actuator\r\n- s4ener:FRBCInstruction\r\n- s4ener:DDBCInstruction\r\n- s4ener:OMBCInstruction\r\
+      \n- s4ener:OperationModeProfile"
+    range: OperationMode
+    multivalued: true
+  has_operation_mode_element:
+    slot_uri: s4ener:hasOperationModeElement
+    title: Has Operation Mode Element
+    description: List of OperationModeElements, which describe the properties of this FRBC.OperationMode
+      depending on the fill_level. The fill_level_ranges of the items in the Array must be contiguous.
+    range: OperationModeElement
+    multivalued: true
+  has_operation_mode_factor:
+    slot_uri: s4ener:hasOperationModeFactor
+    title: Has Operation Mode Factor
+    description: "The number indicates the factor with which the FRBC.OperationMode or OMBC.OperationMode\
+      \ is usedconfigured. The factor should be greater than or equal than 0 and less or equal to 1.\r\
+      \n\r\nWithin the SAREF4ENER extension, this property is to be used on the following classes:\r\n\
+      - s4ener:OMBCInstruction\r\n- s4ener:OperationMode\r\n- saref:Actuator\r\n- s4ener:FRBCInstruction\r\
+      \n- s4ener:DDBCInstruction"
+    range: decimal
+    multivalued: true
+  has_pause_duration_max:
+    slot_uri: s4ener:hasPauseDurationMax
+    title: has pause duration max
+    description: The maximum duration a power sequence can pause after the end of an activity.
+    mixins:
+    - has_duration
+    range: Duration
+    multivalued: true
+  has_pause_duration_min:
+    slot_uri: s4ener:hasPauseDurationMin
+    title: has pause duration min
+    description: The minimum duration a power sequence can pause after the end of an activity.
+    mixins:
+    - has_duration
+    range: Duration
+    multivalued: true
+  has_power_envelope:
+    slot_uri: s4ener:hasPowerEnvelope
+    title: has power envelope
+    description: The PEBC.PowerEnvelope(s) that should be followed by the Resource Manager. There shall
+      be at least one PEBC.PowerEnvelope, but at most one PEBC.PowerEnvelope for each Commodity.
+    range: PowerEnvelope
+    multivalued: true
+  has_power_envelope_element:
+    slot_uri: s4ener:hasPowerEnvelopeElement
+    title: has power envelope element
+    description: This property relates a PowerEnvelopeProfile to the various specific PowerEnvelops contained
+      in the profile.
+    range: PowerEnvelope
+    multivalued: true
+  has_power_limit_consumption_max:
+    slot_uri: s4ener:hasPowerLimitConsumptionMax
+    title: has power limit consumption Max
+    description: The relationship between the power limit and the value indicating the max limit consumption.
+    range: PropertyValue
+    multivalued: true
+  has_power_limit_duration:
+    slot_uri: s4ener:hasPowerLimitDuration
+    title: has power limit duration
+    description: The relationship between the power limit and its duration. Power limit may come with
+      a time period of validity based on duration
+    mixins:
+    - has_duration
+    range: Duration
+    multivalued: true
+  has_power_limit_production_max:
+    slot_uri: s4ener:hasPowerLimitProductionMax
+    title: has power limit production Max
+    description: The relationship between the power limit and the value indicating the max limit production.
+    range: PropertyValue
+    multivalued: true
+  has_power_limit_state:
+    slot_uri: s4ener:hasPowerLimitState
+    title: has power limit state
+    description: The relationship between the power limit state and its state (active/ inactive).
+    range: uriorcurie
+    multivalued: true
+  has_power_plan:
+    slot_uri: s4ener:hasPowerPlan
+    title: has power plan
+    description: A reference to a power plan indicating the preliminary or committed usage of the energy
+      smart device for a specific period.
+    range: PowerPlan
+    multivalued: true
+  has_power_range:
+    slot_uri: s4ener:hasPowerRange
+    title: has power ranges
+    description: The power produced or consumed by this operation mode. The start of each PowerRange is
+      associated with an operation_mode_factor of 0, the end is associated with an operation_mode_factor
+      of 1. In the array there must be at least one PowerRange, and at most one PowerRange per Commodity.
+    range: PowerRange
+    multivalued: true
+  has_power_sequence:
+    slot_uri: s4ener:hasPowerSequence
+    title: has power sequence
+    description: The various Sequences contained in a Power Sequence Container among which the EMS can
+      choose the proper PowerSequence for the current energy demands.
+    range: PowerSequence
+    multivalued: true
+  has_power_sequence_container:
+    slot_uri: s4ener:hasPowerSequenceContainer
+    title: has power sequence container
+    description: The various power sequence containers contained within an S2 Power Profile. The containers
+      have to executed one after the other. Each container contains various Power Sequence anong which
+      the EMS can choose the appropriate Power Sequence for the current energy demands.
+    range: PowerSequenceContainer
+    multivalued: true
+  has_power_sequence_element:
+    slot_uri: s4ener:hasPowerSequenceElement
+    title: has power sequence element
+    description: A connection between the Power Sequence and the elements (or Slots) describing the exact
+      contents.
+    range: PowerSequenceElement
+    multivalued: true
+  has_power_sequence_status:
+    slot_uri: s4ener:hasPowerSequenceStatus
+    title: has power sequence status
+    description: This property indicates the current status of this Power Sequence.
+    range: PowerSequenceStatus
+    multivalued: true
+  has_power_source:
+    slot_uri: s4ener:hasPowerSource
+    title: Power source
+    description: 'Indicates the power source of a device. Possible values are e.g. mainsSinglePhase or
+      battery '
+    range: PowerSource
+    multivalued: true
+  has_previous_operation_mode:
+    slot_uri: s4ener:hasPreviousOperationMode
+    title: has previous operation mode
+    description: The previous operation mode this device was in
+    range: OperationMode
+    multivalued: true
+  has_price:
+    slot_uri: saref:hasPrice
+    range: uriorcurie
+    multivalued: true
+  has_quantile:
+    slot_uri: s4ener:hasQuantile
+    title: has quantile
+    description: 'Used to define a quantile for example on a data point of a quantile time series. The
+      quantile must be a ratio, usually a percentage. In a quantile forecast the hasQuantile property
+      cannot be empty. his property assigns to the data point the percentage of values that are below
+      this value. In other words, a data point with quantile 90 indicates that 90 % of other measurements
+      are (estimated to be) lower. '
+    range: decimal
+    multivalued: true
+  has_recipient:
+    slot_uri: s4ener:hasRecipient
+    title: has recipient
+    description: This property can be used to connect a flexibility offer or/and flexibility request to
+      a foaf:agent or saref:Device.
+    range: uriorcurie
+    multivalued: true
+  has_remaining_pause_time:
+    slot_uri: s4ener:hasRemainingPauseTime
+    title: has remaining pause time
+    description: 'The duration that the current slot (s4ee:activeSlotNumber) permits being paused. This
+      element SHALL ONLY be present if the power sequence is interruptible. Otherwise, it SHALL be omitted.
+      In case the power sequence is interruptible the following rules apply: If the element is absent
+      this means there is no explicit pause duration restriction for the current slot; a value of 0s denoted
+      the slot does not permit being paused.'
+    range: Duration
+    multivalued: true
+  has_remaining_slot_time:
+    slot_uri: s4ener:hasRemainingSlotTime
+    title: has remaining slot time
+    description: If state is set to 'running' or 'paused' AND the slot is determined, this element SHALL
+      contain the time the slot still needs to be in 'running' state (this also means the value remains
+      constant during a 'paused' state). Otherwise it SHALL be omitted.
+    range: Duration
+    multivalued: true
+  has_resume_cost_estimated:
+    slot_uri: s4ener:hasResumeCostEstimated
+    title: Resume cost estimated
+    description: In a power sequence the additional costs for the resumption of a device to its normal
+      operation (after a pause).
+    mixins:
+    - has_property_value
+    multivalued: true
+  has_resume_energy_estimated:
+    slot_uri: s4ener:hasResumeEnergyEstimated
+    title: Resume energy estimated
+    description: In a power sequence the additional energy for the resumption of a device to its normal
+      operation (after a pause).
+    mixins:
+    - has_property_value
+    multivalued: true
+  has_role:
+    slot_uri: s4ener:hasRole
+    title: performs role
+    description: Each Resource Manager provides one or more energy Roles
+    range: Role
+    multivalued: true
+  has_role_type:
+    slot_uri: s4ener:hasRoleType
+    title: role type
+    description: The type of this specific role
+    range: RoleType
+    multivalued: true
+  has_running_costs:
+    slot_uri: s4ener:hasRunningCosts
+    title: has running costs
+    description: Additional costs per second (e.g. wear, services) associated with this operation mode
+      in the currency defined by the ResourceManagerDetails , excluding the commodity cost. The range
+      is expressing uncertainty and is not linked to the operation_mode_factor.
+    range: NumberRange
+    multivalued: true
+  has_scope_type:
+    slot_uri: s4ener:hasScopeType
+    title: has scope type
+    description: The relationship between the incentive table and the scope type
+    range: ScopeType
+    multivalued: true
+  has_slot_value:
+    slot_uri: s4ener:hasSlotValue
+    title: has slot value
+    description: This property is intended to specify the power or energy value of a slot in a power sequence
+      as part of a power profile.
+    range: PropertyValue
+    multivalued: true
+  has_standard_deviation:
+    slot_uri: s4ener:hasStandardDeviation
+    title: has standard deviation
+    description: The standard deviation (i.e. the square root of the average of the squared deviations
+      of the values subtracted from their average value) can be described with this property.
+    range: decimal
+    multivalued: true
+  has_start_time:
+    slot_uri: s4ener:hasStartTime
+    title: has start time
+    description: The startTime of a power sequence or slot. SHALL be present
+    mixins:
+    - has_timestamp
+    range: DateTimeStamp
+    multivalued: true
+  has_storage:
+    slot_uri: s4ener:hasStorage
+    title: has storage
+    description: The storage regulated by the related Fill Rate Profile.
+    range: Storage
+    multivalued: true
+  has_supply_range:
+    slot_uri: s4ener:hasSupplyRange
+    title: Has Supply Range
+    description: The SupplyRange this OperationMode of a Demand Driven Profile can deliver for the CEM
+      to match the DemandRate. The start of the NumberRange is associated with an operation_mode_factor
+      of 0, the end is associated with an operation_mode_factor of 1.
+    range: NumberRange
+    multivalued: true
+  has_task_identifier:
+    slot_uri: s4ener:hasTaskIdentifier
+    title: has task identifier
+    description: Used by a device that wants to uniquely identify reoccurring types of power sequences.
+      For example, specific types of washing cycles with specific parameters SHOULD have the same s4ener:taskIdentifier
+      value every time they are offered using power sequences.
+    mixins:
+    - has_identifier
+    multivalued: true
+  has_temporal_resolution:
+    slot_uri: s4ener:hasTemporalResolution
+    title: has temporal resolution
+    description: The resolution is the distance between two observation timestamps. This only makes sense
+      if the observations are equidistant.
+    range: Duration
+    multivalued: true
+  has_tier:
+    slot_uri: s4ener:hasTier
+    title: has tier incentive
+    description: The relationship between the incentive table and the tiers it consists of
+    range: uriorcurie
+    multivalued: true
+  has_timer:
+    slot_uri: s4ener:hasTimer
+    title: Has Timer
+    description: The set of timers that are available in this Actuator or OperationModeProfile
+    range: Timer
+    multivalued: true
+  has_transition:
+    slot_uri: s4ener:hasTransition
+    title: has transition
+    description: The transitions between various saref:States or s4ener:OperationModes that either the
+      Actuator or the OperationModeProfile can support.
+    range: Transition
+    multivalued: true
+  has_transition_costs:
+    slot_uri: s4ener:hasTransitionCosts
+    title: has transition costs
+    description: Absolute costs for going through this Transition in the currency as described in the
+      ResourceManagerDetails.
+    range: decimal
+    multivalued: true
+  has_transition_duration:
+    slot_uri: s4ener:hasTransitionDuration
+    title: Transition Duration
+    description: Indicates the time between the initiation of this Transition, and the time at which the
+      device behaves according to the Operation Mode which is defined in the appropriate data element.
+      When no value is provided it is assumed the transition duration is negligible.
+    mixins:
+    - has_duration
+    range: Duration
+    multivalued: true
+  has_transition_timestamp:
+    slot_uri: s4ener:hasTransitionTimestamp
+    title: transition Timestamp
+    description: Time at which the transition from the previous Operation Mode was initiated. This value
+      shall always be provided, unless the active OperationMode is the first OperationMode the Resource
+      Manager is aware of.
+    mixins:
+    - has_timestamp
+    range: DateTimeStamp
+    multivalued: true
+  has_update_rate:
+    slot_uri: s4ener:hasUpdateRate
+    title: has update rate
+    description: "The rate at which a data point or time-series or forecast or other data entity is being\
+      \ updated.\r\n\r\nIf the time series gets regularly updated, then the time between two updates can\
+      \ be recorded here."
+    range: Duration
+    multivalued: true
+  has_upper_average_power:
+    slot_uri: s4ener:hasUpperAveragePower
+    title: has upper average power
+    description: The upper average power of an Energy constraint of a Power Envelope profile.
+    range: integer
+    multivalued: true
+  has_upper_boundary:
+    slot_uri: s4ener:hasUpperBoundary
+    title: has upper boundary
+    description: This property relates a boundary to its upper boundary or the value at which this incentive
+      becomes inactive. This value is optional, because the upper boundary can be inferred from the lower
+      boundary of the next boundary.
+    range: DataPoint
+    multivalued: true
+  has_usage:
+    slot_uri: s4ener:hasUsage
+    title: has usage
+    description: This property provides the possibility to add some additional information about the usage
+      of a data-point or time-series. For example, a data point or time series can be used as an upper
+      limit, a lower limit, a baseline, a maximum versus minimum value, or a consumption versus a production
+      value.
+    range: Usage
+    multivalued: true
+  has_usage_forecast:
+    slot_uri: s4ener:hasUsageForecast
+    title: Has Usage Forecast
+    description: "Indicates the usage forecast that may be relevant to decide the energy flexibility strategy\
+      \ following a specific flexibility profile, specifically a fill rate based profile or incentive\
+      \ table.\r\n\r\nIn SAREF4ENER this property is intended to be applied on an s4ener:FlexibilityProfile."
+    range: TimeSeries
+    multivalued: true
+  has_value_source:
+    slot_uri: s4ener:hasValueSource
+    title: has value source
+    description: 'Indicates the source (origin/foundation) of the observation forecasted values for a
+      power sequence. If absent, the source is undefined. Remark: This element shall express the reliability
+      of the forecast.'
+    range: ValueSource
+    multivalued: true
+  includes:
+    slot_uri: s4ener:includes
+    title: includes
+    description: This property can be used to connect the flexibility offer and/or flexibility request
+      to the flexibility profile. Additionally, it can be used to specify the s4ener:datapoint, s4ener:timeseries
+      and ic-fc:forecast included in the flexibility offer and/or  flexibility request.
+    range: uriorcurie
+    multivalued: true
+  is_active:
+    slot_uri: s4ener:isActive
+    title: is active
+    description: Indicates whether the power limit is currently active
+    range: boolean
+    multivalued: true
+  is_actuated_by:
+    slot_uri: s4ener:isActuatedBy
+    title: is actuated by
+    description: A reference to an (external) actuator that can potentially activate this profile or where
+      the instruction originates from.
+    range: Actuator
+    multivalued: true
+  is_blocked_by:
+    slot_uri: s4ener:isBlockedBy
+    title: is blocked by
+    description: The Timers that block this Transition from initiating while at least one of these Timers
+      is not yet finished
+    range: Timer
+    multivalued: true
+  is_bound_to:
+    slot_uri: s4ener:isBoundTo
+    title: is bound to
+    description: The relationship between a device and its contractual power limit
+    range: ContractualPowerLimit
+    multivalued: true
+  is_changeable:
+    slot_uri: s4ener:isChangeable
+    title: is changeable
+    description: "A relationship indicating that this element can be changed by its operator. The boolean\
+      \ value indicates whether it is indeed changeable.\r\n\r\nIn the SAREF4ENER extension this property\
+      \ is intended for PowerLimits and IncentiveTable elements, such as the IncentiveTableProfile, IncentiveTableSlot,\
+      \ and the IncentiveTableTier."
+    range: boolean
+    multivalued: true
+  is_finished_at:
+    slot_uri: s4ener:isFinishedAt
+    title: is finished at
+    description: Indicates when the Timer will be finished. If the DateTimeStamp is in the future, the
+      timer is not yet finished. If the DateTimeStamp is in the past, the timer is finished. When the
+      timer was never started, the value can be an arbitrary DateTimeStamp in the past.
+    mixins:
+    - has_timestamp
+    range: DateTimeStamp
+    multivalued: true
+  is_interruptible:
+    slot_uri: s4ener:isInterruptible
+    title: is interruptible
+    description: This property indicates whether the PowerSequence is interruptible.
+    range: boolean
+    multivalued: true
+  is_limited_with:
+    slot_uri: s4ener:isLimitedWith
+    title: is limited with
+    description: The relationship between device and failsafe power limit
+    range: FailsafePowerLimit
+    multivalued: true
+  is_obligatory:
+    slot_uri: s4ener:isObligatory
+    title: is obligatory
+    description: A relationship between the power limit and the boolean value indicating whether the power
+      limit is obligatory
+    range: boolean
+    multivalued: true
+  is_pausable:
+    slot_uri: s4ener:isPausable
+    title: is pausable
+    description: Specifies if the power sequence is pausable.
+    range: boolean
+    multivalued: true
+  is_protected_by:
+    slot_uri: s4ener:isProtectedBy
+    title: is protected by
+    description: The relationship between the device and the nominal power limit
+    range: NominalPowerLimit
+    multivalued: true
+  is_stoppable:
+    slot_uri: s4ener:isStoppable
+    title: is stoppable
+    description: Specifies if the power sequence is stoppable.
+    range: boolean
+    multivalued: true
+  is_writable:
+    slot_uri: s4ener:isWritable
+    title: is writable
+    description: This Boolean value indicates whether this power plan is writable or fixed.
+    range: boolean
+    multivalued: true
+  leakage_rate:
+    slot_uri: s4ener:leakageRate
+    title: Leakage Rate
+    description: Indicates how fast the momentary fill level will decrease per second due to leakage within
+      the given range of the fill level.
+    range: PropertyValue
+    multivalued: true
+  limit_type:
+    slot_uri: s4ener:limitType
+    title: Limit Type
+    description: Indicates if this ranges applies to the upper limit or the lower limit.
+    range: PowerEnvelopeLimitType
+    multivalued: true
+  max_cycles_per_day:
+    slot_uri: s4ener:maxCyclesPerDay
+    title: max cycles per day
+    description: States the maximum amount of starts a power sequence (of a device) allows per day.
+    range: UnsignedInt
+    multivalued: true
+  node_remote_controllable:
+    slot_uri: s4ener:nodeRemoteControllable
+    title: node remote controllable
+    description: Indicates whether the power profile of a device is configured for remote control (e.g.,
+      by an energy management system).This refers to the selection chosen by the user on the remote control
+      feature of the device. If nodeRemoteControllable is equal to FALSE, all the supported power sequences
+      shall set the sequenceRemoteControllable property to FALSE. If nodeRemoteControllable is equal to
+      TRUE, at least one power sequence shall be remotely controllable by setting the sequenceRemoteControllable
+      property to TRUE.
+    range: boolean
+    multivalued: true
+  optional_slot:
+    slot_uri: s4ener:optionalSlot
+    title: optional slot
+    description: 'Indicates whether a slot is optional (if set to TRUE). Otherwise, if a slot is mandatory,
+      SHALL be omitted or set to FALSE. Note: This element applies to every repetition of the slot number.'
+    range: boolean
+    multivalued: true
+  present_fill_level:
+    slot_uri: s4ener:presentFillLevel
+    title: present fill level
+    description: A saref:PropertyValue with a percentage value indicating the fill level of the storage.
+    range: PropertyValue
+    multivalued: true
+  produced_by:
+    slot_uri: s4ener:producedBy
+    title: produced by
+    description: "A relation between an entity (datapoint, message, timeseries, instruction) that has\
+      \ been produced by a device or other agent.\r\n  \r\n  In the context of SAREF4ENER this property\
+      \ is intended for s4ener:DataPoint, s4ener:TimeSeries, and the various types of flexibility instructions,\
+      \ FlexOffers and FlexRequests."
+    any_of:
+    - range: Agent
+    - range: Device
+    multivalued: true
+  progress:
+    slot_uri: s4ener:progress
+    title: progress
+    description: Time that has passed since the selected sequence has started. A value must be provided,
+      unless no sequence has been selected or the selected sequence hasn't started yet.
+    range: Duration
+    multivalued: true
+  range_boundary:
+    slot_uri: s4ener:rangeBoundary
+    title: range boundary
+    description: Boundaries of the power range of this PEBC.AllowedLimitRange. The CEM is allowed to choose
+      values within this range for the power envelope for the limit as described in limit_type. The start
+      of the range shall be smaller or equal than the end of the range.
+    range: NumberRange
+    multivalued: true
+  receives:
+    slot_uri: s4ener:receives
+    title: receives
+    description: A relationship between a device (e.g., an appliance or a smart meter) and a load control
+      event
+    range: uriorcurie
+    multivalued: true
+  receives_power_limit:
+    slot_uri: s4ener:receivesPowerLimit
+    title: receives power limit
+    description: The relationship between a power limit profile and the power limit it has received for
+      its device to follow
+    range: PowerLimit
+    multivalued: true
+  relates_to_commodity:
+    slot_uri: s4ener:relatesToCommodity
+    title: relates to commodity quantity
+    description: "Relates the classes to the various commodities introduced by the S2 standard.\r\n\r\n\
+      In the SAREF4ENER extension this property is intended for the following:\r\n- s4ener:PowerRange\r\
+      \n- s4ener:AllowedLimitRange\r\n- s4ener:EnergyConstraint\r\n- s4ener:PowerEnvelope"
+    range: Commodity
+    multivalued: true
+  relates_to_offer:
+    slot_uri: s4ener:relatesToOffer
+    title: relates to offer
+    description: The relationship between the s4ener:FlexibilityInstruction and the flexibility offer.
+    range: FlexOffer
+    multivalued: true
+  relates_to_power_profile:
+    slot_uri: s4ener:relatesToPowerProfile
+    title: Relates to power profile
+    description: ID of the PPBC.PowerProfileDefinition of which the PPBC.PowerSequence is being selected
+      and scheduled by the CEM.
+    range: PowerProfile
+    multivalued: true
+  relates_to_power_profile_sequence:
+    slot_uri: s4ener:relatesToPowerProfileSequence
+    title: Relates to power profile sequence
+    description: ID of the PPBC.PowerSequence that is being selected and scheduled by the CEM.
+    range: PowerSequence
+    multivalued: true
+  relates_to_power_profile_sequence_container:
+    slot_uri: s4ener:relatesToPowerProfileSequenceContainer
+    title: Relates to power profile sequence container
+    description: ID of the PPBC.PowerSequnceContainer of which the PPBC.PowerSequence is being selected
+      and scheduled by the CEM.
+    range: PowerSequenceContainer
+    multivalued: true
+  relates_to_request:
+    slot_uri: s4ener:relatesToRequest
+    title: relates to request
+    description: The relationship between the flexibility offer and flexibility request
+    range: FlexRequest
+    multivalued: true
+  repetitions_total:
+    slot_uri: s4ener:repetitionsTotal
+    title: repetition total
+    description: 'Contains the total number of repetitions, if a power sequence repeats its sequence of
+      slots. Absence of the element is equal to a presence with a value of 0 (zero). SHALL be absent if
+      the value is 1. '
+    range: UnsignedInt
+    multivalued: true
+  requires_update:
+    slot_uri: s4ener:requiresUpdate
+    title: requiresUpdate
+    description: "The relationship between the incentive table element and the boolean data indicating\
+      \ whether the incentive table requires an update.\r\n\r\nIn the SAREF4ENER extension this property\
+      \ is intended for the following classes:\r\n- IncentiveTableProfile\r\n- IncentiveTableTier\r\n\
+      - IncentiveTableSlot"
+    range: boolean
+    multivalued: true
+  s4ener_has_value:
+    slot_uri: s4ener:hasValue
+    title: has value
+    description: Power value expressed in the unit associated with the Commodity of the Power Value.
+    range: decimal
+    multivalued: true
+  sequence_remote_controllable:
+    slot_uri: s4ener:sequenceRemoteControllable
+    title: sequence remote controllable
+    description: Denotes whether a power sequence is modifiable (if value is TRUE) or not (if value is
+      FALSE). Modifiability is required to configure power sequences and slots. It is also required to
+      change a power sequence state.
+    range: boolean
+    multivalued: true
+  serial_number:
+    slot_uri: s4ener:serialNumber
+    title: serial number
+    description: Indicates the serial number of a device as defined by the manufacturer. Usually the same
+      as printed on the case.
+    range: string
+    multivalued: true
+  slot_activated:
+    slot_uri: s4ener:slotActivated
+    title: slot activated
+    description: If a slot is optional, represents the current status of the slot (true = the slot will
+      be executed, false = the slot will not be executed). If the slot is not optional, this element SHALL
+      be absent.
+    range: boolean
+    multivalued: true
+  slot_number:
+    slot_uri: s4ener:slotNumber
+    title: slot number
+    description: Provides a unique slot identifier for a certain power sequence
+    range: UnsignedInt
+    multivalued: true
+  software_revision:
+    slot_uri: s4ener:softwareRevision
+    title: software revision
+    description: Indicates the software revision of a device as defined by the manufacturer.
+    range: string
+    multivalued: true
+  start_of_range:
+    slot_uri: s4ener:startOfRange
+    title: start of range
+    description: This property indicates the start of a number range.
+    range: PropertyValue
+    multivalued: true
+  starts_timer:
+    slot_uri: s4ener:startsTimer
+    title: Starts Timer
+    description: List of IDs of Timers that will be (re)started when this transition is initiated
+    range: Timer
+    multivalued: true
+  supports_reselection:
+    slot_uri: s4ener:supportsReselection
+    title: supports reselection
+    description: If set toTRUE, the power profile of a device does not restrict the number of power sequence
+      re-selections by the CEM, i.e. within a given alternative the CEM may first choose one power sequence,
+      alter the selection by configuring another sequence later on, then alter the selection again, etc.
+      (provided the process rules and data still permit configuration). If supportsReselection is set
+      to FALSE, the device permits the CEM to select a power sequence of an alternative only once.
+    range: boolean
+    multivalued: true
+  supports_single_slot_scheduling_only:
+    slot_uri: s4ener:supportsSingleSlotSchedulingOnly
+    title: supports single slot scheduling only
+    description: If set toTRUE, the power profile of a device does NOT permit the modification of more
+      than one slot per configuration command.
+    range: boolean
+    multivalued: true
+  to_operation_mode:
+    slot_uri: s4ener:toOperationMode
+    title: to state operation mode
+    description: ID of the OperationMode (exact type differs per ControlType) that will be switched to.
+    range: OperationMode
+    multivalued: true
+  total_sequences_count_max:
+    slot_uri: s4ener:totalSequencesCountMax
+    title: total sequences count max
+    description: Represents the total number of power sequences supported by the power profile of a device
+    range: UnsignedInt
+    multivalued: true
+  triggers_event_action_consume:
+    slot_uri: s4ener:triggersEventActionConsume
+    title: triggers event action consume
+    description: A relationship between a load control event and the consume action triggered by this
+      event
+    range: uriorcurie
+    multivalued: true
+  triggers_event_action_produce:
+    slot_uri: s4ener:triggersEventActionProduce
+    title: triggers event action produce
+    description: A relationship between a load control event and the produce action triggered by this
+      event
+    range: uriorcurie
+    multivalued: true
+  value_tendency:
+    slot_uri: s4ener:valueTendency
+    title: value tendency
+    description: Indicates whether the tendency of an observation is rising, stable, or falling.
+    range: ValueTendency
+    multivalued: true
+  vendor_code:
+    slot_uri: s4ener:vendorCode
+    title: vendor code
+    description: Provides a code for the vendor of the device as defined by the manufacturer.
+    range: string
+    multivalued: true
+  vendor_name:
+    slot_uri: s4ener:vendorName
+    title: vendor name
+    description: Provides the name of the vendor of the device as defined by the manufacturer.
+    range: string
+    multivalued: true
+classes:
+  ActuatorLevel:
+    class_uri: s4ener:ActuatorLevel
+    title: Actuator level
+    description: Independent from the ActuatorSwitch class, the ActuatorLevel class enables a user or
+      application to model LEVEL commands (start, up, percentageAbsolute, relative, etc.). This can be
+      used to dim a light, set the speed of an electric motor, etc.
+    mixins:
+    - Actuator
+  ActuatorSwitch:
+    class_uri: s4ener:ActuatorSwitch
+    title: Actuator switch
+    description: Basic on/off operations on a simple actuator can be modelled with the ActuatorSwitch
+      class. Whether the function turns a device itself ON or OFF, or whether it switches a specific feature,
+      depends on the implementation. For example, one could model the super freeze program of a freezer
+      using ActuatorSwitch class. An ON command would then activate the super freeze program and an OFF
+      command would deactivate it. This example shall just give an idea how ActuatorSwitch can be used
+      for more purposes than only turning devices on and off.
+    mixins:
+    - Actuator
+  Agent:
+    class_uri: foaf:Agent
+  AllowedLimitRange:
+    class_uri: s4ener:AllowedLimitRange
+    title: Allowed limit range
+    description: The actual constraints of an Power Envelope Based Profile.
+    slots:
+    - limit_type
+    - range_boundary
+  AlternativesGroup:
+    class_uri: s4ener:AlternativesGroup
+    title: Alternatives group
+    description: A collection of power sequences for a certain profile
+    slots:
+    - belongs_to
+    - consists_of
+    - has_identifier
+    slot_usage:
+      belongs_to:
+        range: PowerProfile
+        required: true
+        multivalued: false
+      consists_of:
+        range: PowerSequence
+        required: true
+      has_identifier:
+        required: true
+        multivalued: false
+        range: UnsignedInt
+  ContractualPowerLimit:
+    class_uri: s4ener:ContractualPowerLimit
+    title: Contractual Power Limit
+    description: The contractual power limit of a device
+    mixins:
+    - PowerLimit
+    slots:
+    - has_contractual_consumption_max
+    - has_contractual_production_max
+  DDBCInstruction:
+    class_uri: s4ener:DDBCInstruction
+    title: Demand Driven Based Control Instruction
+    description: An Instruction as specified for an Demand Driven Based Control Profile.
+    mixins:
+    - FlexibilityInstruction
+    slots:
+    - is_actuated_by
+  DataPoint:
+    class_uri: s4ener:DataPoint
+    title: Data point
+    description: "A data point is a quantity that is extended with various pieces of process information,\
+      \ namely\r\n \r\n- A creation time (instant). This is the point in time when the data point was\
+      \ created, which is not necessarily the time for which it is valid. In the case of soft-sensors\
+      \ or forecasters, a data point might have been created ahead of time, in the case of a direct observation\
+      \ a data point might created at its time of validity (or at the end of its validity time interval)\
+      \ and in the case of an archived value the data point might have been created after the fact.\r\n\
+      \r\n - A validity time (temporal entity) which will be named \"time stamp\". The validity time is\
+      \ the instant or interval in time in which a specific quantity is in effect. For example a room\
+      \ temperature might be measured at 12:00, which means it is in effect at this very instant. A specific\
+      \ amount of energy might me expended within the time-slot between 12:30 and 12:45, which means that\
+      \ the energy observation is in effect during this time interval.\r\n\r\n - A location or topological\
+      \ association. For example, an observation might be taken in a specific room, a power avarage might\
+      \ have been measured by a specific meter, a forecast might be valid for a specific region or grid\
+      \ segment. This association is therefore not always a location."
+    mixins:
+    - Observation
+    slots:
+    - belongs_to_time_series
+    - has_creation_time
+    - has_effective_period
+    - has_quantile
+    - has_update_rate
+    - has_usage
+    slot_usage:
+      has_creation_time:
+        multivalued: false
+      has_effective_period:
+        required: true
+        multivalued: false
+        range: Interval
+      has_quantile:
+        multivalued: false
+      has_update_rate:
+        multivalued: false
+      has_usage:
+        range: Usage
+  DemandDrivenProfile:
+    class_uri: s4ener:DemandDrivenProfile
+    title: Demand driven control
+    description: The Flexibility Profile following the Demand Driven strategy.
+    mixins:
+    - FlexibilityProfile
+    slots:
+    - has_demand_rate
+    - has_demand_rate_forecast
+    - is_actuated_by
+  DurationDescription:
+    class_uri: time:DurationDescription
+  EndInterruptionInstruction:
+    class_uri: s4ener:EndInterruptionInstruction
+    title: End Interruption Instruction
+    description: An Instruction message indicating when an interruption can end.
+    mixins:
+    - InterruptionInstruction
+  EndTimeDurationDescription:
+    class_uri: s4ener:EndTimeDurationDescription
+    title: End time duration Description
+    description: The duration description for the end time duration temporal entities
+    mixins:
+    - DurationDescription
+  EnergyConstraint:
+    class_uri: s4ener:EnergyConstraint
+    title: Energy Constraint
+    description: The energy constraint described in the Allowed Limit Range or Power Limit.
+    slots:
+    - allowed_limit_range
+    - has_lower_average_power
+    - has_upper_average_power
+    - range_boundary
+  FRBCInstruction:
+    class_uri: s4ener:FRBCInstruction
+    title: Fill Rate Based Control Instruction
+    description: 'A Fill Rate Based Instruction message. '
+    mixins:
+    - FlexibilityInstruction
+    slots:
+    - is_actuated_by
+  FailsafePowerLimit:
+    class_uri: s4ener:FailsafePowerLimit
+    title: Failsafe Power Limit
+    description: In case the communication between a device and the energy manager is interrupted, fail-safe
+      values apply  and the device enters fail-safe state until the communication is re-established.
+    mixins:
+    - PowerLimit
+    slots:
+    - has_failsafe_consumption_max
+    - has_failsafe_production_max
+  FailsafeState:
+    class_uri: s4ener:FailsafeState
+    title: Fail-safe state
+    description: State that indicates that the device currently is in its Fail-safe state. This means
+      that it has lost its connection to a central energy manager. This may result in the device following
+      stricter power limits.
+    slots:
+    - has_failsafe_duration
+  FillLevelTargetProfile:
+    class_uri: s4ener:FillLevelTargetProfile
+    title: Fill level target profile
+    description: The target profile that a fill rate based control flexibility profile tries to follow.
+    slots:
+    - has_fill_level_target_profile_element
+  FillLevelTargetProfileElement:
+    class_uri: s4ener:FillLevelTargetProfileElement
+    title: Fill level target profile element
+    description: A description of the various Elements detailing the Fill Level Target Profile consists.
+    slots:
+    - has_fill_level_range
+  FillRateProfile:
+    class_uri: s4ener:FillRateProfile
+    title: Fill rate control
+    description: A flexibility profile specified through a Fill Rate Based Profile.
+    mixins:
+    - FlexibilityProfile
+    slots:
+    - has_storage
+    - is_actuated_by
+  FlexOffer:
+    class_uri: s4ener:FlexOffer
+    title: Flex offer
+    description: It  allows to represent a flexibility offer (or schedule) as a combination of multiple
+      time-series, data-points and forecasts. For example, we can create a flexibility offer that includes
+      a time-series ex:T-power of power values, combined with a time-series ex:T-costs of associated costs.
+    slots:
+    - has_creation_time
+    - has_effective_period
+    - has_recipient
+    - includes
+    - produced_by
+    - relates_to_request
+    slot_usage:
+      has_creation_time:
+        multivalued: false
+      has_effective_period:
+        multivalued: false
+        range: Interval
+      has_recipient:
+        any_of:
+        - range: Agent
+        - range: Device
+      includes:
+        any_of:
+        - range: DataPoint
+        - range: TimeSeries
+        - range: FlexibilityProfile
+      produced_by:
+        any_of:
+        - range: Agent
+        - range: Device
+  FlexRequest:
+    class_uri: s4ener:FlexRequest
+    title: Flex request
+    description: The flexibility request
+    slots:
+    - has_creation_time
+    - has_effective_period
+    - has_recipient
+    - includes
+    - produced_by
+    slot_usage:
+      has_creation_time:
+        range: datetime
+      has_effective_period:
+        range: Interval
+      has_recipient:
+        any_of:
+        - range: Agent
+        - range: Device
+      includes:
+        any_of:
+        - range: DataPoint
+        - range: TimeSeries
+        - range: FlexibilityProfile
+        - range: IncentiveTableProfile
+      produced_by:
+        any_of:
+        - range: Agent
+        - range: Device
+  FlexibilityInstruction:
+    class_uri: s4ener:FlexibilityInstruction
+    title: Flexibility Instruction
+    description: The various types of instructions Flexibility Sources can send and/or receive.
+    slots:
+    - abnormal_condition
+    - has_cost
+    - has_execution_time
+    - relates_to_offer
+  FlexibilityProfile:
+    class_uri: s4ener:FlexibilityProfile
+    title: Flexibility Profile
+    description: "Different control types to describe the energy flexibility that a device has to offer.\
+      \  Charging of an EV for instance, may be controlled by power profile-based control or fill-rate\
+      \ -based control. It is not allowed to mix different control types at the same time, but different\
+      \ control types may be used sequentially.\r\nControl Types dictates flexibility instructions. Control\
+      \ Type provides Flexibility options."
+    mixins:
+    - Profile
+  GaussianDataPoint:
+    class_uri: s4ener:GaussianDataPoint
+    title: Gaussian data point
+    description: A data point whose quantity is a standard deviation.
+    mixins:
+    - DataPoint
+    slots:
+    - has_standard_deviation
+    slot_usage:
+      has_standard_deviation:
+        required: true
+        range: decimal
+  Incentive:
+    class_uri: s4ener:Incentive
+    title: Incentive
+    description: An Incentive indicates the intersection of a tier with a slot. In this particular combination
+      of slot and tier there are a particular costs to draw this type of energy. For example, drawing
+      power from the grid costs 0.30 euro per kilowatthour during the afternoon, but will only be activated
+      from a lower boundary of 3000W.
+    mixins:
+    - DataPoint
+    slots:
+    - has_lower_boundary
+    - has_upper_boundary
+  IncentiveTableProfile:
+    class_uri: s4ener:IncentiveTableProfile
+    title: Incentive table based profile
+    description: This flexibility profile describes the usage of an incentive table to describe an incentive
+      type in the form of costs (relative or absolute), CO2 emissions or renewable energy percentage that
+      can be associated to power values (expressed as a time-series of power data-points).
+    mixins:
+    - FlexibilityProfile
+    slots:
+    - has_power_plan
+    - has_scope_type
+    - has_tier
+    - is_changeable
+    - requires_update
+    slot_usage:
+      has_scope_type:
+        range: ScopeType
+      is_changeable:
+        range: boolean
+      requires_update:
+        range: boolean
+  IncentiveTableSlot:
+    class_uri: s4ener:IncentiveTableSlot
+    title: Incentive table slot
+    description: This concept describes a slot that belongs to a Incentive Table. Each slot of the Incentive
+      Table consists of a series of (lower) boundaries, each indicating the power at which a change to
+      another incentive takes place. Additionally, each boundary is associated with a IncentiveTableTier.
+    mixins:
+    - Slot
+    slots:
+    - has_incentive
+  IncentiveTableTier:
+    class_uri: s4ener:IncentiveTableTier
+    title: Incentive table tier
+    description: This concept specifies a Tier that an Incentive Table consists of. Each Tier indicates
+      through a series of Boundaries the price per kilowatthour this incentive costs. For example, a tier
+      may describe grid power, solar panel power, or surplus power.
+    mixins:
+    - TimeSeries
+    slots:
+    - has_incentive
+    - has_incentive_type
+  InterruptionInstruction:
+    class_uri: s4ener:InterruptionInstruction
+    title: Interruption Instruction
+    description: An instruction indicating an interruption to the process.
+    mixins:
+    - PPBCInstruction
+    slots:
+    - has_interruption_end_time
+    - has_interruption_start_time
+  Interval:
+    class_uri: time:Interval
+  LeakageBehaviour:
+    class_uri: s4ener:LeakageBehaviour
+    title: Leakage behaviour
+    description: A description of the Leakage Behaviour associated with this Fill Rate Flexibility Profile.
+    slots:
+    - has_leakage_behaviour_element
+  LeakageBehaviourElement:
+    class_uri: s4ener:LeakageBehaviourElement
+    title: Leakage behaviour element
+    description: An element detailing the leakage behaviour of a storage.
+    slots:
+    - has_fill_level_range
+    - leakage_rate
+  LoadControlEventAction:
+    class_uri: s4ener:LoadControlEventAction
+    title: Load Control event action
+    description: An action type used to express the action to be performed as a consequence of an event
+      used to send overload warning severity level and related load control commands to a device (e.g.
+      a household appliance or a smart meter).
+  LoadControlEventData:
+    class_uri: s4ener:LoadControlEventData
+    title: Load control event data
+    description: An event used to send overload warning severity level and related load control commands
+      to a device (e.g. a household appliance or a smart meter).
+    slots:
+    - has_device
+    - has_identifier
+    - has_timestamp
+    - triggers_event_action_consume
+    - triggers_event_action_produce
+    slot_usage:
+      has_device:
+        range: S4enerDevice
+        required: true
+      has_timestamp:
+        range: datetime
+        required: true
+      triggers_event_action_consume:
+        range: EventActionConsume
+      triggers_event_action_produce:
+        range: EventActionProduce
+  LoadControlEventState:
+    class_uri: s4ener:LoadControlEventState
+    title: 'Load control event state '
+    description: In the load control, it expresses the possible states of an event used to send overload
+      warning severity level and related load control commands to a device (e.g. a household appliance
+      or a smart meter).
+    mixins:
+    - State
+  LoadControlStateData:
+    class_uri: s4ener:LoadControlStateData
+    title: Load control state data
+    description: The representation of the state of an event used to send overload warning severity level
+      and related load control commands to a device (e.g. a household appliance or a smart meter).
+    slots:
+    - has_applied_event_action_consume
+    - has_applied_event_action_produce
+    - has_event_state_consume
+    - has_event_state_produce
+    - has_identifier
+    - has_timestamp
+    slot_usage:
+      has_applied_event_action_consume:
+        range: EventActionConsume
+      has_applied_event_action_produce:
+        range: EventActionProduce
+      has_event_state_consume:
+        range: EventStateConsume
+      has_event_state_produce:
+        range: EventStateProduce
+      has_timestamp:
+        range: datetime
+        required: true
+  NominalPowerLimit:
+    class_uri: s4ener:NominalPowerLimit
+    title: Nominal Power Limit
+    description: A device may have nominal power consumption and/or production values that are defined
+      by the manufacturer and must not be exceeded, so that the power limit must stay within these constraints.
+    mixins:
+    - PowerLimit
+    slots:
+    - has_nominal_consumption
+    - has_nominal_production
+  NumberRange:
+    class_uri: s4ener:NumberRange
+    title: Number range
+    description: This class describes a range via a datatype property indicating the start of the range
+      and another datatype property indicating the end of the range.
+    slots:
+    - end_of_range
+    - start_of_range
+  OMBCInstruction:
+    class_uri: s4ener:OMBCInstruction
+    title: Operation Mode Based Control Instruction
+    description: An instruction following the Operation Mode Based Profile.
+    mixins:
+    - FlexibilityInstruction
+  OperationMode:
+    class_uri: s4ener:OperationMode
+    title: Operation Mode
+    description: A resource manager can declare multiple operation modes for a device. An operation mode
+      is a mode/state that a device can find itself in, that is associated with a specific power value.
+    mixins:
+    - State
+    slots:
+    - has_active_operation_mode
+    - has_cost
+    - has_operation_mode_element
+    - has_power_range
+    - has_previous_operation_mode
+    - has_supply_range
+    - has_transition_timestamp
+  OperationModeElement:
+    class_uri: s4ener:OperationModeElement
+    title: Operation Mode Element
+    description: Operation Mode Elements of a Fill Rate Based Control
+    slots:
+    - fill_rate
+    - has_fill_level_range
+    - has_power_range
+    - has_running_costs
+  OperationModeProfile:
+    class_uri: s4ener:OperationModeProfile
+    title: Operation mode control
+    description: A resource manager can declare multiple operation modes for a device. An operation mode
+      is a mode/state that a device can find itself in, that is associated with a specific power value.
+    mixins:
+    - FlexibilityProfile
+    slots:
+    - has_timer
+    - has_transition
+  PEBCInstruction:
+    class_uri: s4ener:PEBCInstruction
+    title: Power Envelop Based Control Instruction
+    description: An instruction for the Power Envelope Based Profile.
+    mixins:
+    - FlexibilityInstruction
+    slots:
+    - has_constraints
+    - has_power_envelope
+  PPBCInstruction:
+    class_uri: s4ener:PPBCInstruction
+    title: Power Profile Based Control Instruction
+    description: An instruction for a Power Profile Based Flexibility Profile.
+    mixins:
+    - FlexibilityInstruction
+    slots:
+    - relates_to_power_profile
+    - relates_to_power_profile_sequence
+    - relates_to_power_profile_sequence_container
+  PowerConstraint:
+    class_uri: s4ener:PowerConstraint
+    title: Power constraint
+    description: The actual power constraint contained in the Allowed Limit Range or Power limit.
+    slots:
+    - allowed_limit_range
+    - has_consequence_type
+  PowerEnvelope:
+    class_uri: s4ener:PowerEnvelope
+    title: Power Envelope
+    description: A specific Power Envelope to be followed by an energy manager
+    slots:
+    - has_envelope
+  PowerEnvelopeProfile:
+    class_uri: s4ener:PowerEnvelopeProfile
+    title: Power envelope control
+    description: A Flexibility Profile described through a Power Envelope Profile.
+    mixins:
+    - FlexibilityProfile
+    slots:
+    - has_constraints
+    - has_power_envelope
+    - has_power_envelope_element
+  PowerLimit:
+    class_uri: s4ener:PowerLimit
+    title: Power Limit
+    description: A power limit is defined as the maximum value for power consumption and/or production
+      that must not be exceeded by e.g. a (group of) device(s), a building, or also a district.
+    mixins:
+    - AllowedLimitRange
+    slots:
+    - has_power_limit_consumption_max
+    - has_power_limit_duration
+    - has_power_limit_production_max
+    - has_power_limit_state
+    - is_active
+    - is_changeable
+    - is_obligatory
+    slot_usage:
+      is_changeable:
+        range: boolean
+      is_obligatory:
+        range: boolean
+  PowerLimitProfile:
+    class_uri: s4ener:PowerLimitProfile
+    title: Power limit profile
+    description: This profile describes the energy flexibility of a device via a set of power limits,
+      following the SPINE documentation
+    mixins:
+    - FlexibilityProfile
+    slots:
+    - is_bound_to
+    - is_limited_with
+    - is_protected_by
+    - receives_power_limit
+  PowerPlan:
+    class_uri: s4ener:PowerPlan
+    title: Power plan
+    description: The Power Plan that an energy manager creates for a device. It contains three timeseries
+      indicating the minimum, average, and maximum respectively.
+    mixins:
+    - TimeSeries
+    slots:
+    - consists_of
+    - is_writable
+    slot_usage:
+      consists_of:
+        required: true
+        range: TimeSeries
+  PowerProfile:
+    class_uri: s4ener:PowerProfile
+    title: Power profile control
+    description: 'A way to model curves of power and energy over time, which also provides definitions
+      for the modelling of power scheduling including alternative plans. With a PowerProfile, a device
+      (or power sequences server) exposes the power sequences that are potentially relevant for the CEM
+      (or power sequences client). '
+    mixins:
+    - Profile
+    slots:
+    - belongs_to
+    - consists_of
+    - has_power_sequence_container
+    - node_remote_controllable
+    - supports_reselection
+    - supports_single_slot_scheduling_only
+    - total_sequences_count_max
+    slot_usage:
+      belongs_to:
+        range: S4enerDevice
+        required: true
+        multivalued: false
+      consists_of:
+        range: AlternativesGroup
+        required: true
+      node_remote_controllable:
+        required: true
+        multivalued: false
+      supports_reselection:
+        required: true
+        multivalued: false
+      supports_single_slot_scheduling_only:
+        required: true
+        multivalued: false
+      total_sequences_count_max:
+        required: true
+        multivalued: false
+  PowerRange:
+    class_uri: s4ener:PowerRange
+    title: Power range
+    description: A class describing a power range, containing a start of range, an end of range, and a
+      saref:Property indicating the type of power involved.
+    slots:
+    - has_number_range
+  PowerSequence:
+    class_uri: s4ener:PowerSequence
+    title: Power sequence
+    description: A Power Sequence following S2 is a container containing one or more PowerSequenceElements
+      among which the EMS can choose the Element with the best fit to the current energy demands.
+    slots:
+    - active_repetition_number
+    - active_slot_number
+    - belongs_to
+    - cheapest
+    - consists_of
+    - greenest
+    - has_active_duration_max
+    - has_active_duration_min
+    - has_active_duration_sum_max
+    - has_active_duration_sum_min
+    - has_earliest_start_time
+    - has_elapsed_slot_time
+    - has_end_time
+    - has_identifier
+    - has_latest_end_time
+    - has_max_duration
+    - has_max_pause_before
+    - has_min_duration
+    - has_pause_duration_max
+    - has_pause_duration_min
+    - has_power_sequence_element
+    - has_remaining_slot_time
+    - has_resume_cost_estimated
+    - has_resume_energy_estimated
+    - has_start_time
+    - has_state
+    - has_task_identifier
+    - has_value_source
+    - is_interruptible
+    - is_pausable
+    - is_stoppable
+    - max_cycles_per_day
+    - repetitions_total
+    - sequence_remote_controllable
+    slot_usage:
+      active_repetition_number:
+        multivalued: false
+      active_slot_number:
+        multivalued: false
+      belongs_to:
+        range: AlternativesGroup
+        required: true
+        multivalued: false
+      cheapest:
+        multivalued: false
+      consists_of:
+        range: Slot
+        required: true
+      greenest:
+        multivalued: false
+      has_active_duration_max:
+        required: true
+      has_active_duration_min:
+        required: true
+      has_active_duration_sum_max:
+        multivalued: false
+      has_active_duration_sum_min:
+        multivalued: false
+      has_earliest_start_time:
+        multivalued: false
+      has_elapsed_slot_time:
+        multivalued: false
+      has_end_time:
+        multivalued: false
+      has_identifier:
+        required: true
+        multivalued: false
+      has_latest_end_time:
+        multivalued: false
+      has_pause_duration_max:
+        multivalued: false
+      has_pause_duration_min:
+        multivalued: false
+      has_remaining_slot_time:
+        multivalued: false
+      has_resume_cost_estimated:
+        range: PropertyValue
+        multivalued: false
+      has_resume_energy_estimated:
+        range: PropertyValue
+        multivalued: false
+      has_start_time:
+        required: true
+      has_state:
+        range: PowerSequenceState
+      is_pausable:
+        multivalued: false
+      is_stoppable:
+        multivalued: false
+      max_cycles_per_day:
+        multivalued: false
+      repetitions_total:
+        multivalued: false
+      sequence_remote_controllable:
+        required: true
+        multivalued: false
+  PowerSequenceContainer:
+    class_uri: s4ener:PowerSequenceContainer
+    title: Power profile container
+    description: A container containing the various Power Sequences among which the EMS may choose for
+      the appropriate Power Sequence at a given time.
+    slots:
+    - has_power_sequence
+    - has_power_sequence_status
+    - progress
+  PowerSequenceElement:
+    class_uri: s4ener:PowerSequenceElement
+    title: Power sequence element
+    description: An element of a power sequence, roughly equivalent to slots in the existing S4ener.
+  Role:
+    class_uri: s4ener:Role
+    title: Role
+    description: 'A codelist containing the various roles a device can take: producer, consumer, and storage.'
+    slots:
+    - has_commodity
+    - has_role_type
+  S4enerDevice:
+    class_uri: s4ener:Device
+    title: Device
+    description: A specialization of a saref:Device that exposes a power profile with power sequences
+      to the CEM. Most of the existing devices can expose at most one power profile, but there are special
+      cases in which more than one power profiles can be exposed by the same device. For example, consider
+      the case of a combined fridge-freezer in which there are 2 logical devices (fridge and freezer)
+      combined in 1 physical device. This combined device can expose 2 power profiles, one for the fridge
+      and one for the freezer. A s4ee:Device (e.g. a household appliance or a smart meter) can also receive
+      events about overload warning severity level and related load control commands (LoadControlEventData)
+    mixins:
+    - Device
+    slots:
+    - brand_name
+    - device_code
+    - device_name
+    - firmware_version
+    - hardware_revision
+    - has_manufacturer
+    - has_power_source
+    - has_role
+    - receives
+    - serial_number
+    - software_revision
+    - vendor_code
+    - vendor_name
+    slot_usage:
+      brand_name:
+        multivalued: false
+      device_code:
+        multivalued: false
+      device_name:
+        multivalued: false
+      hardware_revision:
+        multivalued: false
+      has_manufacturer:
+        multivalued: false
+      receives:
+        range: LoadControlEventData
+      serial_number:
+        multivalued: false
+      software_revision:
+        multivalued: false
+      vendor_code:
+        multivalued: false
+      vendor_name:
+        multivalued: false
+  ScheduleInstruction:
+    class_uri: s4ener:ScheduleInstruction
+    title: Schedule Instruction
+    description: Schedule instruction for a power profile flexibility profile.
+    mixins:
+    - PPBCInstruction
+  Slot:
+    class_uri: s4ener:Slot
+    title: Slot
+    description: 'The single steps of a power sequence are represented by slots. A slot is associated
+      with a slot number (while a power sequence is associated with a power sequence identifier). The
+      slot numbers of two power sequences should be considered independent from each other, i.e., slot
+      number 7 of sequence 1 describes a different slot than slot number 7 of sequence 2. Therefore a
+      slot is only uniquely identified in combination with a sequence ID. '
+    slots:
+    - belongs_to
+    - has_default_duration
+    - has_duration_uncertainty
+    - has_earliest_start_time
+    - has_end_time
+    - has_latest_end_time
+    - has_max_duration
+    - has_min_duration
+    - has_remaining_pause_time
+    - has_slot_value
+    - has_start_time
+    - has_usage
+    - optional_slot
+    - slot_activated
+    - slot_number
+    slot_usage:
+      belongs_to:
+        range: PowerSequence
+        required: true
+        multivalued: false
+      has_default_duration:
+        multivalued: false
+      has_duration_uncertainty:
+        multivalued: false
+      has_earliest_start_time:
+        multivalued: false
+      has_end_time:
+        multivalued: false
+      has_latest_end_time:
+        multivalued: false
+      has_max_duration:
+        multivalued: false
+      has_min_duration:
+        multivalued: false
+      has_remaining_pause_time:
+        multivalued: false
+      has_start_time:
+        multivalued: false
+      has_usage:
+        range: Usage
+        required: true
+      optional_slot:
+        multivalued: false
+      slot_activated:
+        multivalued: false
+      slot_number:
+        required: true
+        multivalued: false
+  StartInterruptionInstruction:
+    class_uri: s4ener:StartInterruptionInstruction
+    title: Start Interruption Instruction
+    description: An instruction or message indicating the start of an interruption.
+    mixins:
+    - InterruptionInstruction
+  Storage:
+    class_uri: s4ener:Storage
+    title: Storage
+    description: 'storage device which is the main component of Fill Rate Based Control type.). In the
+      context of flexibility control and instructuons, a device shall be able to inform the CEM about
+      its fill level, a measure of how full the storage is, and the lower and upper boundaries that the
+      fill level should remain within. '
+    mixins:
+    - S4enerDevice
+    slots:
+    - fill_rate
+    - has_fill_level_range
+    - has_fill_level_target_profile
+    - has_leakage_behaviour
+    - present_fill_level
+  TimeSeries:
+    class_uri: s4ener:TimeSeries
+    title: Time Series
+    description: An ordered sequence of data points of a quantity observed at spaced time intervals is
+      referred to as a time series. Time series can be a result of prediction algorithm.
+    slots:
+    - has_creation_time
+    - has_data_point
+    - has_effective_period
+    - has_temporal_resolution
+    - has_update_rate
+    - has_usage
+    slot_usage:
+      has_creation_time:
+        multivalued: false
+      has_effective_period:
+        range: Interval
+      has_temporal_resolution:
+        multivalued: false
+      has_update_rate:
+        multivalued: false
+      has_usage:
+        range: Usage
+  Timer:
+    class_uri: s4ener:Timer
+    title: Timer
+    description: A timer for time-based operation mode and transition constraints.
+    slots:
+    - is_finished_at
+  Transition:
+    class_uri: s4ener:Transition
+    title: Transition
+    description: Possible transitions to switch from one Operation Mode to another or to set new parameters.
+    slots:
+    - from_operation_mode
+    - has_transition_costs
+    - has_transition_duration
+    - is_blocked_by
+    - starts_timer
+    - to_operation_mode

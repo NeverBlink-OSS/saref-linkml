@@ -1,13 +1,7 @@
 #!/usr/bin/env python3
 """Validate the official SAREF examples against SHACL shapes generated from the LinkML schema.
 
-    ./checks/check_examples.py --mode open      # shapes must not forbid what SAREF permits
-    ./checks/check_examples.py --mode closed    # shapes must declare everything SAREF uses
-    ./checks/check_examples.py --shapes build/saref-core.shacl.ttl --mode open   # reuse in CI
-
-The examples are the only external check on the conversion: they were written against SAREF itself,
-by people who did not know this schema exists. A violation means our shapes forbid something SAREF
-permits, so the schema is wrong - not the example.
+Note: examples may be patched to align with SHACL restrictions. See source .ttl for added statements.
 
 Both modes gate; a failure in either exits nonzero:
   open    only declared constraints are checked. A failure is an over-constraint.
@@ -20,7 +14,6 @@ import sys
 from collections import Counter
 from pathlib import Path
 
-import yaml
 from rdflib import Graph, Literal, Namespace
 from rdflib.namespace import RDF
 
@@ -28,47 +21,45 @@ SH = Namespace("http://www.w3.org/ns/shacl#")
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def generate_shapes(schema, out):
-    """Generate closed shapes with the CLI. Only used when --shapes is not supplied."""
-    # linkml-scala's --to does not truncate: writing shorter output over a longer existing file
-    # leaves the old tail behind and yields corrupt Turtle. Remove it first.
-    out.unlink(missing_ok=True)
-    result = subprocess.run(
-        ["linkml-scala", "generate", "shacl", "--format", "ttl", "--to", str(out), str(schema)],
-        capture_output=True, text=True)
-    if result.returncode != 0:
-        sys.exit(f"linkml-scala generate shacl failed:\n{result.stderr or result.stdout}")
+def generate_shapes(schema, mode, build):
+    """Generate shapes for `mode` straight from `schema`. Only used when --shapes is not supplied.
+    
+    """
+    try:
+        import linkml_scala
+    except ImportError:
+        sys.exit("neverblink-linkml is not installed - pip install neverblink-linkml")
+
+    try:
+        with linkml_scala.load_file(schema) as loaded:
+            triples = loaded.shacl(open=(mode == "open"))
+    except linkml_scala.LinkMlError as error:
+        sys.exit(f"generating SHACL from {schema} failed:\n{error}")
+
+    graph = Graph()
+    graph.parse(data=triples, format="nt")
+    out = build / f"shapes-{mode}.ttl"
+    graph.serialize(destination=out, format="turtle")
     return out
 
 
 def shapes_for(source, mode, build):
-    """Write a shapes file for `mode`, derived from a default (closed) generation.
+    """Re-serialize a supplied shapes file as Turtle, checking it was generated for `mode`.
 
-    `--open` sets sh:closed false on every node shape, and that is its only effect - verified by
-    diffing both generator outputs on 0.12.1. So open mode is derived by flipping, and closed mode
-    is the generated file untouched.
-
-    Untouched matters: the default generation already emits sh:closed false for the 5 mixin classes,
-    because a mixin's instances carry the mixing class's properties too. Forcing those to true would
-    make closed mode stricter than linkml-scala ever is, and invent failures.
     """
     graph = Graph()
     graph.parse(source)          # format inferred from the extension, so .ttl or .nt both work
-    closed = list(graph.triples((None, SH.closed, None)))
-    if not any(o == Literal(True) for _, _, o in closed):
-        print(f"warning: {source} has no sh:closed true - it looks like an --open generation, "
-              f"so closed mode cannot be derived from it", file=sys.stderr)
-
-    flipped = 0
-    if mode == "open":
-        for shape, _, current in closed:
-            if current != Literal(False):
-                graph.set((shape, SH.closed, Literal(False)))
-                flipped += 1
+    found = {o for _, _, o in graph.triples((None, SH.closed, None))}
+    wanted = Literal(mode == "closed")
+    if found and found != {wanted}:
+        carries = ", ".join(sorted(str(o) for o in found))
+        sys.exit(f"{source} carries sh:closed {carries}, but --mode {mode} needs sh:closed "
+                 f"{str(wanted.value).lower()}; regenerate the shapes with open="
+                 f"{str(mode == 'open').lower()}")
 
     out = build / f"shapes-{mode}.ttl"
     graph.serialize(destination=out, format="turtle")
-    return out, flipped
+    return out
 
 
 def validate(shapes, data):
@@ -118,27 +109,15 @@ def short(node):
     return text
 
 
-def load_expected(path):
-    """(example, path, constraint) -> reason, from the expected-violations file."""
-    if not path or not Path(path).exists():
-        return {}
-    out = {}
-    for entry in yaml.safe_load(Path(path).read_text()) or []:
-        for example in entry["examples"]:
-            out[(example, entry["path"], entry["constraint"])] = " ".join(entry["reason"].split())
-    return out
-
-
 def main():
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--schema", default=ROOT / "schema/saref-core.yaml")
     ap.add_argument("--shapes", default=None,
-                    help="pre-generated SHACL (either mode); skips calling linkml-scala")
+                    help="pre-generated SHACL, which must have been generated for --mode; "
+                         "skips generating it from --schema")
     ap.add_argument("--examples", default=ROOT / "source/SAREFCore/examples")
     ap.add_argument("--build", default=ROOT / "build")
     ap.add_argument("--mode", choices=("open", "closed"), default="open")
-    ap.add_argument("--expected", default=ROOT / "tests/expected-violations.yaml",
-                    help="known-acceptable violations; pass '' to treat every violation as a failure")
     ap.add_argument("-v", "--verbose", action="store_true", help="list every violation")
     args = ap.parse_args()
 
@@ -148,57 +127,42 @@ def main():
 
     build = Path(args.build)
     build.mkdir(parents=True, exist_ok=True)
-    source = Path(args.shapes) if args.shapes else generate_shapes(args.schema, build / "shapes.ttl")
-    shapes, flipped = shapes_for(source, args.mode, build)
-    expected = load_expected(args.expected)
+    if args.shapes:
+        shapes = shapes_for(Path(args.shapes), args.mode, build)
+    else:
+        shapes = generate_shapes(Path(args.schema), args.mode, build)
 
-    print(f"shapes:   {shapes} ({args.mode}"
-          + (f", sh:closed flipped on {flipped} shapes)" if flipped else ")"))
+    print(f"shapes:   {shapes} ({args.mode})")
     print(f"examples: {len(examples)} from {args.examples}\n")
 
-    by_component, known, unexpected, fired = Counter(), 0, [], set()
+    by_component, failures = Counter(), []
     for path in examples:
-        new, accepted = [], 0
-        for focus, slot, component, message in validate(shapes, path):
-            key = (path.name, slot, component)
-            if key in expected:
-                known += 1
-                accepted += 1
-                fired.add(key)
-            else:
-                new.append((focus, slot, component, message))
-                by_component[component] += 1
-        unexpected += [(path.name, *f) for f in new]
+        found = validate(shapes, path)
+        for _, _, component, _ in found:
+            by_component[component] += 1
+        failures += [(path.name, *f) for f in found]
 
-        if new:
-            mark, detail = "FAIL", f"  {len(new)} unexpected"
-        else:
-            mark, detail = "ok  ", f"  ({accepted} known)" if accepted else ""
-        print(f"  {mark} {path.name}{detail}")
+        print(f"  {'FAIL' if found else 'ok  '} {path.name}"
+              + (f"  {len(found)} violation(s)" if found else ""))
         if args.verbose:
-            for focus, slot, component, message in new:
+            for focus, slot, component, message in found:
                 print(f"         {focus} {slot} [{component}] {message}")
 
-    files_failed = len({u[0] for u in unexpected})
+    files_failed = len({f[0] for f in failures})
     print(f"\n{len(examples) - files_failed}/{len(examples)} examples pass"
-          f"  ({known} known violation(s) accepted, {len(unexpected)} unexpected)")
+          f"  ({len(failures)} violation(s))")
 
-    stale = set(expected) - fired
-    if stale:
-        print(f"\n{len(stale)} expectation(s) no longer fire - remove them from {args.expected}:")
-        for example, slot, component in sorted(stale):
-            print(f"  {example}  {slot}  [{component}]")
-
-    if unexpected:
-        print("\nunexpected violations by constraint:")
+    if failures:
+        print("\nviolations by constraint:")
         for component, count in by_component.most_common():
             print(f"  {count:4}  {component}")
         if args.mode == "closed":
-            print(f"\nThe schema does not declare something the official examples use. Add the "
-                  f"missing slot, or record the mismatch with a reason in {args.expected}.")
+            print("\nThe schema does not declare something the official examples use. Add the "
+                  "missing slot, or patch the example and record why in its source .ttl.")
         else:
-            print(f"\nThe schema over-constrains SAREF: these shapes forbid something the official "
-                  f"examples do. Fix the schema, or record the mismatch in {args.expected}.")
+            print("\nThe schema over-constrains SAREF: these shapes forbid something the official "
+                  "examples do. Fix the schema, or patch the example and record why in its "
+                  "source .ttl.")
         return 1
     return 0
 

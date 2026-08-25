@@ -1,0 +1,141 @@
+@prefix : <https://saref.etsi.org/saref4ener/v2.1.1/example/PowerLimitProfile/>  .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix s4ener: <https://saref.etsi.org/saref4ener/> .
+@prefix saref: <https://saref.etsi.org/core/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix om: <http://www.ontology-of-units-of-measure.org/resource/om-2-ucum/> . # typo fixed: the original has no trailing slash, so om:watt read as .../om-2-ucumwatt
+@prefix dctype: <http://purl.org/dc/dcmitype/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+
+<https://saref.etsi.org/saref4ener/v2.1.1/example/powerLimitProfile#>
+  a dctype:Dataset ;
+  dcterms:conformsTo <https://saref.etsi.org/saref4ener/v2.1.1/> ;
+  dcterms:title "SAREF4ENER Power Envelope Flexilibity Profile Examples"@en ;
+  owl:imports saref:, s4ener: ;
+  dcterms:abstract "This example file exemplifies how to model a Power Limit profile in the SAREF4ENER extension." ;
+  dcterms:description "This example file exemplifies how to model a Power Envelope profile in the SAREF4ENER extension." ;
+  dcterms:license <https://forge.etsi.org/etsi-software-license> ;
+.
+
+:SolarPanelInverter
+  a saref:Device ;
+  saref:hasProfile :PowerLimitProfile_1 ;
+  rdfs:label "Solar panel inverter" ;
+  #saref:hasState :FailSafeState ; # This triple only exists when the device actually is in a failsafe state.
+.
+
+:FailsafeState rdf:type s4ener:FailsafeState ;
+  rdfs:label "Fail safe state for the solar panel inverter." ;
+  s4ener:hasFailsafeDuration "PT2H"^^xsd:duration ; # was "P2H", an untyped literal that is not a valid xsd:duration either
+.
+
+:PowerLimitProfile_1 rdf:type s4ener:PowerLimitProfile ;
+  s4ener:receivesPowerLimit :ReceivedPowerLimit ;
+  s4ener:isBoundTo :ContractualPowerLimit ;
+  s4ener:isProtectedBy :NominalPowerLimit ;
+  s4ener:isLimitedWith :FailsafePowerLimit ;
+.
+
+:ReceivedPowerLimit rdf:type s4ener:PowerLimit ;
+  s4ener:isChangeable "false"^^xsd:boolean ;
+  s4ener:isObligatory "true"^^xsd:boolean ;
+  s4ener:hasEarliestStartTime "2023-01-29T10:00:00Z"^^xsd:dateTimeStamp ;
+  s4ener:hasLatestEndTime "2023-01-29T19:00:00Z"^^xsd:dateTimeStamp ;
+  s4ener:isActive "true"^^xsd:boolean ;
+  s4ener:hasPowerLimitConsumptionMax :PropertyValue_1 ;
+  s4ener:hasPowerLimitProductionMax :PropertyValue_2 ;
+.
+
+:ReceivedPowerLimit rdf:type s4ener:ContractualPowerLimit ;
+  s4ener:isChangeable "false"^^xsd:boolean ;
+  s4ener:isObligatory "true"^^xsd:boolean ;
+  s4ener:hasEarliestStartTime "2023-01-29T10:00:00Z"^^xsd:dateTimeStamp ;
+  s4ener:hasLatestEndTime "2023-01-29T19:00:00Z"^^xsd:dateTimeStamp ;
+  s4ener:isActive "true"^^xsd:boolean ;
+  s4ener:hasContractualConsumptionMax :PropertyValue_3 ;
+  s4ener:hasContractualProductionMax :PropertyValue_4 ;
+.
+
+:ReceivedPowerLimit rdf:type s4ener:NominalPowerLimit ;
+  s4ener:isChangeable "false"^^xsd:boolean ;
+  s4ener:isObligatory "false"^^xsd:boolean ;
+  s4ener:hasEarliestStartTime "2023-01-29T10:00:00Z"^^xsd:dateTimeStamp ;
+  s4ener:hasLatestEndTime "2023-01-29T19:00:00Z"^^xsd:dateTimeStamp ;
+  s4ener:isActive "true"^^xsd:boolean ;
+  s4ener:hasNominalConsumption :PropertyValue_5 ;
+  s4ener:hasNominalProduction :PropertyValue_6 ;
+.
+
+:ReceivedPowerLimit rdf:type s4ener:FailsafePowerLimit ;
+  s4ener:isChangeable "false"^^xsd:boolean ;
+  s4ener:isObligatory "true"^^xsd:boolean ;
+  s4ener:hasEarliestStartTime "2023-01-29T10:00:00Z"^^xsd:dateTimeStamp ;
+  s4ener:hasLatestEndTime "2023-01-29T19:00:00Z"^^xsd:dateTimeStamp ;
+  s4ener:isActive "false"^^xsd:boolean ;
+  s4ener:hasFailsafeConsumptionMax :PropertyValue_7 ;
+  s4ener:hasFailsafeProductionMax :PropertyValue_8 ;
+.
+
+:PropertyValue_1 rdf:type saref:PropertyValue ;
+  saref:hasValue "500"^^xsd:decimal ;
+  saref:isMeasuredIn om:kilowatt ;
+  saref:isValueOfProperty s4ener:Power ;
+.
+
+:PropertyValue_2 rdf:type saref:PropertyValue ;
+  saref:hasValue "1000"^^xsd:decimal ;
+  saref:isMeasuredIn om:kilowatt ;
+  saref:isValueOfProperty s4ener:Power ;
+.
+
+:PropertyValue_3 rdf:type saref:PropertyValue ;
+  saref:hasValue "400"^^xsd:decimal ;
+  saref:isMeasuredIn om:kilowatt ;
+  saref:isValueOfProperty s4ener:Power ;
+.
+
+:PropertyValue_4 rdf:type saref:PropertyValue ;
+  saref:hasValue "1500"^^xsd:decimal ;
+  saref:isMeasuredIn om:kilowatt ;
+  saref:isValueOfProperty s4ener:Power ;
+.
+
+:PropertyValue_5 rdf:type saref:PropertyValue ;
+  saref:hasValue "50"^^xsd:decimal ;
+  saref:isMeasuredIn om:kilowatt ;
+  saref:isValueOfProperty s4ener:Power ;
+.
+
+:PropertyValue_6 rdf:type saref:PropertyValue ;
+  saref:hasValue "1250"^^xsd:decimal ;
+  saref:isMeasuredIn om:kilowatt ;
+  saref:isValueOfProperty s4ener:Power ;
+.
+
+:PropertyValue_7 rdf:type saref:PropertyValue ;
+  saref:hasValue "10"^^xsd:decimal ;
+  saref:isMeasuredIn om:kilowatt ;
+  saref:isValueOfProperty s4ener:Power ;
+.
+
+:PropertyValue_8 rdf:type saref:PropertyValue ;
+  saref:hasValue "0"^^xsd:decimal ;
+  saref:isMeasuredIn om:kilowatt ;
+  saref:isValueOfProperty s4ener:Power ;
+.
+
+dcterms:abstract a owl:AnnotationProperty .
+
+#################################################################
+#    Added for SHACL validation, not in the ETSI original
+#################################################################
+
+# Types the shapes check with sh:class but this file never states.
+om:kilowatt a saref:UnitOfMeasure .
+s4ener:Power a saref:Property .
+:ContractualPowerLimit a s4ener:ContractualPowerLimit .
+:FailsafePowerLimit a s4ener:FailsafePowerLimit .
+:NominalPowerLimit a s4ener:NominalPowerLimit .
+:PowerLimitProfile_1 a saref:Profile .

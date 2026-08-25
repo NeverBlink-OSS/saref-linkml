@@ -1,0 +1,112 @@
+@prefix : <https://saref.etsi.org/saref4bldg/v2.1.1/example/example1BLDG/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix saref: <https://saref.etsi.org/core/> .
+@prefix s4bldg: <https://saref.etsi.org/saref4bldg/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix wgs84: <http://www.w3.org/2003/01/geo/wgs84_pos#> .
+@prefix time: <http://www.w3.org/2006/time#> .
+@prefix wurvoc: <http://www.wurvoc.org/vocabularies/om-1.8/> .
+@prefix dctype: <http://purl.org/dc/dcmitype/> .
+@base <https://saref.etsi.org/saref4bldg/v2.1.1/example/example1BLDG/> .
+
+<https://saref.etsi.org/saref4bldg/v2.1.1/example/example1BLDG#> a dctype:Dataset ;
+  dcterms:creator <http://purl.org/net/mpoveda> ,
+                  <http://www.garcia-castro.com/foaf.rdf#me> ;
+  dcterms:license <https://forge.etsi.org/etsi-software-license> ;
+  dcterms:conformsTo <https://saref.etsi.org/saref4bldg/v2.1.1/> ;
+  dcterms:title "Example of use for the SAREF extension for building devices"@en ;
+  dcterms:description "Example of use for the SAREF extension for building devices"@en .
+
+wgs84:SpatialThing a owl:Class .
+wgs84:long a owl:DatatypeProperty .
+wgs84:lat a owl:DatatypeProperty .
+wgs84:location a owl:ObjectProperty .
+
+:ComputerScienceBuilding1 a s4bldg:Building ;
+  wgs84:location [ a wgs84:SpatialThing ;
+          wgs84:lat "40.405013" ;
+          wgs84:long "-3.839349" ;
+          rdfs:label "Location of Computer Science Building 1"@en
+    ] ;
+  rdfs:label "Computer Science Building 1"@en .
+
+:RefrigerationStoreComputerScienceBuilding1 a s4bldg:BuildingSpace ;
+  s4bldg:isSpaceOf :ComputerScienceBuilding1 ;
+  wgs84:location [
+    a wgs84:SpatialThing ;
+    wgs84:lat "40.405152" ;
+    wgs84:long "-3.839209" ;
+    rdfs:label "LocationRefrigerationStoreComputerScienceBuilding1"@en 
+  ] ;
+  rdfs:label "Refrigeration store of Computer Science Building 1"@en .
+
+:Compressor001SIERRA02-0434C3 a s4bldg:Compressor ;
+  s4bldg:isContainedIn :RefrigerationStoreComputerScienceBuilding1 ;
+  # added saref:hasProperty
+  saref:hasProperty s4bldg:compressorSpeed ,
+                    s4bldg:idealCapacity ,
+                    s4bldg:impellerDiameter ,
+                    s4bldg:nominalCapacity ;
+  saref:hasPropertyValue [
+    a saref:PropertyValue ;
+    saref:isValueOfProperty s4bldg:compressorSpeed ;
+    saref:isMeasuredIn :cyclesPerSecond ;
+    saref:hasValue "3.0"^^xsd:float ;
+    rdfs:label "Compressor speed of compressor001 SIERRA02-0434C3"@en 
+  ] ;
+  saref:hasPropertyValue [
+    a saref:PropertyValue ;
+    saref:isValueOfProperty s4bldg:idealCapacity ;
+    saref:isMeasuredIn wurvoc:watt ;
+    saref:hasValue "1800.0"^^xsd:float ;
+    rdfs:label "Ideal capacity of compressor001 SIERRA02-0434C3"@en 
+  ] ;
+  saref:hasPropertyValue [
+    a saref:PropertyValue ;
+    saref:isValueOfProperty s4bldg:impellerDiameter ;
+    saref:isMeasuredIn wurvoc:inch-international ;
+    saref:hasValue "5.9"^^xsd:float ;
+    rdfs:label "Impeller diameter of compressor001 SIERRA02-0434C3"@en 
+  ] ;
+  saref:hasPropertyValue [
+    a saref:PropertyValue ;
+    saref:isValueOfProperty s4bldg:nominalCapacity ;
+    saref:isMeasuredIn wurvoc:watt ;
+    saref:hasValue "680.0"^^xsd:float ;
+    rdfs:label "Nominal capacity of compressor001 SIERRA02-0434C3"@en 
+  ] ;                              
+  wgs84:location [
+    a wgs84:SpatialThing ;
+    wgs84:lat "40.405155" ;
+    wgs84:long "-3.839203" ;
+    rdfs:label "Location of compressor001 SIERRA02-0434C3"@en 
+  ] ;
+  s4bldg:hasHotGasBypass "false"^^xsd:boolean ;
+  s4bldg:powerSource "MotorDriven"^^xsd:string ;
+  s4bldg:refrigerantClass "HFC"^^xsd:string ;
+  saref:hasManufacturer "SIEMENS"^^xsd:string ;
+  saref:hasModel "SIERRA 02-0434C3"^^xsd:string ;
+  rdfs:label "CompressorSIERRA02-0434C3"@en .
+
+wurvoc:inch-international a saref:UnitOfMeasure ;
+  rdfs:label "inch international"@en .
+
+wurvoc:watt a saref:UnitOfMeasure ;
+  rdfs:label "watt"@en .
+
+#################################################################
+#    Added for SHACL validation, not in the ETSI original
+#################################################################
+
+s4bldg:compressorSpeed a saref:Property .
+s4bldg:idealCapacity a saref:Property .
+s4bldg:impellerDiameter a saref:Property .
+s4bldg:nominalCapacity a saref:Property .
+
+:cyclesPerSecond a saref:UnitOfMeasure .
+:cyclesPerSecond rdfs:label "cycles per second"@en .

@@ -1,0 +1,138 @@
+@prefix ex: <https://saref.etsi.org/saref4grid/v2.1.1/example/Set/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix oneM2M: <http://www.owl-ontologies.com/oneM2M#> .
+@prefix saref: <https://saref.etsi.org/core/> .
+@prefix s4grid: <https://saref.etsi.org/saref4grid/> .
+@prefix dctype: <http://purl.org/dc/dcmitype/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+
+<https://saref.etsi.org/saref4grid/v2.1.1/example/Set#> a dctype:Dataset ;
+  dcterms:license <https://forge.etsi.org/etsi-software-license> ;
+  dcterms:conformsTo <https://saref.etsi.org/saref4grid/v2.1.1/> ;
+  dcterms:title "Example Set"@en ;
+  dcterms:description "Example Set"@en .
+ 
+
+
+#################################################################
+#    Object Properties
+#################################################################
+
+oneM2M:hasService a owl:ObjectProperty .
+
+saref:hasOperation a owl:ObjectProperty .
+
+saref:hasInput a owl:ObjectProperty .
+
+
+#################################################################
+#    Data properties
+#################################################################
+
+s4grid:obtainInputFromObis a owl:DatatypeProperty .
+
+s4grid:hasInputObjectType a owl:DatatypeProperty .
+
+s4grid:obtainInputForProperty a owl:DatatypeProperty .
+
+s4grid:hasInputDataType a owl:DatatypeProperty .
+
+
+#################################################################
+#    Classes
+#################################################################
+
+s4grid:GridMeter a owl:Class .
+
+s4grid:SetService a owl:Class .
+
+s4grid:SetOperation a owl:Class .
+
+s4grid:SetOperationObisInput a owl:Class .
+
+s4grid:SetOperationObjectInput a owl:Class .
+
+s4grid:SetOperationDataInput a owl:Class .
+
+
+#################################################################
+#    Individuals
+#################################################################
+
+ex:Meter1234 a s4grid:GridMeter,
+        owl:NamedIndividual ;
+    oneM2M:hasService ex:SetMulticastCommunicationIdentifier,
+			ex:SetServiceCapturePeriodIncrementalLoadProfile,
+			ex:SetServiceDisconnectionScript .
+
+ex:SetMulticastCommunicationIdentifier a s4grid:SetService,
+        owl:NamedIndividual ;
+    saref:hasOperation ex:SetOperationMulticastCommunicationIdentifier .
+
+ex:SetOperationMulticastCommunicationIdentifier a s4grid:SetOperation,
+        owl:NamedIndividual ;
+    saref:hasInput ex:InputMulticastCommunicationIdentifier .
+
+ex:InputMulticastCommunicationIdentifier a s4grid:SetOperationObisInput,
+        owl:NamedIndividual ;
+    s4grid:obtainInputFromObis "0-0:96.1.5.255"^^xsd:string ;
+	s4grid:hasInputObjectType "saref:PropertyValue"^^xsd:string .
+
+ex:SetServiceCapturePeriodIncrementalLoadProfile a s4grid:SetService,
+        owl:NamedIndividual ;
+    saref:hasOperation ex:SetOperationCapturePeriodIncrementalLoadProfile .
+
+ex:SetOperationCapturePeriodIncrementalLoadProfile a s4grid:SetOperation,
+        owl:NamedIndividual ;
+    saref:hasInput ex:InputCapturePeriodIncrementalLoadProfile .
+
+ex:InputCapturePeriodIncrementalLoadProfile a s4grid:SetOperationDataInput,
+        owl:NamedIndividual ;
+    s4grid:obtainInputFromObis "1-0:99.1.0.255"^^xsd:string ;
+	s4grid:obtainInputForProperty "s4grid:hasCapturePeriod"^^xsd:string ;
+	s4grid:hasInputDataType "xsd:unsignedLong"^^xsd:string .
+
+ex:SetServiceDisconnectionScript a s4grid:SetService,
+        owl:NamedIndividual ;
+    saref:hasOperation ex:SetOperationDisconnectionScript .
+
+ex:SetOperationDisconnectionScript a s4grid:SetOperation,
+        owl:NamedIndividual ;
+    saref:hasInput ex:InputDisconnectionScript .
+
+ex:InputDisconnectionScript a s4grid:SetOperationObjectInput,
+        owl:NamedIndividual ;
+    s4grid:obtainInputFromObis "0-0:10.0.196.255"^^xsd:string ;
+	s4grid:obtainInputForProperty "s4grid:storesScript"^^xsd:string ;
+	s4grid:hasInputObjectType "s4grid:Script"^^xsd:string .
+
+
+#################################################################
+#    Added for SHACL validation, not in the ETSI original
+#################################################################
+
+# Types the shapes check with sh:class but this file never states.
+ex:SetOperationMulticastCommunicationIdentifier a saref:Operation .
+ex:SetOperationCapturePeriodIncrementalLoadProfile a saref:Operation .
+ex:SetOperationDisconnectionScript a saref:Operation .
+ex:SetMulticastCommunicationIdentifier a saref:Service .
+ex:SetServiceCapturePeriodIncrementalLoadProfile a saref:Service .
+ex:SetServiceDisconnectionScript a saref:Service .
+ex:Meter1234 a saref:Device .
+
+# Nodes added only so that the required values below have something to point at
+s4grid:ActiveEnergy a s4grid:EnergyAndPowerProperty, saref:Property .
+
+# Values required by sh:minCount 1.
+# isOfferedBy, isOperationOf are inverses of existing statements
+ex:SetMulticastCommunicationIdentifier saref:isOfferedBy ex:Meter1234 .
+ex:SetServiceCapturePeriodIncrementalLoadProfile saref:isOfferedBy ex:Meter1234 .
+ex:SetServiceDisconnectionScript saref:isOfferedBy ex:Meter1234 .
+ex:SetOperationMulticastCommunicationIdentifier saref:isOperationOf ex:SetMulticastCommunicationIdentifier .
+ex:SetOperationCapturePeriodIncrementalLoadProfile saref:isOperationOf ex:SetServiceCapturePeriodIncrementalLoadProfile .
+ex:SetOperationDisconnectionScript saref:isOperationOf ex:SetServiceDisconnectionScript .
+ex:Meter1234 saref:observes s4grid:ActiveEnergy .
+

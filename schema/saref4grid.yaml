@@ -1,0 +1,1042 @@
+id: https://saref.etsi.org/saref4grid/
+name: saref4grid
+title: 'SAREF4GRID: an extension of SAREF for the Smart Grid domain'
+description: This ontology extends the SAREF ontology for the smart grid domain.
+license: https://forge.etsi.org/etsi-software-license
+version: https://saref.etsi.org/saref4grid/v2.1.1/
+created_on: '2025-04-25'
+last_updated_on: '2024-06-05'
+source: https://saref.etsi.org/sources/saref4grid/
+contributors:
+- http://w3id.org/people/mpoveda
+- http://www.garcia-castro.com/foaf.rdf#me
+- https://www.linkedin.com/in/sergio-mario-carulli-p%C3%A9rez-7632b5217/
+comments:
+- The development of the SAREF4GRID ontology has been partially funded by the IA4TES project (MIA.2021.M04.0008),
+  funded by the Spanish Ministry of Economic Affairs and Digital Transformation and by the NextGenerationEU
+  program
+see_also:
+- https://www.etsi.org/deliver/etsi_ts/103400_103499/10341012/01.01.01_60/ts_10341012v010101p.pdf
+prefixes:
+  dcterms: http://purl.org/dc/terms/
+  linkml: https://w3id.org/linkml/
+  oneM2M: http://www.owl-ontologies.com/oneM2M#
+  owl: http://www.w3.org/2002/07/owl#
+  rdfs: http://www.w3.org/2000/01/rdf-schema#
+  s4grid: https://saref.etsi.org/saref4grid/
+  saref: https://saref.etsi.org/core/
+  schema1: http://schema.org/
+  vann: http://purl.org/vocab/vann/
+  xsd: http://www.w3.org/2001/XMLSchema#
+default_prefix: s4grid
+default_range: string
+imports:
+- linkml:types
+- ./saref-core
+slots:
+  executes_script:
+    slot_uri: s4grid:executesScript
+    title: executes script
+    description: '[COSEM] Defines the script to be executed'
+    range: Script
+    multivalued: true
+  has_action_value:
+    slot_uri: s4grid:hasActionValue
+    title: has action value
+    description: It specifies the input of a method from the instance (COSEM object) of a class. The value
+      of this property conforms to a simple type (not a structure)
+    range: Literal
+    multivalued: true
+  has_activate_passive_calendar_time:
+    slot_uri: s4grid:hasActivatePassiveCalendarTime
+    title: has activate passive calendar time
+    description: '[COSEM] Defines the time when the passive calendar will be activated'
+    range: datetime
+    multivalued: true
+  has_active_season_profile:
+    slot_uri: s4grid:hasActiveSeasonProfile
+    title: has active season profile
+    description: '[COSEM] Contains a list of active season profiles. These season profiles form an active
+      calendar'
+    range: SeasonProfile
+    multivalued: true
+  has_activity_calendar:
+    slot_uri: s4grid:hasActivityCalendar
+    title: has activity calendar
+    description: The activity calendar of a meter
+    range: ActivityCalendar
+    multivalued: true
+  has_calendar_name_active:
+    slot_uri: s4grid:hasCalendarNameActive
+    title: has calendar name active
+    description: '[COSEM] Used defined name identifying the passive calendar. Typically contains an identifier
+      of the active calendar (currently active), which is descriptive to the set of scripts activated
+      by the object'
+    range: string
+    multivalued: true
+  has_calendar_name_passive:
+    slot_uri: s4grid:hasCalendarNamePassive
+    title: has calendar name passive
+    description: '[COSEM] User defined name identifying the passive calendar. Typically contains an identifier
+      of the passive calendar (will be activated), which is descriptive to the set of scripts activated
+      by the object'
+    range: string
+    multivalued: true
+  has_capture_period:
+    slot_uri: s4grid:hasCapturePeriod
+    title: has capture period
+    description: '[COSEM] The capturing period of a profile generic in seconds. If its value is 0, then
+      there is not automatic capturing; capturing is triggered externally or through capture events occur
+      asynchronously. If its value is greater than 0, then automatic capturing is assumed'
+    range: Int
+    multivalued: true
+  has_clock:
+    slot_uri: s4grid:hasClock
+    title: has clock
+    description: The clock of the meter
+    range: Clock
+    multivalued: true
+  has_clock_base:
+    slot_uri: s4grid:hasClockBase
+    title: has clock base
+    description: '[COSEM] Defines where the basic timing information comes from: (0) not defined, (1)
+      internal crystal, (2) mains frequency 50 Hz, (3) mains frequency 60 Hz, (4) GPS (global positioning
+      system), (5) radio controlled'
+    range: Int
+    multivalued: true
+  has_control_mode:
+    slot_uri: s4grid:hasControlMode
+    title: has control mode
+    description: '[COSEM] Configures the behaviour of the disconnect control object for all triggers,
+      i.e. the possible state transitions'
+    range: Int
+    multivalued: true
+  has_control_state:
+    slot_uri: s4grid:hasControlState
+    title: has control state
+    description: 'Shows the internal state of the disconnect control object: (0) Disconnected, (1) Connected,
+      (2) Ready for reconnection'
+    range: Int
+    multivalued: true
+  has_day_id:
+    slot_uri: s4grid:hasDayId
+    title: has day id
+    description: It defines the unique identifier of a day
+    range: Int
+    multivalued: true
+  has_day_profile:
+    slot_uri: s4grid:hasDayProfile
+    title: has day profile
+    description: '[COSEM] Day profile for every day of the week of a season'
+    range: DayProfile
+    multivalued: true
+  has_day_schedule:
+    slot_uri: s4grid:hasDaySchedule
+    title: has day schedule
+    description: The day schedule of a day profile
+    range: DaySchedule
+    multivalued: true
+  has_daylight_savings_begin:
+    slot_uri: s4grid:hasDaylightSavingsBegin
+    title: has daylight savings begin
+    description: '[COSEM] Defines the local switch date and time when the local time starts to deviate
+      from the normal time'
+    range: datetime
+    multivalued: true
+  has_daylight_savings_deviation:
+    slot_uri: s4grid:hasDaylightSavingsDeviation
+    title: has daylight savings deviation
+    description: '[COSEM] Contains the number of minutes by which the deviation in generalized time shall
+      be corrected at daylight savings begin'
+    range: integer
+    multivalued: true
+  has_daylight_savings_enabled:
+    slot_uri: s4grid:hasDaylightSavingsEnabled
+    title: has daylight savings enabled
+    description: '[COSEM] Enable and disable the daylight savings time feature'
+    range: boolean
+    multivalued: true
+  has_daylight_savings_end:
+    slot_uri: s4grid:hasDaylightSavingsEnd
+    title: has daylight savings end
+    description: '[COSEM] Defines the local switch date and time when the local time ends to deviate from
+      the local normal time'
+    range: datetime
+    multivalued: true
+  has_execution_time:
+    slot_uri: s4grid:hasExecutionTime
+    title: has execution time
+    description: '[COSEM] Specifies the time and the date when the script is executed'
+    range: datetime
+    multivalued: true
+  has_firmware:
+    slot_uri: s4grid:hasFirmware
+    title: has firmware
+    description: The firmware of the meter
+    range: Firmware
+    multivalued: true
+  has_firmware_version:
+    slot_uri: s4grid:hasFirmwareVersion
+    title: has firmware version
+    description: '[COSEM] Textual description of the firmware version running on the device'
+    range: string
+    multivalued: true
+  has_friday_profile:
+    slot_uri: s4grid:hasFridayProfile
+    title: has friday profile
+    description: It defines the day profile valid each Friday of the season
+    mixins:
+    - has_day_profile
+    multivalued: true
+  has_index:
+    slot_uri: s4grid:hasIndex
+    title: has index
+    description: It defines the index of the special day
+    range: UnsignedShort
+    multivalued: true
+  has_input_data_type:
+    slot_uri: s4grid:hasInputDataType
+    title: has input data type
+    description: It identifies the type of the attribute of an instance (COSEM object) of a class from
+      which the data is going to be obtained. The value of this property conforms to the range of a datatype
+      property of SAREF4GRID
+    range: string
+    multivalued: true
+  has_input_object_type:
+    slot_uri: s4grid:hasInputObjectType
+    title: has input object type
+    description: It identifies the type of the attribute of an instance (COSEM object) of a class from
+      which the data is going to be obtained. The value of this property conforms to the range of an object
+      property of SAREF4GRID
+    range: string
+    multivalued: true
+  has_mac_address:
+    slot_uri: s4grid:hasMACAddress
+    title: has m a c address
+    description: '[COSEM] Holds the MAC address'
+    range: string
+    multivalued: true
+  has_monday_profile:
+    slot_uri: s4grid:hasMondayProfile
+    title: has monday profile
+    description: It defines the day profile valid each Monday of the season
+    mixins:
+    - has_day_profile
+    multivalued: true
+  has_network_interface:
+    slot_uri: s4grid:hasNetworkInterface
+    title: has network interface
+    description: The network interface of the meter
+    range: NetworkInterface
+    multivalued: true
+  has_obis:
+    slot_uri: s4grid:hasObis
+    title: has obis
+    description: '[COSEM] It identifies the instance (COSEM object) of a class. The value of this property
+      conforms to OBIS. OBject Identification System (OBIS) provides a unique identifier for all data
+      within the metering equipment, including not only measurement values, but also abstract values used
+      for configuration or obtaining information about the behaviour of the metering equipment'
+    range: string
+    multivalued: true
+  has_output_data_type:
+    slot_uri: s4grid:hasOutputDataType
+    title: has output data type
+    description: It identifies the type of the attribute of an instance (COSEM object) of a class from
+      which the data is going to be obtained. The value of this property conforms to the range of a datatype
+      property of SAREF4GRID
+    range: string
+    multivalued: true
+  has_output_object_type:
+    slot_uri: s4grid:hasOutputObjectType
+    title: has output object type
+    description: It identifies the type of the attribute of an instance (COSEM object) of a class from
+      which the data is going to be obtained. The value of this property conforms to the range of an object
+      property of SAREF4GRID
+    range: string
+    multivalued: true
+  has_output_state:
+    slot_uri: s4grid:hasOutputState
+    title: has output state
+    description: '[COSEM] Shows the actual physical state of the device connection to the supply: (True)
+      Connected, (False) Disconnected'
+    range: boolean
+    multivalued: true
+  has_passive_season_profile:
+    slot_uri: s4grid:hasPassiveSeasonProfile
+    title: has passive season profile
+    description: '[COSEM] Contains a list of passive season profiles. These season profiles form a passive
+      calendar'
+    range: SeasonProfile
+    multivalued: true
+  has_preset_time:
+    slot_uri: s4grid:hasPresetTime
+    title: has preset time
+    description: It pre-sets the clock time to a new value
+    range: datetime
+    multivalued: true
+  has_product_id:
+    slot_uri: s4grid:hasProductId
+    title: has product id
+    description: '[COSEM] Vendor-assigned unique identifier for the specific product'
+    range: UnsignedShort
+    multivalued: true
+  has_profile_generic:
+    slot_uri: s4grid:hasProfileGeneric
+    title: has profile generic
+    description: The profile generic of a meter
+    range: ProfileGeneric
+    multivalued: true
+  has_saturday_profile:
+    slot_uri: s4grid:hasSaturdayProfile
+    title: has saturday profile
+    description: It defines the day profile valid each Saturday of the season
+    mixins:
+    - has_day_profile
+    multivalued: true
+  has_script_table:
+    slot_uri: s4grid:hasScriptTable
+    title: has script table
+    description: The script table of a meter
+    range: ScriptTable
+    multivalued: true
+  has_season_profile_name:
+    slot_uri: s4grid:hasSeasonProfileName
+    title: has season profile name
+    description: '[COSEM] User defined name identifying the current season profile'
+    range: string
+    multivalued: true
+  has_season_start:
+    slot_uri: s4grid:hasSeasonStart
+    title: has season start
+    description: '[COSEM] Starting time of the season profile. The current season profile is terminated
+      by the starting time of the next season'
+    range: datetime
+    multivalued: true
+  has_selective_access:
+    slot_uri: s4grid:hasSelectiveAccess
+    title: has selective access
+    description: The selective access of a profile generic get service
+    range: SelectiveAccess
+    multivalued: true
+  has_service:
+    slot_uri: oneM2M:hasService
+    title: has service
+    range: uriorcurie
+    multivalued: true
+    source: https://git.onem2m.org/MAS/BaseOntology
+  has_single_scheduled_action:
+    slot_uri: s4grid:hasSingleScheduledAction
+    title: has single scheduled action
+    description: The single scheduled action of a meter
+    range: SingleScheduledAction
+    multivalued: true
+  has_special_date:
+    slot_uri: s4grid:hasSpecialDate
+    title: has special date
+    description: It defines the date at which a normal day is considered a special date
+    range: date
+    multivalued: true
+  has_special_day_date:
+    slot_uri: s4grid:hasSpecialDayDate
+    title: has special day date
+    description: Dates at which a normal day is considered a special date (i.e., Christmas)
+    range: date
+    multivalued: true
+  has_special_day_profile:
+    slot_uri: s4grid:hasSpecialDayProfile
+    title: has special day profile
+    description: It defines when there is a festivity and therefore a normal day behaves as a special
+      date
+    mixins:
+    - has_day_profile
+    multivalued: true
+  has_start_time:
+    slot_uri: s4grid:hasStartTime
+    title: has start time
+    description: '[COSEM] Time when the script is going to be executed'
+    range: time
+    multivalued: true
+  has_status:
+    slot_uri: s4grid:hasStatus
+    title: has status
+    description: '[COSEM] Status of the clock'
+    range: Int
+    multivalued: true
+  has_sunday_profile:
+    slot_uri: s4grid:hasSundayProfile
+    title: has sunday profile
+    description: It defines the day profile valid each Sunday of the season
+    mixins:
+    - has_day_profile
+    multivalued: true
+  has_thursday_profile:
+    slot_uri: s4grid:hasThursdayProfile
+    title: has thursday profile
+    description: It defines the day profile valid each Thursday of the season
+    mixins:
+    - has_day_profile
+    multivalued: true
+  has_time:
+    slot_uri: s4grid:hasTime
+    title: has time
+    description: '[COSEM] Meter’s local date and time'
+    range: datetime
+    multivalued: true
+  has_time_zone:
+    slot_uri: s4grid:hasTimeZone
+    title: has time zone
+    description: '[COSEM] The deviation of local, normal time to UTC in minutes. The value depends on
+      the geographical location of the meter'
+    range: Long
+    multivalued: true
+  has_tuesday_profile:
+    slot_uri: s4grid:hasTuesdayProfile
+    title: has tuesday profile
+    description: It defines the day profile valid each Tuesday of the season
+    mixins:
+    - has_day_profile
+    multivalued: true
+  has_validity_interval_end:
+    slot_uri: s4grid:hasValidityIntervalEnd
+    title: has validity interval end
+    description: It defines the end of a validity interval within which the new time can be activated
+    range: datetime
+    multivalued: true
+  has_validity_interval_start:
+    slot_uri: s4grid:hasValidityIntervalStart
+    title: has validity interval start
+    description: It defines the start of a validity interval within which the new time can be activated
+    range: datetime
+    multivalued: true
+  has_vendor_id:
+    slot_uri: s4grid:hasVendorId
+    title: has vendor id
+    description: '[COSEM] Unique vendor identifier assigned by the PRIME Alliance'
+    range: UnsignedShort
+    multivalued: true
+  has_wednesday_profile:
+    slot_uri: s4grid:hasWednesdayProfile
+    title: has wednesday profile
+    description: It defines the day profile valid each Wednesday of the season
+    mixins:
+    - has_day_profile
+    multivalued: true
+  obtain_from_entry:
+    slot_uri: s4grid:obtainFromEntry
+    title: obtain from entry
+    description: It defines the first entry to be retrieved from a profile generic
+    range: UnsignedLong
+    multivalued: true
+  obtain_from_value:
+    slot_uri: s4grid:obtainFromValue
+    title: obtain from value
+    description: It restricts the range of entries to be retrieved from a profile generic defining the
+      oldest or smallest entry to retrieve
+    range: Literal
+    multivalued: true
+  obtain_input_for_property:
+    slot_uri: s4grid:obtainInputForProperty
+    title: obtain input for property
+    description: It identifies the attribute of an instance (COSEM object) of a class from which the data
+      is going to be obtained. The value of this property conforms to and object property or datatype
+      property of SAREF4GRID
+    range: string
+    multivalued: true
+  obtain_input_from_obis:
+    slot_uri: s4grid:obtainInputFromObis
+    title: obtain input from obis
+    description: It identifies the instance (COSEM object) of a class from which the data is going to
+      be obtained. The value of this property conforms to OBIS
+    range: string
+    multivalued: true
+  obtain_to_entry:
+    slot_uri: s4grid:obtainToEntry
+    title: obtain to entry
+    description: It defines the last entry to be retrieved from a profile generic
+    range: UnsignedLong
+    multivalued: true
+  obtain_to_value:
+    slot_uri: s4grid:obtainToValue
+    title: obtain to value
+    description: It restricts the range of entries to be retrieved from a profile generic defining the
+      newest or largest entry to retrieve
+    range: Literal
+    multivalued: true
+  related_clock:
+    slot_uri: s4grid:relatedClock
+    title: related clock
+    description: The clock that is captured by a profile generic
+    range: Clock
+    multivalued: true
+  related_observation:
+    slot_uri: s4grid:relatedObservation
+    title: related observation
+    description: The observation that is captured by a profile generic
+    range: Observation
+    multivalued: true
+  related_property_value:
+    slot_uri: s4grid:relatedPropertyValue
+    title: related property value
+    description: The property value that is captured by a profile generic
+    range: PropertyValue
+    multivalued: true
+  stores_script:
+    slot_uri: s4grid:storesScript
+    title: stores script
+    description: '[COSEM] Specifies the different scripts which are stored in a script table'
+    range: Script
+    multivalued: true
+classes:
+  ActionOperation:
+    class_uri: s4grid:ActionOperation
+    title: Action Operation
+    description: This class is the means of an action service to communicate in a procedure-type manner
+      over the network (i.e. transmit data to/from other devices). It is the –machine interpretable- exposure
+      of a –human understandable- Command to a network
+    mixins:
+    - Operation
+  ActionService:
+    class_uri: s4grid:ActionService
+    title: Action Service
+    description: This class is a representation of an action function to a network that makes the function
+      discoverable, registerable, remotely controllable by other devices in the network. Actions can be
+      performed over classes that are characterised by an OBIS code
+    mixins:
+    - Service
+  ActivityCalendar:
+    class_uri: s4grid:ActivityCalendar
+    title: Activity Calendar
+    description: '[COSEM] This class allows handling various tariff structures in the meter. This class
+      provides a list of scheduled actions, following the classical way of calendar-based schedules by
+      defining seasons, weeks, etc'
+    slots:
+    - has_activate_passive_calendar_time
+    - has_active_season_profile
+    - has_calendar_name_active
+    - has_calendar_name_passive
+    - has_passive_season_profile
+    - has_season_start
+    slot_usage:
+      has_activate_passive_calendar_time:
+        multivalued: false
+      has_calendar_name_active:
+        required: true
+        multivalued: false
+      has_calendar_name_passive:
+        required: true
+        multivalued: false
+  BreakerState:
+    class_uri: s4grid:BreakerState
+    title: Breaker State
+    description: '[COSEM] This class manages an internal or external disconnect unit of the meter (e.g.
+      electricity breaker, gas valve) in order to connect or disconnect – partly or entirely – the premises
+      of the consumer to / from the supply'
+    mixins:
+    - State
+    slots:
+    - has_control_mode
+    - has_control_state
+    - has_output_state
+    slot_usage:
+      has_control_mode:
+        required: true
+        multivalued: false
+      has_control_state:
+        required: true
+        multivalued: false
+      has_output_state:
+        required: true
+        multivalued: false
+  Clock:
+    class_uri: s4grid:Clock
+    title: Clock
+    description: '[COSEM] This class models the device clock, managing all information related to date
+      and time including deviations of the local time to a generalized time reference (UTC) due to time
+      zones and daylight-saving time schemes'
+    slots:
+    - has_clock_base
+    - has_daylight_savings_begin
+    - has_daylight_savings_deviation
+    - has_daylight_savings_enabled
+    - has_daylight_savings_end
+    - has_status
+    - has_time
+    - has_time_zone
+    slot_usage:
+      has_clock_base:
+        required: true
+        multivalued: false
+      has_daylight_savings_begin:
+        required: true
+        multivalued: false
+      has_daylight_savings_deviation:
+        required: true
+        multivalued: false
+      has_daylight_savings_enabled:
+        required: true
+        multivalued: false
+      has_daylight_savings_end:
+        required: true
+        multivalued: false
+      has_status:
+        required: true
+        multivalued: false
+      has_time:
+        required: true
+        multivalued: false
+      has_time_zone:
+        required: true
+        multivalued: false
+  ComplexActionOperationInput:
+    class_uri: s4grid:ComplexActionOperationInput
+    title: Complex Action Operation Input
+    description: This class indicates that the parameter needed by the action to operate is complex (i.e.,
+      structure)
+    mixins:
+    - CosemOperationInput
+  CosemOperationInput:
+    class_uri: s4grid:CosemOperationInput
+    title: Cosem Operation Input
+    description: This class specifies the instance at which a service (get, set or action) is going to
+      be executed by indicating the OBIS code
+    mixins:
+    - OperationInput
+    slots:
+    - obtain_input_from_obis
+    slot_usage:
+      obtain_input_from_obis:
+        required: true
+        multivalued: false
+  DayProfile:
+    class_uri: s4grid:DayProfile
+    title: Day Profile
+    description: '[COSEM] This class represents a list of scheduled actions which are defined by a script
+      to be executed and the corresponding activation time'
+    slots:
+    - has_day_schedule
+  DaySchedule:
+    class_uri: s4grid:DaySchedule
+    title: Day Scheduled
+    description: Scheduled actions to be executed at a given time for a day profile
+    slots:
+    - executes_script
+    - has_start_time
+    slot_usage:
+      executes_script:
+        required: true
+        multivalued: false
+      has_start_time:
+        required: true
+        multivalued: false
+  EnergyAndPowerProperty:
+    class_uri: s4grid:EnergyAndPowerProperty
+    title: Energy Power Property
+    description: Class to group those properties related to the energy and power of power lines
+    mixins:
+    - Property
+  EntryDescriptor:
+    class_uri: s4grid:EntryDescriptor
+    title: Entry Descriptor
+    description: In the case of a get service of a profile generic class a selective access can be specified.
+      This indicates the range of entries to be retrieved from the profile generic class
+    mixins:
+    - SelectiveAccess
+    slots:
+    - obtain_from_entry
+    - obtain_to_entry
+  Firmware:
+    class_uri: s4grid:Firmware
+    title: Firmware
+    description: '[COSEM] This class holds identification information related to administration and maintenance
+      of meters. They are not communication parameters but allow the device management'
+    slots:
+    - has_firmware_version
+    - has_product_id
+    - has_vendor_id
+    slot_usage:
+      has_firmware_version:
+        required: true
+        multivalued: false
+      has_product_id:
+        required: true
+        multivalued: false
+      has_vendor_id:
+        required: true
+        multivalued: false
+  GetOperation:
+    class_uri: s4grid:GetOperation
+    title: Get Operation
+    description: This class is the means of a get service to communicate in a procedure-type manner over
+      the network (i.e. transmit data to/from other devices). It is the –machine interpretable- exposure
+      of a –human understandable- Command to a network
+    mixins:
+    - Operation
+    slots:
+    - has_input
+    - has_output
+    - has_selective_access
+    slot_usage:
+      has_input:
+        required: true
+        multivalued: false
+      has_output:
+        required: true
+        multivalued: false
+  GetOperationDataOutput:
+    class_uri: s4grid:GetOperationDataOutput
+    title: Get Operation Data Output
+    description: This class specifies that the output of a get operation is going to be a datatype
+    mixins:
+    - GetOperationOutput
+    slots:
+    - has_output_data_type
+    slot_usage:
+      has_output_data_type:
+        required: true
+        multivalued: false
+  GetOperationObjectOutput:
+    class_uri: s4grid:GetOperationObjectOutput
+    title: Get Operation Object Output
+    description: This class specifies that the output of a get operation is going to be a class
+    mixins:
+    - GetOperationOutput
+    slots:
+    - has_output_object_type
+    slot_usage:
+      has_output_object_type:
+        required: true
+        multivalued: false
+  GetOperationOutput:
+    class_uri: s4grid:GetOperationOutput
+    title: Get Operation Output
+    description: This class specifies the output of a get operation, which can be either a class or a
+      datatype
+    mixins:
+    - OperationOutput
+  GetOperationPropertyInput:
+    class_uri: s4grid:GetOperationPropertyInput
+    title: Get Operation Property Input
+    description: This class specifies the object/datatype property of an instance from which data is going
+      to be retrieved by indicating the name of the object/datatype property
+    mixins:
+    - CosemOperationInput
+    slots:
+    - obtain_input_for_property
+    slot_usage:
+      obtain_input_for_property:
+        required: true
+        multivalued: false
+  GetService:
+    class_uri: s4grid:GetService
+    title: Get Service
+    description: This class is a representation of a get function to a network that makes the function
+      discoverable, registerable, remotely controllable by other devices in the network
+    mixins:
+    - Service
+  GridMeter:
+    class_uri: s4grid:GridMeter
+    title: Meter
+    description: Metering device that remotely records real electricity consumption. This device allows
+      to control all the information regarding consumption for any time range, automatically and remotely
+    mixins:
+    - Meter
+    slots:
+    - has_activity_calendar
+    - has_clock
+    - has_firmware
+    - has_network_interface
+    - has_profile_generic
+    - has_property_value
+    - has_script_table
+    - has_single_scheduled_action
+  MeterProperty:
+    class_uri: s4grid:MeterProperty
+    title: Meter Property
+    description: Class to group those properties related to electric grid meters
+    mixins:
+    - Property
+  NetworkInterface:
+    class_uri: s4grid:NetworkInterface
+    title: Network Interface
+    description: '[COSEM] This class holds the MAC address of the physical device (or, more generally,
+      of a device or software). There shall be an instance of this class for each network interface of
+      the physical device'
+    slots:
+    - has_mac_address
+    slot_usage:
+      has_mac_address:
+        required: true
+        multivalued: false
+  OneM2MDevice:
+    class_uri: oneM2M:Device
+    title: Device
+    source: https://git.onem2m.org/MAS/BaseOntology
+  OneM2MService:
+    class_uri: oneM2M:Service
+    title: Service
+    source: https://git.onem2m.org/MAS/BaseOntology
+    exact_mappings:
+    - saref:Service
+  OperationInput:
+    class_uri: oneM2M:OperationInput
+    title: Operation Input
+    source: https://git.onem2m.org/MAS/BaseOntology
+  OperationOutput:
+    class_uri: oneM2M:OperationOutput
+    title: Operation Output
+    source: https://git.onem2m.org/MAS/BaseOntology
+  PowerLine:
+    class_uri: s4grid:PowerLine
+    title: Power Line
+    description: Interconnected network for electricity delivery from producers to consumers
+    mixins:
+    - FeatureOfInterest
+  PresetAdjustingTime:
+    class_uri: s4grid:PresetAdjustingTime
+    title: Preset Adjusting Time
+    description: This class represents the parameters that are needed by a clock to modify its time
+    mixins:
+    - ComplexActionOperationInput
+    slots:
+    - has_preset_time
+    - has_validity_interval_end
+    - has_validity_interval_start
+    slot_usage:
+      has_preset_time:
+        required: true
+        multivalued: false
+      has_validity_interval_end:
+        required: true
+        multivalued: false
+      has_validity_interval_start:
+        required: true
+        multivalued: false
+  ProfileGeneric:
+    class_uri: s4grid:ProfileGeneric
+    title: Profile Generic
+    description: '[COSEM] This class provides a generalized concept allowing to store, sort and access
+      data groups or data series, called capture objects. Capture objects are appropriate attributes or
+      elements of (an) attribute(s) of COSEM objects. The capture objects are collected periodically or
+      occasionally'
+    slots:
+    - has_capture_period
+    - related_clock
+    - related_observation
+    - related_property_value
+    slot_usage:
+      has_capture_period:
+        required: true
+        multivalued: false
+  QualityProperty:
+    class_uri: s4grid:QualityProperty
+    title: Quality Property
+    description: Class to group those properties related to the quality of power lines
+    mixins:
+    - Property
+  RangeDescriptor:
+    class_uri: s4grid:RangeDescriptor
+    title: Range Descriptor
+    description: In the case of a get service of a profile generic class a selective access can be specified.
+      This indicates the range of values to be retrieved from the profile generic class
+    mixins:
+    - SelectiveAccess
+    slots:
+    - obtain_from_value
+    - obtain_to_value
+  RegularDayProfile:
+    class_uri: s4grid:RegularDayProfile
+    title: Regular Day Profile
+    description: This class represents normal dates
+    mixins:
+    - DayProfile
+  Script:
+    class_uri: s4grid:Script
+    title: Script
+    description: '[COSEM] Lists of actions to be executed by the meter'
+    mixins:
+    - Function
+  ScriptTable:
+    class_uri: s4grid:ScriptTable
+    title: Script Table
+    description: This class allows modelling the triggering of a series of actions by executing scripts
+    slots:
+    - stores_script
+  SeasonProfile:
+    class_uri: s4grid:SeasonProfile
+    title: Season Profile
+    description: '[COSEM] This class represents a season which is defined by its starting date and a specific
+      day profile to be executed'
+    slots:
+    - has_day_profile
+    - has_friday_profile
+    - has_monday_profile
+    - has_saturday_profile
+    - has_season_profile_name
+    - has_season_start
+    - has_special_day_profile
+    - has_sunday_profile
+    - has_thursday_profile
+    - has_tuesday_profile
+    - has_wednesday_profile
+    slot_usage:
+      has_friday_profile:
+        required: true
+        multivalued: false
+      has_monday_profile:
+        required: true
+        multivalued: false
+      has_saturday_profile:
+        required: true
+        multivalued: false
+      has_season_profile_name:
+        required: true
+        multivalued: false
+      has_season_start:
+        required: true
+        multivalued: false
+      has_sunday_profile:
+        required: true
+        multivalued: false
+      has_thursday_profile:
+        required: true
+        multivalued: false
+      has_tuesday_profile:
+        required: true
+        multivalued: false
+      has_wednesday_profile:
+        required: true
+        multivalued: false
+  SelectiveAccess:
+    class_uri: s4grid:SelectiveAccess
+    title: Selective Access
+    description: The get operations property-related services typically reference the entire property.
+      However, in the case of certain properties, selective access to only part of the property may be
+      provided
+    mixins:
+    - OperationInput
+  SetOperation:
+    class_uri: s4grid:SetOperation
+    title: Set Operation
+    description: This class is the means of a set service to communicate in a procedure-type manner over
+      the network (i.e. transmit data to/from other devices). It is the –machine interpretable- exposure
+      of a –human understandable- Command to a network
+    mixins:
+    - Operation
+    slots:
+    - has_input
+    slot_usage:
+      has_input:
+        required: true
+        multivalued: false
+  SetOperationDataInput:
+    class_uri: s4grid:SetOperationDataInput
+    title: Set Operation Data Input
+    description: This class specifies that just the range of a datatype property of the instance is going
+      to be modified
+    mixins:
+    - CosemOperationInput
+    slots:
+    - has_input_data_type
+    - obtain_input_for_property
+    slot_usage:
+      has_input_data_type:
+        required: true
+        multivalued: false
+      obtain_input_for_property:
+        required: true
+        multivalued: false
+  SetOperationObisInput:
+    class_uri: s4grid:SetOperationObisInput
+    title: Set Operation Obis Input
+    description: This class specifies that the whole instance is going to be modified
+    mixins:
+    - CosemOperationInput
+    slots:
+    - has_input_object_type
+    slot_usage:
+      has_input_object_type:
+        required: true
+        multivalued: false
+  SetOperationObjectInput:
+    class_uri: s4grid:SetOperationObjectInput
+    title: Set Operation Object Input
+    description: This class specifies that just the range of an object property of the instance is going
+      to be modified
+    mixins:
+    - CosemOperationInput
+    slots:
+    - has_input_object_type
+    - obtain_input_for_property
+    slot_usage:
+      has_input_object_type:
+        required: true
+        multivalued: false
+      obtain_input_for_property:
+        required: true
+        multivalued: false
+  SetService:
+    class_uri: s4grid:SetService
+    title: Set Service
+    description: This class is a representation of a set function to a network that makes the function
+      discoverable, registerable, remotely controllable by other devices in the network
+    mixins:
+    - Service
+  SimpleActionOperationInput:
+    class_uri: s4grid:SimpleActionOperationInput
+    title: Simple Action Operation Input
+    description: This class indicates that the parameter needed by the action to operate is simple (i.e.,
+      integer, string, etc)
+    mixins:
+    - CosemOperationInput
+    slots:
+    - has_action_value
+    slot_usage:
+      has_action_value:
+        required: true
+        multivalued: false
+  SingleScheduledAction:
+    class_uri: s4grid:SingleScheduledAction
+    title: Single Scheduled Action
+    description: '[COSEM] This class allows modelling the execution of periodic actions within a meter;
+      such actions are not necessarily linked to tariffication'
+    slots:
+    - executes_script
+    - has_execution_time
+    slot_usage:
+      executes_script:
+        required: true
+        multivalued: false
+  SpecialDayEntry:
+    class_uri: s4grid:SpecialDayEntry
+    title: Special Day Entry
+    description: This class represents the parameters that are needed by an activity calendar for adding
+      a new special day
+    mixins:
+    - ComplexActionOperationInput
+    slots:
+    - has_day_id
+    - has_index
+    - has_special_date
+    slot_usage:
+      has_day_id:
+        required: true
+        multivalued: false
+      has_index:
+        required: true
+        multivalued: false
+      has_special_date:
+        required: true
+        multivalued: false
+  SpecialDayProfile:
+    class_uri: s4grid:SpecialDayProfile
+    title: Special Day Profile
+    description: '[COSEM] This class allows defining special dates. On such dates, a special switching
+      behaviour overrides the normal one'
+    mixins:
+    - DayProfile
+    slots:
+    - has_special_day_date
+    slot_usage:
+      has_special_day_date:
+        required: true
+        multivalued: false
