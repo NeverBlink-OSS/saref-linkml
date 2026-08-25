@@ -17,6 +17,7 @@ import subprocess
 import sys
 from collections import defaultdict
 from pathlib import Path
+from typing import NamedTuple
 
 import yaml
 from rdflib import BNode, Graph, URIRef
@@ -72,6 +73,85 @@ def ordered(d: dict, order: list[str]) -> dict:
     return {k: d[k] for k in order if k in d} | {k: v for k, v in d.items() if k not in order}
 
 
+class Element(NamedTuple):
+    """One named thing a schema can refer to: what it is called, and what it is.
+
+    `declared_as` is the owl: type CURIE a slot was declared under, which decides its default
+    range. Nothing else has one.
+    """
+
+    name: str
+    kind: str  # "class" | "slot" | "enum"
+    imported: bool = False  # provided by an import rather than emitted by this schema
+    declared_as: str | None = None
+
+
+class Registry:
+    """Every element the schema can name, and every name already spoken for.
+
+    """
+
+    def __init__(self, reserved: set[str]):
+        self.elements: dict[URIRef, Element] = {}  # by IRI, in the order they arrived
+        self.enum_bodies: dict[str, dict] = {}  # every emitted enum, by LinkML name
+        self.reserved = set(reserved)  # names the schema header declares
+        self.used: set[str] = set()  # names an element or an enum currently holds
+
+    # -- reading ------------------------------------------------------------
+
+    def get(self, iri) -> Element | None:
+        return self.elements.get(iri)
+
+    def name_of(self, iri, *kinds: str, local_only: bool = False) -> str | None:
+        """`iri`'s LinkML name if it is one of `kinds`, else None."""
+        element = self.elements.get(iri)
+        if element is None or element.kind not in kinds:
+            return None
+        return None if local_only and element.imported else element.name
+
+    def locals(self, kind: str) -> dict[URIRef, str]:
+        """Every element of `kind` this schema emits itself, in the order it declared them."""
+        return {iri: e.name for iri, e in self.elements.items()
+                if e.kind == kind and not e.imported}
+
+    def imported_names(self) -> set[str]:
+        return {e.name for e in self.elements.values() if e.imported}
+
+    def taken(self, name: str) -> bool:
+        return name in self.used or name in self.reserved
+
+    # -- writing ------------------------------------------------------------
+
+    def declare(self, iri, name: str, kind: str, declared_as: str | None = None) -> None:
+        """Record an element this schema emits."""
+        self.elements[iri] = Element(name, kind, False, declared_as)
+        self.used.add(name)
+
+    def adopt(self, iri, name: str, kind: str) -> None:
+        """Record an element an import already provides."""
+        self.elements[iri] = Element(name, kind, True)
+        self.used.add(name)
+
+    def rename(self, iri, name: str) -> None:
+        self.elements[iri] = self.elements[iri]._replace(name=name)
+        self.used.add(name)
+        self._recount()
+
+    def release(self, iri) -> str:
+        """Drop an element and hand its name back; returns the name it held."""
+        name = self.elements.pop(iri).name
+        self._recount()
+        return name
+
+    def add_enum(self, name: str, body: dict) -> None:
+        self.enum_bodies[name] = body
+        self.used.add(name)
+
+    def _recount(self) -> None:
+        """Recompute the names in use, so a released one can be handed out again."""
+        self.used = {e.name for e in self.elements.values()} | set(self.enum_bodies)
+
+
 class Converter:
     """Turns one RDF graph into one LinkML schema dict, driven by the mapping table."""
 
@@ -83,20 +163,14 @@ class Converter:
         self.issues: list[str] = []
         self.used_prefixes: set[str] = set()
         self.imports: list[str] = []  # LinkML imports resolved from owl:imports
-        self.classes: dict[URIRef, str] = {}  # emitted classes: IRI -> LinkML name
-        self.slots: dict[URIRef, str] = {}  # emitted slots:   IRI -> LinkML name
-        self.slot_kind: dict[URIRef, str] = {}  # slot IRI -> declaring owl: type CURIE
+        self.reg = Registry(set(mapping["schema"]["root_only"]["types"]))
         self.class_slots: dict[URIRef, set[str]] = defaultdict(set)
-        self.imported: dict[URIRef, str] = {}  # elements an import already provides: IRI -> name
-        self.imported_kind: dict[URIRef, str] = {}  # the same IRI -> "classes" | "slots"
         self.default_prefix = ""  # vann:preferredNamespacePrefix, read from the ontology node
-        self.enums: dict[URIRef, str] = {}  # a class rendered as an enum: type IRI -> enum name
         self.members: dict[URIRef, set[URIRef]] = defaultdict(set)  # type IRI -> individuals
         self.enumerated: dict[URIRef, set[URIRef]] = {}  # the same, from enumeration axioms
-        self.read_one_of: set = set()  # nodes an enumeration was actually read off
         self.slot_owners: set[URIRef] = set()  # classes some property declares a domain of
         self.ranged: set[URIRef] | None = None  # classes in range position, computed once
-        self.value_enums: dict[str, dict] = {}  # every emitted enum, by LinkML name
+        self.fillers = self.filler_axioms()
 
     # -- small helpers ------------------------------------------------------
 
@@ -194,35 +268,26 @@ class Converter:
             prefix, _, local = str(curie).partition(":")
             return URIRef(prefixes.get(prefix, f"{prefix}:") + local)
 
-        for kind, key in (("classes", "class_uri"), ("slots", "slot_uri")):
-            for name, body in (doc.get(kind) or {}).items():
+        for section, key, kind in (("classes", "class_uri", "class"),
+                                   ("slots", "slot_uri", "slot")):
+            for name, body in (doc.get(section) or {}).items():
                 if body and body.get(key):
-                    self.imported[expand(body[key])] = name
-                    self.imported_kind[expand(body[key])] = kind
+                    self.reg.adopt(expand(body[key]), name, kind)
 
     def known_class(self, iri: URIRef) -> str | None:
         """LinkML name usable as a range: a class, an enum, or an import.
 
         An enum name is a valid range, so a class replaced by an enum keeps resolving.
         """
-        if iri in self.classes:
-            return self.classes[iri]
-        if iri in self.enums:
-            return self.enums[iri]
-        if self.imported_kind.get(iri) == "classes":
-            return self.imported[iri]
-        return None
+        return self.reg.name_of(iri, "class", "enum")
 
     def claim(self, name: str, iri: URIRef | None, what: str) -> str:
         """Reserve a name for an enum, renaming it if something else already holds it.
 
         """
-        taken = (set(self.imported.values()) | set(self.classes.values())
-                 | set(self.slots.values()) | set(self.value_enums)
-                 | set(self.m["schema"]["root_only"]["types"]))
-        if name not in taken:
+        if not self.reg.taken(name):
             return name
-        if name in self.value_enums:
+        if name in self.reg.enum_bodies:
             raise ValueError(f"{what} would be named {name}, which another enum in this schema "
                              f"already uses; two enums cannot share one name")
         chosen = self.qualify(self.m["naming"]["on_conflict_with_import"]["class"], name,
@@ -232,11 +297,7 @@ class Converter:
 
     def known_slot(self, iri: URIRef) -> str | None:
         """LinkML name for a slot, whether this schema emits it or an import provides it."""
-        if iri in self.slots:
-            return self.slots[iri]
-        if self.imported_kind.get(iri) == "slots":
-            return self.imported[iri]
-        return None
+        return self.reg.name_of(iri, "slot")
 
     # -- vocabulary ---------------------------------------------------------
 
@@ -279,15 +340,13 @@ class Converter:
                     continue  # anonymous classes are not emitted
                 if self.curie(term) in self.m["report_ignored"]:
                     continue  # declared by the source, but deliberately ignored
-                if term in self.imported:
+                if (found := self.reg.get(term)) and found.imported:
                     self.note(f"{self.curie(term)} is declared but already imported "
-                              f"as {self.imported[term]}, reusing it")
+                              f"as {found.name}, reusing it")
                     continue
-                if kind == "class":
-                    self.classes[term] = self.styled(kind, term)
-                else:
-                    self.slots[term] = self.styled(kind, term)
-                    self.slot_kind[term] = curie
+                # a slot remembers the owl: type it was declared under; that decides its default range
+                self.reg.declare(term, self.styled(kind, term), kind,
+                                 curie if kind == "slot" else None)
 
     def qualify(self, template: str, name: str, prefix: str) -> str:
         """Fill a naming template with a namespace prefix."""
@@ -298,8 +357,7 @@ class Converter:
     def term_prefix(self, iri: URIRef) -> str:
         """The prefix the source binds for a term's own namespace.
 
-        Used for collisions rather than the schema's own prefix: saref4grid declares terms in
-        the third-party oneM2M namespace, and OneM2MDevice is right where S4gridDevice is not.
+        Used for collisions.
         """
         return self.curie(iri).partition(":")[0]
 
@@ -313,17 +371,17 @@ class Converter:
         """
         spec = self.m["naming"]["on_conflict_with_import"]
         override = self.m["naming"].get("rename") or {}
-        taken = set(self.imported.values())
+        taken = self.reg.imported_names()
         if not override and not taken:
             return
-        for registry, kind in ((self.classes, "class"), (self.slots, "slot")):
-            for iri, name in list(registry.items()):
+        for kind in ("class", "slot"):
+            for iri, name in self.reg.locals(kind).items():
                 chosen = override.get(self.curie(iri))
                 if chosen is None:
                     if name not in taken:
                         continue
                     chosen = self.qualify(spec[kind], name, self.term_prefix(iri))
-                registry[iri] = chosen
+                self.reg.rename(iri, chosen)
                 if spec.get("report"):
                     self.note(f"{self.curie(iri)} named {chosen}: an import already uses {name}")
 
@@ -339,7 +397,7 @@ class Converter:
         for subject, _, kind in self.g.triples((None, RDF.type, None)):
             if isinstance(subject, BNode) or isinstance(kind, BNode):
                 continue
-            if subject in self.classes or subject in self.slots or subject in self.imported:
+            if self.reg.get(subject) is not None:  # a class, a slot or an import, not a member
                 continue
             if self.known_class(kind) is not None:
                 self.members[kind].add(subject)
@@ -360,7 +418,6 @@ class Converter:
         enumerates = False
         for listed in self.g.objects(node, OWL.oneOf):
             enumerates = True
-            self.read_one_of.add(node)
             for item in self.g.items(listed):
                 if isinstance(item, BNode):
                     self.note(f"{self.curie(kind)}: owl:oneOf lists an anonymous individual, "
@@ -387,7 +444,7 @@ class Converter:
         """Every class an enumeration axiom names, with the individuals it names.
 
         """
-        for kind in self.classes:
+        for kind in self.reg.locals("class"):
             found = self.enumeration(kind, kind, set())
             if found is not None:
                 self.enumerated[kind] = found
@@ -440,12 +497,12 @@ class Converter:
         Find all the places where property has a range or where we create a range through restriction
         """
         if self.ranged is None:
-            nodes = [declared for prop in self.slots
+            nodes = [declared for prop in self.reg.locals("slot")
                      if (declared := self.g.value(prop, RDFS.range)) is not None]
-            nodes += [filler for kind in self.classes
+            nodes += [filler for kind in self.reg.locals("class")
                       for parent in self.g.objects(kind, RDFS.subClassOf)
                       if isinstance(parent, BNode) # restriction
-                      for axiom in self.filler_axioms() # allValuesFrom, someValuesFrom, onClass, onDataRange
+                      for axiom in self.fillers # allValuesFrom, someValuesFrom, onClass, onDataRange
                       for filler in self.g.objects(parent, axiom)] # the range restriction creates
             self.ranged = {member for node in nodes
                            for member in (self.union(node) or [node])
@@ -461,10 +518,10 @@ class Converter:
         
         Check if we can get rid of the class.
         """
-        if self.imported_kind.get(kind) == "classes":
+        if (found := self.reg.get(kind)) and found.imported and found.kind == "class":
             # an extension adding individuals does not get to remodel an import
             return (f"{self.curie(kind)} enumerates {len(members)} individuals declared here, but an "
-                    f"import provides it as the class {self.imported[kind]}, so it stays one; the "
+                    f"import provides it as the class {found.name}, so it stays one; the "
                     f"schema that declares a class decides that, not one that extends it")
         if any(not isinstance(c, BNode) for c in self.g.subjects(RDFS.subClassOf, kind)):
             # we cannot make an enum the parent of a class, so it stays a class too
@@ -492,7 +549,7 @@ class Converter:
             if reason := self.stays_a_class(kind, members):
                 self.note(reason)
                 continue
-            name = self.classes.pop(kind)
+            name = self.reg.release(kind)  # the class stops being one, freeing its name
             # the enum takes the class's place, so it takes its identity too
             head = {"enum_uri": self.curie(kind)} | self.documentation(kind)
             if kind not in self.enumerated:  # nothing in the source says these are the only members
@@ -505,10 +562,10 @@ class Converter:
                 self.note(f"{self.curie(kind)} replaced by an enum; mixins {parents} are "
                           f"recorded")
             name = self.claim(name, kind, f"the enum for {self.curie(kind)}")
-            self.enums[kind] = name
+            self.reg.declare(kind, name, "enum")
             enum = self.build_enum(head, members)
-            self.value_enums[name] = ordered(
-                enum | self.inheritance(parents, "classes", "rdfs:subClassOf"), ENUM_ORDER)
+            self.reg.add_enum(name, ordered(
+                enum | self.inheritance(parents, "classes", "rdfs:subClassOf"), ENUM_ORDER))
 
     def has_value_enum(self, owner: str, prop: URIRef, members: set[URIRef]) -> str:
         """The permitted set an owl:hasValue conjunction becomes, as a per-class enum."""
@@ -531,7 +588,7 @@ class Converter:
                                f"the slot they are pinned on."}
         if kinds:
             head["see_also"] = kinds
-        self.value_enums[name] = self.build_enum(head, members)
+        self.reg.add_enum(name, self.build_enum(head, members))
         return name
 
     # -- ranges -------------------------------------------------------------
@@ -555,7 +612,8 @@ class Converter:
             return {self.m["properties"]["owl:unionOf"]: [{"range": n} for n in names]}
         if names:
             return {"range": names[0]}
-        kind = self.slot_kind.get(prop)
+        declaring = self.reg.get(prop)
+        kind = declaring.declared_as if declaring else None
         if kind is None:
             self.note(f"{context}: nothing emittable to range over, keeping the range "
                       f"{self.known_slot(prop)} already has")
@@ -605,9 +663,9 @@ class Converter:
         classes = []
         for domain in declared:
             for member in self.union(domain) or [domain]: # union is here bc of Core that uses it extensively
-                if member in self.classes:
+                if self.reg.name_of(member, "class", local_only=True):
                     classes.append(member)
-                elif self.imported_kind.get(member) == "classes":
+                elif self.reg.name_of(member, "class"):
                     # LinkML cannot reopen an imported class to hang another slot on it
                     self.note(f"domain of {self.curie(prop)} is {self.curie(member)}, which an "
                               f"import owns; the slot is left unattached there")
@@ -645,15 +703,16 @@ class Converter:
         elif parents:  # a plain range arrives through is_a; a union does not
             slot |= self.inherited_union(prop, prop)
         else:
-            slot["range"] = self.m["defaults"]["range"][self.slot_kind[prop]]
+            slot["range"] = self.m["defaults"]["range"][self.reg.elements[prop].declared_as]
 
         slot["multivalued"] = self.m["defaults"]["multivalued"]
         for curie, body in self.m["properties"].items():
             if isinstance(body, dict) and (prop, RDF.type, self.uri(curie)) in self.g:
                 slot |= body
-        inverse = self.g.value(prop, OWL.inverseOf)
-        if inverse in self.slots:
-            slot[self.m["properties"]["owl:inverseOf"]] = self.slots[inverse]
+        # only a slot this schema emits can be named as an inverse
+        inverse = self.reg.name_of(self.g.value(prop, OWL.inverseOf), "slot", local_only=True)
+        if inverse:
+            slot[self.m["properties"]["owl:inverseOf"]] = inverse
         return ordered(slot, SLOT_ORDER)
 
     # -- restrictions -------------------------------------------------------
@@ -803,7 +862,7 @@ class Converter:
                 self.note(f"{self.curie(iri)} drops parent {self.curie(parent)}, not emitted")
         cls |= self.inheritance(parents, "classes", "rdfs:subClassOf")
         for prop, members in sorted(pinned.items(), key=lambda kv: str(kv[0])):
-            enum = self.has_value_enum(self.classes[iri], prop, members)
+            enum = self.has_value_enum(self.reg.elements[iri].name, prop, members)
             usage = {k: (enum if v == "<Enum>" else v)
                      for k, v in self.m["has_value"][self.usage_metaslot()].items()}
             contributions[self.known_slot(prop)].append(usage)
@@ -870,17 +929,18 @@ class Converter:
         self.apply_naming()
         self.collect_individuals()
         self.collect_enumerations()
-        owners = {prop: self.domains(prop) for prop in self.slots} # check who owns slots
+        own_slots = self.reg.locals("slot")
+        owners = {prop: self.domains(prop) for prop in own_slots} # check who owns slots
         self.slot_owners = {owner for found in owners.values() for owner in found}
         self.build_individual_enums()  # before ranges resolve: it moves classes to enums
 
-        slots = {self.slots[p]: self.build_slot(p) for p in self.slots}
+        slots = {name: self.build_slot(p) for p, name in own_slots.items()}
         for prop, found in owners.items():
             for owner in found:
-                self.class_slots[owner].add(self.slots[prop])
-        classes = {self.classes[c]: self.build_class(c) for c in self.classes}
+                self.class_slots[owner].add(own_slots[prop])
+        classes = {name: self.build_class(c) for c, name in self.reg.locals("class").items()}
         carried = {name for names in self.class_slots.values() for name in names}
-        for prop, name in self.slots.items():
+        for prop, name in own_slots.items():
             if name not in carried:
                 self.note(f"{self.curie(prop)} is emitted unattached to any class, "
                           f"neither a domain nor a restriction places it")
@@ -895,9 +955,10 @@ class Converter:
         schema |= {k: v for k, v in header.items() if k != "prefixes"}
         prefixes = {p: str(n) for p, n in self.g.namespaces() if p in self.used_prefixes}
         schema["prefixes"] = dict(sorted((prefixes | header["prefixes"]).items()))
-        if self.value_enums:
-            schema["enums"] = {k: self.value_enums[k] for k in sorted(self.value_enums)}
-        schema["slots"] = {k: (slots)[k] for k in sorted(slots)}
+        if self.reg.enum_bodies:
+            enums = self.reg.enum_bodies
+            schema["enums"] = {k: enums[k] for k in sorted(enums)}
+        schema["slots"] = {k: slots[k] for k in sorted(slots)}
         schema["classes"] = {k: classes[k] for k in sorted(classes)}
         return ordered(schema, SCHEMA_ORDER)
 
@@ -924,10 +985,6 @@ def main() -> int:
     parser.add_argument("-o", "--out", type=Path, required=True, help="LinkML schema to write")
     parser.add_argument("-m", "--mapping", type=Path, default=here / "mapping/mapping_table.yaml")
     args = parser.parse_args()
-    # temporary for debugging
-    # mapping = load_mapping(here / "mapping/mapping_table.yaml")
-    # graph = Graph().parse(str(here / "source/saref4bldg/saref4bldg.ttl"), format="turtle")
-    # converter = Converter(graph, mapping, "test")
 
     mapping = load_mapping(args.mapping)
     graph = Graph().parse(args.source, format="turtle")

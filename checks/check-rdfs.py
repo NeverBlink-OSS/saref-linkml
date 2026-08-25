@@ -15,9 +15,7 @@ and CHECK_ENUM_INHERITANCE below.
 """
 
 import argparse
-import subprocess
 import sys
-import tempfile
 from pathlib import Path
 
 import yaml
@@ -52,12 +50,19 @@ def qname(term):
     return f"<{term}>"
 
 def generate_rdfs(schema):
-    out = Path(tempfile.mkdtemp(prefix="rdfs-check-")) / "generated.rdfs.ttl"
-    subprocess.run(
-        ["linkml-scala", "generate", "rdfs", "--format", "ttl", "--to", str(out), str(schema)],
-        check=True,
-    )
-    return out
+    """The RDFS for `schema`, as N-Triples text.
+
+    """
+    try:
+        import linkml_scala
+    except ImportError:
+        sys.exit("neverblink-linkml is not installed - pip install neverblink-linkml")
+
+    try:
+        with linkml_scala.load_file(schema) as loaded:
+            return loaded.rdfs()
+    except linkml_scala.LinkMlError as error:
+        sys.exit(f"generating RDFS from {schema} failed:\n{error}")
 
 def named_hierarchy(graph, predicate):
     """subject/object pairs of `predicate` where both ends are named terms.
@@ -203,7 +208,7 @@ def report_dropped_properties(dropped, schema_slots, source, schema, ignored):
 def main():
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--rdfs", default=None,
-                    help="pre-generated RDFS; skips calling linkml-scala")
+                    help="pre-generated RDFS; skips generating it from --schema")
     ap.add_argument("--schema", type=Path, default=SCHEMA,
                     help="the LinkML schema the RDFS was generated from")
     ap.add_argument("--source", type=Path, default=SAREF,
@@ -221,16 +226,20 @@ def main():
                          "enums (disabled by default, see module docstring)")
     args = ap.parse_args()
 
-    generated = Path(args.rdfs) if args.rdfs else generate_rdfs(args.schema)
     ref, gen = Graph(), Graph()
     ref.parse(args.source, format="turtle")
-    gen.parse(generated)          # format inferred from the extension, so .ttl or .nt both work
+    if args.rdfs:
+        generated = Path(args.rdfs).name
+        gen.parse(args.rdfs)      # format inferred from the extension, so .ttl or .nt both work
+    else:
+        generated = f"generated from {args.schema.name}"
+        gen.parse(data=generate_rdfs(args.schema), format="nt")
 
     ref_classes, ref_props, ref_subclass, ref_subprop = read_reference(ref)
     gen_classes, gen_props, gen_subclass, gen_subprop = read_generated(gen)
 
     print(f"reference: {args.source.name} - {len(ref_classes)} classes, {len(ref_props)} properties")
-    print(f"generated: {generated.name} - {len(gen_classes)} classes, {len(gen_props)} properties")
+    print(f"generated: {generated} - {len(gen_classes)} classes, {len(gen_props)} properties")
 
     ignored = read_ignored(args.mapping, ref_classes | ref_props, ref)
 

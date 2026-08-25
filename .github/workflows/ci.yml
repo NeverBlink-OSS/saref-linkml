@@ -92,6 +92,7 @@ jobs:
         with:
           command: generate
           generator: shacl
+          open: true
           files: "schema/${{ matrix.name }}.yaml"
           output: build/shacl
 
@@ -138,6 +139,5 @@ jobs:
             --shapes   "$SHACL" \
             --schema   schema/${{ matrix.name }}.yaml \
             --examples ${{ matrix.examples }} \
-            --expected tests/expected-violations-${{ matrix.name }}.yaml \
             --build    build/${{ matrix.name }} \
             --mode     open
