@@ -3,6 +3,8 @@
 [![CI](https://img.shields.io/github/actions/workflow/status/NeverBlink-OSS/saref-linkml/ci.yml?branch=main&style=flat-square&logo=githubactions&logoColor=white&label=CI)](https://github.com/NeverBlink-OSS/saref-linkml/actions/workflows/ci.yml)
 [![License](https://img.shields.io/badge/license-BSD_3--Clause-blue?style=flat-square&logo=opensourceinitiative&logoColor=white)](LICENSE)
 [![Discord](https://img.shields.io/badge/Discord-join_chat-5865F2?style=flat-square&logo=discord&logoColor=white)](https://discord.gg/HGksVAJ6ss)
+[![Playground](https://img.shields.io/badge/playground-try_it_live-8A2BE2?style=flat-square&logo=scala&logoColor=white)](https://linkml.neverblink.eu/playground/?url=https%3A%2F%2Fgithub.com%2FNeverBlink-OSS%2Fsaref-linkml%2Fblob%2Fmain%2Fschema%2Fsaref-core.yaml)
+[![built with LinkML-Scala](https://img.shields.io/badge/built_with-LinkML--Scala-2D6A9F?style=flat-square)](https://github.com/NeverBlink-OSS/linkml-scala)
 
 </div>
 
