@@ -43,11 +43,6 @@ satisfy them. Where an example was missing a statement that the ontology require
 | SAREF4GRID | 12 | 12 |
 | SAREF4WATR | 0 | - |
 
-SAREF4WATR is the odd one out: ETSI publishes no example data for it, so its SHACL shapes get no
-example-based test and CI runs only the RDFS check on it. If ETSI adds examples later, drop them
-in `saref4watr/examples/` and give the matrix entry in
-[../.github/workflows/ci.yml](../.github/workflows/ci.yml) a non-empty `examples:` path.
-
 Every edit is marked in place. Most sit in a block at the end of the file:
 
 ```turtle
