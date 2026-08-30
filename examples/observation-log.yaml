@@ -32,13 +32,13 @@ classes:
         # SAREF allows any literal. A reading is a number.
         range: double
         required: true
-        multivalued: false
+        maximum_cardinality: 1
       is_measured_in:
         # Retargeted at CatalogUnit so the unit is written as an IRI. Left as UnitOfMeasure it
         # would be a nested copy of the unit, because UnitOfMeasure has no identifier.
         range: CatalogUnit
         required: true
-        multivalued: false
+        maximum_cardinality: 1
 
   LoggedObservation:
     is_a: Observation
@@ -46,20 +46,20 @@ classes:
     slot_usage:
       has_timestamp:
         required: true
-        multivalued: false
+        maximum_cardinality: 1
       made_by:
         # Retargeted from Sensor to CatalogSensor, for the same reason as is_measured_in above.
         range: CatalogSensor
         required: true
-        multivalued: false
+        maximum_cardinality: 1
       observes:
         # Already required by SAREF's own restriction on Observation, so only the range is set.
         range: CatalogProperty
-        multivalued: false
+        maximum_cardinality: 1
       has_result:
         range: Reading
         required: true
-        multivalued: false
+        maximum_cardinality: 1
 
   ObservationLog:
     tree_root: true

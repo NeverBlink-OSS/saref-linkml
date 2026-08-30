@@ -11,6 +11,7 @@ reported on stderr rather than guessed at, and no placeholder classes are emitte
 from __future__ import annotations
 
 import argparse
+import math
 import re
 import shutil
 import subprocess
@@ -734,16 +735,17 @@ class Converter:
         """
         if metaslot in ("range", self.m["properties"]["owl:unionOf"]):
             return "type"
-        return {"required": "lower", "multivalued": "upper"}.get(metaslot)
+        return {"required": "lower", "maximum_cardinality": "upper"}.get(metaslot)
 
-    def width(self, dimension: str, body: dict) -> int:
+    def width(self, dimension: str, body: dict) -> float:
         """How much `body` admits in `dimension`; the wider value wins a clash."""
         if dimension == "type":
             union = body.get(self.m["properties"]["owl:unionOf"])
             return len(union) if union else 1
         if dimension == "lower":
             return 0 if body.get("required") else 1
-        return 1 if body.get("multivalued", True) else 0
+        # No upper bound at all admits more than any bound the table can write.
+        return body.get("maximum_cardinality", math.inf)
 
     def resolve(self, bodies: list[dict], cls: URIRef, slot: str) -> dict:
         """One slot_usage entry from every restriction on this class and property.
@@ -751,7 +753,7 @@ class Converter:
         OWL reads several restrictions as a conjunction, which one slot_usage entry cannot always
         hold, so the widest constraint wins. 
         """
-        widest: dict[str, int] = {}
+        widest: dict[str, float] = {}
         for body in bodies:
             for metaslot in body:
                 if d := self.dimension(metaslot):

@@ -10,7 +10,7 @@
 
 # SAREF-LinkML
 
-**[SAREF](https://saref.etsi.org/) is ETSI's reference ontology for the Internet of Things.** This repository has SAREF core and three of its extensions written as [LinkML](https://linkml.io/) schemas. **We also publish SAREF SHACL shapes, RDFS, and JSON Schemas** generated from LinkML.
+**[SAREF](https://saref.etsi.org/) is ETSI's reference ontology for the Internet of Things.** This repository has SAREF core and four of its extensions written as [LinkML](https://linkml.io/) schemas. **We also publish SAREF SHACL shapes, RDFS, and JSON Schemas** generated from LinkML.
 
 SAREF is published as OWL, which works well for reasoning and Semantic Web tools, but does not help with validation (constraints) or with data formats other than RDF. LinkML solves that: it is a modelling language that works across formats. You write a schema in LinkML, and it generates SHACL, RDFS, JSON Schema, Frictionless table schemas, GraphQL, ER diagrams, and code for several languages.
 
@@ -45,6 +45,7 @@ They are in [schema/](schema/):
 - [saref4bldg.yaml](schema/saref4bldg.yaml) - SAREF4BLDG (buildings)
 - [saref4ener.yaml](schema/saref4ener.yaml) - SAREF4ENER (energy flexibility)
 - [saref4grid.yaml](schema/saref4grid.yaml) - SAREF4GRID (smart grid)
+- [saref4watr.yaml](schema/saref4watr.yaml) - SAREF4WATR (water)
 
 If an extension that you need is not here, please [open an issue](https://github.com/saref-linkml/saref-linkml/issues/new).
 
@@ -67,7 +68,7 @@ Sensor:
 
 ### Generating SHACL, RDFS, JSON Schema, and other formats
 
-Grab the four files from [schema/](schema/). Then, we recommend using [LinkML-Scala](https://github.com/NeverBlink-OSS/linkml-scala), which is a single binary with no runtime dependencies (see the [installation instructions](https://github.com/NeverBlink-OSS/linkml-scala/blob/main/cli/README.md)).
+Grab the five files from [schema/](schema/). Then, we recommend using [LinkML-Scala](https://github.com/NeverBlink-OSS/linkml-scala), which is a single binary with no runtime dependencies (see the [installation instructions](https://github.com/NeverBlink-OSS/linkml-scala/blob/main/cli/README.md)).
 
 Generate a JSON Schema for SAREF4ENER:
 
@@ -105,9 +106,11 @@ A reading then looks like this:
 }
 ```
 
-Those single-element arrays should be plain values. The example schemas say `multivalued: false`
-on each of these slots, but `slot_usage` overrides of `multivalued` are currently dropped, so the
-generated JSON Schema still asks for arrays. Same cause as the cardinality limitation below.
+Those single-element arrays are arrays on purpose. SAREF declares these slots multivalued, and
+`slot_usage` may only narrow a slot, never change its shape: turning a list into a scalar would
+make data that is valid against the parent class invalid against the child. So the example
+schemas write `maximum_cardinality: 1`, which says "at most one entry" without breaking that
+rule. See the note on cardinality below for what the generators currently do with it.
 
 To check that the JSON really does match:
 
@@ -133,7 +136,7 @@ We use ETSI's SAREF examples to test the generated SHACL shapes.
 To run the checks locally:
 
 ```shell
-pip install rdflib pyyaml pyshacl jsonschema
+pip install -r requirements.txt
 linkml-scala generate shacl --open --to build/shapes.nt schema/saref-core.yaml
 linkml-scala generate rdfs --to build/rdfs.nt schema/saref-core.yaml
 python checks/check-rdfs.py --rdfs build/rdfs.nt --schema schema/saref-core.yaml \
@@ -147,7 +150,7 @@ Most of ETSI's examples needed a small edit before they would validate, usually 
 
 ### Limitations
 
-- `owl:minCardinality 1` becomes `required: true`. Temporarily, only an upper bound of exactly 1 is expressible (max 1, cardinality 1 -> `multivalued: false`), larger upper bounds are dropped and reported. `owl:minCardinality 0` is skipped.
+- `owl:minCardinality 1` becomes `required: true`, and `owl:minCardinality 0` is skipped. An upper bound (max 1, cardinality 1) becomes `maximum_cardinality: 1` in `slot_usage`. Only a bound of exactly 1 is written today; larger ones are dropped and reported, though nothing in SAREF has one. Note that LinkML-Scala 0.14.0 does not yet act on `maximum_cardinality`, so these 122 bounds are in the schemas but do not reach the generated SHACL (`sh:maxCount`) or JSON Schema (`maxItems`) yet.
 - Two restrictions are read as closed, stricter than the axiom: `owl:someValuesFrom X` becomes `required: true` and `range: X`, and `owl:hasValue` becomes a closed enum. `owl:allValuesFrom` also becomes a range.
 - By default all slots are `multivalued: true`, constraints restrict that per class basis. Exception: `owl:FunctionalProperty` sets `multivalued: false` on the slot itself, schema-wide.
 - When there are multiple restrictions on the same slot, the WIDEST is taken (e.g. `saref:represents`). The loser is dropped whole, not just the key that lost.

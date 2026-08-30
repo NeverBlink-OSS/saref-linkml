@@ -1855,13 +1855,13 @@ classes:
       belongs_to:
         range: PowerProfile
         required: true
-        multivalued: false
+        maximum_cardinality: 1
       consists_of:
         range: PowerSequence
         required: true
       has_identifier:
         required: true
-        multivalued: false
+        maximum_cardinality: 1
         range: UnsignedInt
   ContractualPowerLimit:
     class_uri: s4ener:ContractualPowerLimit
@@ -1908,15 +1908,15 @@ classes:
     - has_usage
     slot_usage:
       has_creation_time:
-        multivalued: false
+        maximum_cardinality: 1
       has_effective_period:
         required: true
-        multivalued: false
+        maximum_cardinality: 1
         range: Interval
       has_quantile:
-        multivalued: false
+        maximum_cardinality: 1
       has_update_rate:
-        multivalued: false
+        maximum_cardinality: 1
       has_usage:
         range: Usage
   DemandDrivenProfile:
@@ -2014,9 +2014,9 @@ classes:
     - relates_to_request
     slot_usage:
       has_creation_time:
-        multivalued: false
+        maximum_cardinality: 1
       has_effective_period:
-        multivalued: false
+        maximum_cardinality: 1
         range: Interval
       has_recipient:
         any_of:
@@ -2396,22 +2396,22 @@ classes:
       belongs_to:
         range: S4enerDevice
         required: true
-        multivalued: false
+        maximum_cardinality: 1
       consists_of:
         range: AlternativesGroup
         required: true
       node_remote_controllable:
         required: true
-        multivalued: false
+        maximum_cardinality: 1
       supports_reselection:
         required: true
-        multivalued: false
+        maximum_cardinality: 1
       supports_single_slot_scheduling_only:
         required: true
-        multivalued: false
+        maximum_cardinality: 1
       total_sequences_count_max:
         required: true
-        multivalued: false
+        maximum_cardinality: 1
   PowerRange:
     class_uri: s4ener:PowerRange
     title: Power range
@@ -2461,66 +2461,66 @@ classes:
     - sequence_remote_controllable
     slot_usage:
       active_repetition_number:
-        multivalued: false
+        maximum_cardinality: 1
       active_slot_number:
-        multivalued: false
+        maximum_cardinality: 1
       belongs_to:
         range: AlternativesGroup
         required: true
-        multivalued: false
+        maximum_cardinality: 1
       cheapest:
-        multivalued: false
+        maximum_cardinality: 1
       consists_of:
         range: Slot
         required: true
       greenest:
-        multivalued: false
+        maximum_cardinality: 1
       has_active_duration_max:
         required: true
       has_active_duration_min:
         required: true
       has_active_duration_sum_max:
-        multivalued: false
+        maximum_cardinality: 1
       has_active_duration_sum_min:
-        multivalued: false
+        maximum_cardinality: 1
       has_earliest_start_time:
-        multivalued: false
+        maximum_cardinality: 1
       has_elapsed_slot_time:
-        multivalued: false
+        maximum_cardinality: 1
       has_end_time:
-        multivalued: false
+        maximum_cardinality: 1
       has_identifier:
         required: true
-        multivalued: false
+        maximum_cardinality: 1
       has_latest_end_time:
-        multivalued: false
+        maximum_cardinality: 1
       has_pause_duration_max:
-        multivalued: false
+        maximum_cardinality: 1
       has_pause_duration_min:
-        multivalued: false
+        maximum_cardinality: 1
       has_remaining_slot_time:
-        multivalued: false
+        maximum_cardinality: 1
       has_resume_cost_estimated:
         range: PropertyValue
-        multivalued: false
+        maximum_cardinality: 1
       has_resume_energy_estimated:
         range: PropertyValue
-        multivalued: false
+        maximum_cardinality: 1
       has_start_time:
         required: true
       has_state:
         range: PowerSequenceState
       is_pausable:
-        multivalued: false
+        maximum_cardinality: 1
       is_stoppable:
-        multivalued: false
+        maximum_cardinality: 1
       max_cycles_per_day:
-        multivalued: false
+        maximum_cardinality: 1
       repetitions_total:
-        multivalued: false
+        maximum_cardinality: 1
       sequence_remote_controllable:
         required: true
-        multivalued: false
+        maximum_cardinality: 1
   PowerSequenceContainer:
     class_uri: s4ener:PowerSequenceContainer
     title: Power profile container
@@ -2569,25 +2569,25 @@ classes:
     - vendor_name
     slot_usage:
       brand_name:
-        multivalued: false
+        maximum_cardinality: 1
       device_code:
-        multivalued: false
+        maximum_cardinality: 1
       device_name:
-        multivalued: false
+        maximum_cardinality: 1
       hardware_revision:
-        multivalued: false
+        maximum_cardinality: 1
       has_manufacturer:
-        multivalued: false
+        maximum_cardinality: 1
       receives:
         range: LoadControlEventData
       serial_number:
-        multivalued: false
+        maximum_cardinality: 1
       software_revision:
-        multivalued: false
+        maximum_cardinality: 1
       vendor_code:
-        multivalued: false
+        maximum_cardinality: 1
       vendor_name:
-        multivalued: false
+        maximum_cardinality: 1
   ScheduleInstruction:
     class_uri: s4ener:ScheduleInstruction
     title: Schedule Instruction
@@ -2622,35 +2622,35 @@ classes:
       belongs_to:
         range: PowerSequence
         required: true
-        multivalued: false
+        maximum_cardinality: 1
       has_default_duration:
-        multivalued: false
+        maximum_cardinality: 1
       has_duration_uncertainty:
-        multivalued: false
+        maximum_cardinality: 1
       has_earliest_start_time:
-        multivalued: false
+        maximum_cardinality: 1
       has_end_time:
-        multivalued: false
+        maximum_cardinality: 1
       has_latest_end_time:
-        multivalued: false
+        maximum_cardinality: 1
       has_max_duration:
-        multivalued: false
+        maximum_cardinality: 1
       has_min_duration:
-        multivalued: false
+        maximum_cardinality: 1
       has_remaining_pause_time:
-        multivalued: false
+        maximum_cardinality: 1
       has_start_time:
-        multivalued: false
+        maximum_cardinality: 1
       has_usage:
         range: Usage
         required: true
       optional_slot:
-        multivalued: false
+        maximum_cardinality: 1
       slot_activated:
-        multivalued: false
+        maximum_cardinality: 1
       slot_number:
         required: true
-        multivalued: false
+        maximum_cardinality: 1
   StartInterruptionInstruction:
     class_uri: s4ener:StartInterruptionInstruction
     title: Start Interruption Instruction
@@ -2686,13 +2686,13 @@ classes:
     - has_usage
     slot_usage:
       has_creation_time:
-        multivalued: false
+        maximum_cardinality: 1
       has_effective_period:
         range: Interval
       has_temporal_resolution:
-        multivalued: false
+        maximum_cardinality: 1
       has_update_rate:
-        multivalued: false
+        maximum_cardinality: 1
       has_usage:
         range: Usage
   Timer:

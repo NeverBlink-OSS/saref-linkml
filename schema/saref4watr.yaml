@@ -1,0 +1,673 @@
+id: https://saref.etsi.org/saref4watr/
+name: saref4watr
+title: 'SAREF4WATR: an extension of SAREF for the water domain'
+description: This ontology extends the SAREF ontology for the water domain. This work has been developed
+  in the context of the STF 566, which was established with the goal to create three SAREF extensions,
+  one of them for the water domain.
+license: https://forge.etsi.org/etsi-software-license
+version: https://saref.etsi.org/saref4watr/v2.1.1/
+created_on: '2025-04-25'
+last_updated_on: '2025-04-24'
+source: https://saref.etsi.org/sources/saref4watr/
+contributors:
+- http://www.garcia-castro.com/foaf.rdf#me
+see_also:
+- https://www.etsi.org/deliver/etsi_ts/103400_103499/10341010/02.01.01_60/ts_10341010v020101p.pdf
+prefixes:
+  dcterms: http://purl.org/dc/terms/
+  geo: http://www.opengis.net/ont/geosparql#
+  linkml: https://w3id.org/linkml/
+  owl: http://www.w3.org/2002/07/owl#
+  rdfs: http://www.w3.org/2000/01/rdf-schema#
+  s4syst: https://saref.etsi.org/saref4syst/
+  s4watr: https://saref.etsi.org/saref4watr/
+  saref: https://saref.etsi.org/core/
+  schema1: http://schema.org/
+  sf: http://www.opengis.net/ont/sf#
+  time: http://www.w3.org/2006/time#
+  vann: http://purl.org/vocab/vann/
+  xsd: http://www.w3.org/2001/XMLSchema#
+default_prefix: s4watr
+default_range: string
+imports:
+- linkml:types
+- ./saref-core
+enums:
+  WaterFlowProperty:
+    enum_uri: s4watr:WaterFlowProperty
+    title: Water flow property
+    description: Class to group those properties related to water flow.
+    comments:
+    - OWL leaves this class open.
+    mixins:
+    - Property
+    permissible_values:
+      FLOW_PRESSURE:
+        meaning: s4watr:FlowPressure
+        title: Flow pressure
+        description: Property indicating the pressure of a water flow.
+      FLOW_RATE:
+        meaning: s4watr:FlowRate
+        title: Flow rate
+        description: Property indicating the rate of a water flow.
+      FLOW_TEMPERATURE:
+        meaning: s4watr:FlowTemperature
+        title: Flow temperature
+        description: Property indicating the temperature of a water flow.
+      FLOW_VOLUME:
+        meaning: s4watr:FlowVolume
+        title: Flow volume
+        description: Property indicating the volume of a water flow.
+  WaterKind:
+    enum_uri: s4watr:WaterKind
+    title: Water kind
+    description: This class is used to define kinds of water features.
+    comments:
+    - OWL leaves this class open.
+    mixins:
+    - FeatureKind
+    permissible_values:
+      DRINKING_WATER:
+        meaning: s4watr:DrinkingWater
+        title: Drinking water
+        description: Drinking water is water that is treated to comply with drinking water standards.
+      RAW_WATER:
+        meaning: s4watr:RawWater
+        title: Raw water
+        description: Raw water is water found in the environment that has not been treated and does not
+          have any of its minerals, ions, particles, bacteria, or parasites removed.
+      STORMWATER:
+        meaning: s4watr:Stormwater
+        title: Storm water
+        description: Stormwater is water that originates during precipitation events and snow/ice melt.
+      WASTEWATER:
+        meaning: s4watr:Wastewater
+        title: Waste water
+        description: Wastewater is water that has been used in the home, in a business, or as part of
+          an industrial process.
+  WaterMeterProperty:
+    enum_uri: s4watr:WaterMeterProperty
+    title: Water meter property
+    description: Class to group those properties related to water meters.
+    comments:
+    - OWL leaves this class open.
+    mixins:
+    - Property
+    permissible_values:
+      BATTERY_LAST_CHANGE:
+        meaning: s4watr:BatteryLastChange
+        title: Battery last change
+        description: The time in which the battery was last changed.
+      BATTERY_OPERATING_TIME:
+        meaning: s4watr:BatteryOperatingTime
+        title: Battery operating time
+        description: The time for which the battery has been operating since the last charge.
+      BATTERY_REMAINING_TIME:
+        meaning: s4watr:BatteryRemainingTime
+        title: Battery remaining time
+        description: The time until the battery is discharged.
+      METER_ON_TIME:
+        meaning: s4watr:MeterOnTime
+        title: Meter on time
+        description: The duration of the meter power up.
+      METER_OPERATING_TIME:
+        meaning: s4watr:MeterOperatingTime
+        title: Meter operating time
+        description: The time for which the meter has been operating.
+  WaterUse:
+    enum_uri: s4watr:WaterUse
+    title: Water use
+    description: This class is used to define the different uses of water.
+    comments:
+    - OWL leaves this class open.
+    permissible_values:
+      AGRICULTURE:
+        meaning: s4watr:Agriculture
+        title: Agriculture
+        description: Use of water for the farming of plants and livestock.
+      AQUACULTURE:
+        meaning: s4watr:Aquaculture
+        title: Aquaculture
+        description: Use of water for the farming of fish, crustaceans, molluscs, aquatic plants, algae,
+          and other organisms.
+      DOMESTIC:
+        meaning: s4watr:Domestic
+        title: Domestic
+        description: Use of water for domestic purposes.
+      INDUSTRY:
+        meaning: s4watr:Industry
+        title: Industry
+        description: Use of water for industrial purposes.
+      RECREATION:
+        meaning: s4watr:Recreation
+        title: Recreation
+        description: Use of water for recreational purposes.
+slots:
+  applies_to:
+    slot_uri: s4watr:appliesTo
+    title: applies to
+    description: The water meter to which a tariff applies to.
+    range: WaterMeter
+    multivalued: true
+  for_absolute_time_at_day:
+    slot_uri: s4watr:forAbsoluteTimeAtDay
+    title: for absolute time at day
+    description: The time interval in each day for which a tariff is applied (e.g., 8:00 to 10:00).
+    range: Interval
+    multivalued: true
+  for_day_in_month:
+    slot_uri: s4watr:forDayInMonth
+    title: for day in month
+    description: The day of the month for which a tariff is applied (e.g., each 15).
+    range: GDay
+    multivalued: true
+  for_financial_consumption:
+    slot_uri: s4watr:forFinancialConsumption
+    title: for financial consumption
+    description: The financial consumption related to a tariff (e.g., prepaid tariffs).
+    range: Literal
+    multivalued: true
+  for_volume_consumption:
+    slot_uri: s4watr:forVolumeConsumption
+    title: for volume consumption
+    description: The volume consumption related to a tariff (e.g., after consumption of 900 litres).
+    range: Literal
+    multivalued: true
+  for_volume_flow:
+    slot_uri: s4watr:forVolumeFlow
+    title: for volume flow
+    description: The volume flow related to a tariff.
+    range: Literal
+    multivalued: true
+  for_week_day:
+    slot_uri: s4watr:forWeekDay
+    title: for week day
+    description: The day of the week for which a tariff is applied (e.g., each Saturday and Sunday).
+    range: DayOfWeek
+    multivalued: true
+  has_billing_date:
+    slot_uri: s4watr:hasBillingDate
+    title: has billing date
+    description: The billing date of a tariff.
+    range: datetime
+    multivalued: true
+  has_billing_period:
+    slot_uri: s4watr:hasBillingPeriod
+    title: has billing period
+    description: The billing period of a tariff.
+    range: TemporalDuration
+    multivalued: true
+  has_duration:
+    slot_uri: s4watr:hasDuration
+    title: has duration
+    description: The duration of a tariff.
+    range: TemporalDuration
+    multivalued: true
+  has_fabrication_number:
+    slot_uri: s4watr:hasFabricationNumber
+    title: has fabrication number
+    description: The fabrication number of a device.
+    mixins:
+    - has_identifier
+    range: Literal
+    multivalued: true
+  has_firmware_version:
+    slot_uri: s4watr:hasFirmwareVersion
+    title: has firmware version
+    description: The firmware version of a device.
+    mixins:
+    - has_version
+    range: Literal
+    multivalued: true
+  has_geometry:
+    slot_uri: geo:hasGeometry
+    title: hasGeometry
+    range: uriorcurie
+    multivalued: true
+    source: http://www.opengis.net/ont/geosparql#
+  has_hardware_version:
+    slot_uri: s4watr:hasHardwareVersion
+    title: has hardware version
+    description: The hardware version of a device.
+    mixins:
+    - has_version
+    range: Literal
+    multivalued: true
+  has_period:
+    slot_uri: s4watr:hasPeriod
+    title: has period
+    description: The period of a tariff.
+    range: TemporalDuration
+    multivalued: true
+  has_start_timestamp:
+    slot_uri: s4watr:hasStartTimestamp
+    title: has start timestamp
+    description: The start date and time of a tariff.
+    range: datetime
+    multivalued: true
+  is_designed_for:
+    slot_uri: s4watr:isDesignedFor
+    title: is designed for
+    description: The type of water for which an infrastructure is designed for.
+    range: uriorcurie
+    multivalued: true
+  is_intended_for:
+    slot_uri: s4watr:isIntendedFor
+    title: is intended for
+    description: The intended use of the infrastructure.
+    range: uriorcurie
+    multivalued: true
+  operates_at_radio_frequency:
+    slot_uri: s4watr:operatesAtRadioFrequency
+    title: operates at radio frequency
+    description: The radio frequency at which a device operates.
+    range: Literal
+    multivalued: true
+  requires_power:
+    slot_uri: s4watr:requiresPower
+    title: requires power
+    description: The power required by a device.
+    range: Literal
+    multivalued: true
+  sf_contains:
+    slot_uri: geo:sfContains
+    title: sfContains
+    range: uriorcurie
+    multivalued: true
+    source: http://www.opengis.net/ont/geosparql#
+  sf_within:
+    slot_uri: geo:sfWithin
+    title: sfWithin
+    range: uriorcurie
+    multivalued: true
+    source: http://www.opengis.net/ont/geosparql#
+classes:
+  AcceptabilityProperty:
+    class_uri: s4watr:AcceptabilityProperty
+    title: Acceptability property
+    description: An acceptability property is a property of water that is related to its acceptability.
+    mixins:
+    - WaterProperty
+  Aquifer:
+    class_uri: s4watr:Aquifer
+    title: Aquifer
+    description: An aquifer is an underground layer of water-bearing permeable rock, rock fractures or
+      unconsolidated materials.
+    mixins:
+    - StorageAsset
+  BacterialProperty:
+    class_uri: s4watr:BacterialProperty
+    title: Bacterial property
+    description: A bacterial property is a property of water that is related to bacteria.
+    mixins:
+    - MicrobialProperty
+  Channel:
+    class_uri: s4watr:Channel
+    title: Channel
+    description: A channel is a passage of water flowing in an open conduit (i.e., subject to atmospheric
+      pressure).
+    mixins:
+    - Main
+  ChemicalProperty:
+    class_uri: s4watr:ChemicalProperty
+    title: ChemicalProperty
+    description: A chemical property is a property of water that is related to chemical components.
+    mixins:
+    - WaterProperty
+  ConsumptionBasedTariff:
+    class_uri: s4watr:ConsumptionBasedTariff
+    title: Consumption-based tariff
+    description: A consumption-based tariff is a tariff that is based on consumption.
+    mixins:
+    - Tariff
+    slots:
+    - for_financial_consumption
+    - for_volume_consumption
+  DayOfWeek:
+    class_uri: time:DayOfWeek
+    source: http://www.w3.org/2006/time#
+  DistributionSystem:
+    class_uri: s4watr:DistributionSystem
+    title: Distribution system
+    description: A water distribution system is an infrastructure to carry potable water from a centralized
+      treatment plant or wells to water consumers in order to adequately deliver water to satisfy residential,
+      commercial, industrial and fire fighting requirements.
+    mixins:
+    - WaterInfrastructure
+  EnvironmentalProperty:
+    class_uri: s4watr:EnvironmentalProperty
+    title: Environmental property
+    description: Class to group those properties related to the environment.
+    mixins:
+    - Property
+  Estuary:
+    class_uri: s4watr:Estuary
+    title: Estuary
+    description: An estuary is a partially enclosed coastal body of brackish water with one or more rivers
+      or streams flowing into it, and with a free connection to the open sea.
+    mixins:
+    - SinkAsset
+  Feature:
+    class_uri: geo:Feature
+    title: Feature
+    description: This class represents the top-level feature type. This class is equivalent to GFI_Feature
+      defined in ISO 19156:2011, and it is superclass of all feature types.
+    mixins:
+    - SpatialObject
+    source: http://www.opengis.net/ont/geosparql#
+  FireHydrant:
+    class_uri: s4watr:FireHydrant
+    title: Fire hydrant
+    description: A fire hydrant is a fitting in a street or other public place with a nozzle by which
+      a fire hose may be attached to a water main.
+    mixins:
+    - WaterDevice
+  GaugingStation:
+    class_uri: s4watr:GaugingStation
+    title: Gauging station
+    description: A gauging station is an infrastructure to monitor and test terrestrial bodies of water.
+    mixins:
+    - MonitoringInfrastructure
+  Geometry:
+    class_uri: geo:Geometry
+    title: Geometry
+    description: The class represents the top-level geometry type. This class is equivalent to the UML
+      class GM_Object defined in ISO 19107, and it is superclass of all geometry types.
+    mixins:
+    - SpatialObject
+    source: http://www.opengis.net/ont/geosparql#
+  Glacier:
+    class_uri: s4watr:Glacier
+    title: Glacier
+    description: A glacier is a persistent body of dense ice that is constantly moving under its own weight.
+    mixins:
+    - SourceAsset
+  HydroelectricPowerPlant:
+    class_uri: s4watr:HydroelectricPowerPlant
+    title: Hydroelectric power plant
+    description: A hydroelectric power plant is an infrastructure to generate electricity by conversion
+      of the energy of running water.
+    mixins:
+    - WaterInfrastructure
+  Intake:
+    class_uri: s4watr:Intake
+    title: Intake
+    description: An intake is an installation for obtaining water from a source of supply (river, lake,
+      reservoir, and so on).
+    mixins:
+    - TransportAsset
+  Interval:
+    class_uri: time:Interval
+    source: http://www.w3.org/2006/time#
+  Lagoon:
+    class_uri: s4watr:Lagoon
+    title: Lagoon
+    description: A lagoon is a shallow body of water separated from a larger body of water by barrier
+      islands or reefs.
+    mixins:
+    - SourceAsset
+  Lake:
+    class_uri: s4watr:Lake
+    title: Lake
+    description: A lake is an area filled with water, localized in a basin, surrounded by land, apart
+      from any river or other outlet that serves to feed or drain the lake.
+    mixins:
+    - SourceAsset
+  Main:
+    class_uri: s4watr:Main
+    title: Main
+    description: A main is a passage of water to flow through.
+    mixins:
+    - TransportAsset
+  Manhole:
+    class_uri: s4watr:Manhole
+    title: Maintenance hole
+    description: A maintenance hole is an enclosure that facilitates human access to and working space
+      for equipment.
+    mixins:
+    - TransportAsset
+  MicrobialProperty:
+    class_uri: s4watr:MicrobialProperty
+    title: Microbial property
+    description: A microbial property is a property of water that is related to microbes.
+    mixins:
+    - WaterProperty
+  MonitoringInfrastructure:
+    class_uri: s4watr:MonitoringInfrastructure
+    title: Monitoring infrastructure
+    description: A monitoring infrastructure is an infrastructure to monitor water.
+    mixins:
+    - WaterInfrastructure
+  Ocean:
+    class_uri: s4watr:Ocean
+    title: Ocean
+    description: An ocean is a large body of salt water.
+    mixins:
+    - SinkAsset
+  Pipe:
+    class_uri: s4watr:Pipe
+    title: Pipe
+    description: A pipe is a passage of water flowing in a closed conduit (i.e., not subject to atmospheric
+      pressure).
+    mixins:
+    - Main
+  Pit:
+    class_uri: s4watr:Pit
+    title: Pit
+    description: A pit is a well or hole sunk in the ground to procure, store or drain water.
+    mixins:
+    - TransportAsset
+  Point:
+    class_uri: sf:Point
+    title: Point
+    mixins:
+    - Geometry
+    source: http://www.opengis.net/ont/sf#
+  Polygon:
+    class_uri: sf:Polygon
+    title: Polygon
+    mixins:
+    - Geometry
+    source: http://www.opengis.net/ont/sf#
+  Pump:
+    class_uri: s4watr:Pump
+    title: Pump
+    description: A pump is a device for moving water by mechanical action.
+    mixins:
+    - Actuator
+    - WaterDevice
+  Reservoir:
+    class_uri: s4watr:Reservoir
+    title: Reservoir
+    description: A reservoir is an enlarged natural or artificial lake, pond or impoundment created using
+      a dam or lock to store water.
+    mixins:
+    - StorageAsset
+  River:
+    class_uri: s4watr:River
+    title: River
+    description: A river is a natural flowing watercourse, usually freshwater, flowing towards an ocean,
+      sea, lake or another river.
+    mixins:
+    - SinkAsset
+  Sea:
+    class_uri: s4watr:Sea
+    title: Sea
+    description: A sea is a body of salt water partly or fully enclosed by land.
+    mixins:
+    - SinkAsset
+  SinkAsset:
+    class_uri: s4watr:SinkAsset
+    title: Sink asset
+    description: A sink asset is a water asset where water sinks.
+    mixins:
+    - WaterAsset
+  SourceAsset:
+    class_uri: s4watr:SourceAsset
+    title: Source asset
+    description: A source asset is a water asset that is a natural source of water.
+    mixins:
+    - WaterAsset
+  SpatialObject:
+    class_uri: geo:SpatialObject
+    title: Spatial object
+    source: http://www.opengis.net/ont/geosparql#
+  StorageAsset:
+    class_uri: s4watr:StorageAsset
+    title: Storage asset
+    description: A storage asset is a water asset used to store water.
+    mixins:
+    - WaterAsset
+  StorageInfrastructure:
+    class_uri: s4watr:StorageInfrastructure
+    title: Storage infrastructure
+    description: An storage infrastructure is an infrastructure to storage both potable water for consumption,
+      and non potable water for use in agriculture.
+    mixins:
+    - WaterInfrastructure
+  Tank:
+    class_uri: s4watr:Tank
+    title: Tank
+    description: A tank is a container for storing water.
+    mixins:
+    - StorageAsset
+  Tariff:
+    class_uri: s4watr:Tariff
+    title: Tariff
+    description: A tariff is a schedule of rates or charges of a business or a public utility. Tariffs
+      can be based on time, thresholds or consumption; however, combined tariffs may also exist that mix
+      more than one of these types.
+    slots:
+    - applies_to
+    - has_billing_date
+    - has_billing_period
+    - has_duration
+    - has_period
+    - has_start_timestamp
+  TemporalDuration:
+    class_uri: time:TemporalDuration
+    source: http://www.w3.org/2006/time#
+  ThresholdBasedTariff:
+    class_uri: s4watr:ThresholdBasedTariff
+    title: Threshold-based tariff
+    description: A threshold-based tariff is a tariff that is based on a threshold.
+    mixins:
+    - Tariff
+    slots:
+    - for_volume_flow
+  TimeBasedTariff:
+    class_uri: s4watr:TimeBasedTariff
+    title: Time-based tariff
+    description: A time-based tariff is a tariff that is based on time.
+    mixins:
+    - Tariff
+    slots:
+    - for_absolute_time_at_day
+    - for_day_in_month
+    - for_week_day
+  TransportAsset:
+    class_uri: s4watr:TransportAsset
+    title: Transport asset
+    description: A transport asset is a water asset used to enable and support the transport and distribution
+      of water.
+    mixins:
+    - WaterAsset
+  TreatmentPlant:
+    class_uri: s4watr:TreatmentPlant
+    title: Treatment plant
+    description: A treatment plant is an infrastructure to improve the quality of water to make it more
+      acceptable for a specific end-use.
+    mixins:
+    - WaterInfrastructure
+  Valve:
+    class_uri: s4watr:Valve
+    title: Valve
+    description: A valve is a device designed to control water flow, pressure or volume.
+    mixins:
+    - Actuator
+    - WaterDevice
+  Vent:
+    class_uri: s4watr:Vent
+    title: Vent
+    description: A vent is the part of a system that allows air to enter a plumbing system to maintain
+      proper air pressure and sewer gases to escape to the outside.
+    mixins:
+    - TransportAsset
+  Water:
+    class_uri: s4watr:Water
+    title: Water
+    description: This class is used to define a particular quantity or body of water.
+    mixins:
+    - FeatureOfInterest
+    slots:
+    - has_property
+    slot_usage:
+      has_property:
+        range: WaterProperty
+  WaterAsset:
+    class_uri: s4watr:WaterAsset
+    title: Water asset
+    description: A water asset is a physical entity used in the process of transporting, treating, storing
+      and distributing water.
+    mixins:
+    - Feature
+    - FeatureOfInterest
+    - System
+  WaterDevice:
+    class_uri: s4watr:WaterDevice
+    title: Water device
+    description: A water device is a device that is also a water asset.
+    mixins:
+    - Device
+    - WaterAsset
+  WaterInfrastructure:
+    class_uri: s4watr:WaterInfrastructure
+    title: Water infrastructure
+    description: A water infrastructure is the set of facilities, services, and installations needed for
+      water management.
+    mixins:
+    - Feature
+    - FeatureOfInterest
+    - System
+    slots:
+    - is_designed_for
+    - is_intended_for
+    slot_usage:
+      is_designed_for:
+        required: true
+        range: WaterKind
+      is_intended_for:
+        required: true
+        range: WaterUse
+  WaterMeter:
+    class_uri: s4watr:WaterMeter
+    title: Water meter
+    description: A water meter is an instrument intended to measure continuously, memorize, and display
+      the volume of water passing through the meter.
+    mixins:
+    - Meter
+    - WaterDevice
+    slots:
+    - has_fabrication_number
+    - has_firmware_version
+    - has_hardware_version
+    - has_property
+    - observes
+    slot_usage:
+      has_fabrication_number:
+        maximum_cardinality: 1
+      has_firmware_version:
+        maximum_cardinality: 1
+      has_hardware_version:
+        maximum_cardinality: 1
+      has_property:
+        range: WaterMeterProperty
+      observes:
+        required: true
+        range: WaterFlowProperty
+  WaterProperty:
+    class_uri: s4watr:WaterProperty
+    title: Water property
+    description: Class to group those properties related to the water.
+    mixins:
+    - Property

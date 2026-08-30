@@ -83,16 +83,19 @@ properties:
 #   from [<a>, <b>]   the same, trying each axiom in order; qualified cardinalities carry their
 #                     filler under owl:onClass or owl:onDataRange depending on its kind
 # Every other key is a LinkML metaslot.
-# Maps to slot_usage
+# Maps to slot_usage, so an upper bound is written as `maximum_cardinality`, never as
+# `multivalued: false`. slot_usage may only narrow, and turning a list into a scalar is not a
+# narrowing: data valid against the parent would stop being valid. A list bounded to one entry
+# is, and it says the same thing.
 restrictions:
   owl:allValuesFrom:            {range: from owl:allValuesFrom}
   owl:minCardinality:           {when: 1, required: true} # so that owl:minCardinality 0 doesnt get required: true
-  owl:maxCardinality:           {when: 1, multivalued: false}
-  owl:cardinality:              {when: 1, required: true, multivalued: false}
+  owl:maxCardinality:           {when: 1, maximum_cardinality: 1}
+  owl:cardinality:              {when: 1, required: true, maximum_cardinality: 1}
   owl:minQualifiedCardinality:  {when: 1, required: true, range: 'from [owl:onClass, owl:onDataRange]'}
   owl:someValuesFrom:           {required: true, range: from owl:someValuesFrom}
-  owl:qualifiedCardinality:     {when: 1, required: true, multivalued: false, range: 'from [owl:onClass, owl:onDataRange]'}
-  owl:maxQualifiedCardinality:  {when: 1, multivalued: false, range: 'from [owl:onClass, owl:onDataRange]'}
+  owl:qualifiedCardinality:     {when: 1, required: true, maximum_cardinality: 1, range: 'from [owl:onClass, owl:onDataRange]'}
+  owl:maxQualifiedCardinality:  {when: 1, maximum_cardinality: 1, range: 'from [owl:onClass, owl:onDataRange]'}
 
 # A cardinality of 0 is an axiom that asserts nothing.
 # linkml owl-gen has owlgen-skip-vacuous-min-zero-cardinality-default
@@ -137,6 +140,7 @@ datatypes:
   xsd:decimal:             decimal
   xsd:dateTime:            datetime
   xsd:date:                date
+  xsd:gDay:                GDay
   xsd:anyURI:              uri
   xsd:time:                time
 
@@ -177,6 +181,7 @@ schema:
     types:
       Duration:            {uri: xsd:duration,           typeof: string}
       DateTimeStamp:       {uri: xsd:dateTimeStamp,      typeof: datetime}
+      GDay:                {uri: xsd:gDay,               typeof: string}
       Int:                 {uri: xsd:int,                typeof: integer}
       Long:                {uri: xsd:long,               typeof: integer}
       UnsignedInt:         {uri: xsd:unsignedInt,        typeof: integer}
