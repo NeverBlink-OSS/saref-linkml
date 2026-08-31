@@ -9,7 +9,7 @@ work. If a conversion comes out wrong, the fix belongs in
 
 ## Ontologies
 
-The four Turtle files are byte-for-byte copies of what the ETSI portal serves.
+The five Turtle files are byte-for-byte copies of what the ETSI portal serves.
 
 To check that a file still matches what ETSI publishes:
 
@@ -25,7 +25,8 @@ diff does to the schemas.
 ## Examples
 
 The `examples/` directory under each ontology holds the example data ETSI publishes for it: 13
-files for SAREF core, 1 for SAREF4BLDG, 8 for SAREF4ENER, 12 for SAREF4GRID.
+files for SAREF core, 1 for SAREF4BLDG, 8 for SAREF4ENER, 12 for SAREF4GRID. SAREF4WATR has no
+`examples/` directory because ETSI publishes none for it.
 [../checks/check-examples.py](../checks/check-examples.py) validates all of them against SHACL
 shapes generated from the corresponding schema. That is how we catch a conversion that came out
 stricter than the ontology intended: if ETSI's own example fails, the constraint is wrong.
@@ -40,6 +41,7 @@ satisfy them. Where an example was missing a statement that the ontology require
 | SAREF4BLDG | 1 | 1 |
 | SAREF4ENER | 8 | 8 |
 | SAREF4GRID | 12 | 12 |
+| SAREF4WATR | 0 | - |
 
 Every edit is marked in place. Most sit in a block at the end of the file:
 

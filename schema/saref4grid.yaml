@@ -518,13 +518,13 @@ classes:
     - has_season_start
     slot_usage:
       has_activate_passive_calendar_time:
-        multivalued: false
+        maximum_cardinality: 1
       has_calendar_name_active:
         required: true
-        multivalued: false
+        maximum_cardinality: 1
       has_calendar_name_passive:
         required: true
-        multivalued: false
+        maximum_cardinality: 1
   BreakerState:
     class_uri: s4grid:BreakerState
     title: Breaker State
@@ -540,13 +540,13 @@ classes:
     slot_usage:
       has_control_mode:
         required: true
-        multivalued: false
+        maximum_cardinality: 1
       has_control_state:
         required: true
-        multivalued: false
+        maximum_cardinality: 1
       has_output_state:
         required: true
-        multivalued: false
+        maximum_cardinality: 1
   Clock:
     class_uri: s4grid:Clock
     title: Clock
@@ -565,28 +565,28 @@ classes:
     slot_usage:
       has_clock_base:
         required: true
-        multivalued: false
+        maximum_cardinality: 1
       has_daylight_savings_begin:
         required: true
-        multivalued: false
+        maximum_cardinality: 1
       has_daylight_savings_deviation:
         required: true
-        multivalued: false
+        maximum_cardinality: 1
       has_daylight_savings_enabled:
         required: true
-        multivalued: false
+        maximum_cardinality: 1
       has_daylight_savings_end:
         required: true
-        multivalued: false
+        maximum_cardinality: 1
       has_status:
         required: true
-        multivalued: false
+        maximum_cardinality: 1
       has_time:
         required: true
-        multivalued: false
+        maximum_cardinality: 1
       has_time_zone:
         required: true
-        multivalued: false
+        maximum_cardinality: 1
   ComplexActionOperationInput:
     class_uri: s4grid:ComplexActionOperationInput
     title: Complex Action Operation Input
@@ -606,7 +606,7 @@ classes:
     slot_usage:
       obtain_input_from_obis:
         required: true
-        multivalued: false
+        maximum_cardinality: 1
   DayProfile:
     class_uri: s4grid:DayProfile
     title: Day Profile
@@ -624,10 +624,10 @@ classes:
     slot_usage:
       executes_script:
         required: true
-        multivalued: false
+        maximum_cardinality: 1
       has_start_time:
         required: true
-        multivalued: false
+        maximum_cardinality: 1
   EnergyAndPowerProperty:
     class_uri: s4grid:EnergyAndPowerProperty
     title: Energy Power Property
@@ -656,13 +656,13 @@ classes:
     slot_usage:
       has_firmware_version:
         required: true
-        multivalued: false
+        maximum_cardinality: 1
       has_product_id:
         required: true
-        multivalued: false
+        maximum_cardinality: 1
       has_vendor_id:
         required: true
-        multivalued: false
+        maximum_cardinality: 1
   GetOperation:
     class_uri: s4grid:GetOperation
     title: Get Operation
@@ -678,10 +678,10 @@ classes:
     slot_usage:
       has_input:
         required: true
-        multivalued: false
+        maximum_cardinality: 1
       has_output:
         required: true
-        multivalued: false
+        maximum_cardinality: 1
   GetOperationDataOutput:
     class_uri: s4grid:GetOperationDataOutput
     title: Get Operation Data Output
@@ -693,7 +693,7 @@ classes:
     slot_usage:
       has_output_data_type:
         required: true
-        multivalued: false
+        maximum_cardinality: 1
   GetOperationObjectOutput:
     class_uri: s4grid:GetOperationObjectOutput
     title: Get Operation Object Output
@@ -705,7 +705,7 @@ classes:
     slot_usage:
       has_output_object_type:
         required: true
-        multivalued: false
+        maximum_cardinality: 1
   GetOperationOutput:
     class_uri: s4grid:GetOperationOutput
     title: Get Operation Output
@@ -725,7 +725,7 @@ classes:
     slot_usage:
       obtain_input_for_property:
         required: true
-        multivalued: false
+        maximum_cardinality: 1
   GetService:
     class_uri: s4grid:GetService
     title: Get Service
@@ -766,7 +766,7 @@ classes:
     slot_usage:
       has_mac_address:
         required: true
-        multivalued: false
+        maximum_cardinality: 1
   OneM2MDevice:
     class_uri: oneM2M:Device
     title: Device
@@ -804,13 +804,13 @@ classes:
     slot_usage:
       has_preset_time:
         required: true
-        multivalued: false
+        maximum_cardinality: 1
       has_validity_interval_end:
         required: true
-        multivalued: false
+        maximum_cardinality: 1
       has_validity_interval_start:
         required: true
-        multivalued: false
+        maximum_cardinality: 1
   ProfileGeneric:
     class_uri: s4grid:ProfileGeneric
     title: Profile Generic
@@ -826,7 +826,7 @@ classes:
     slot_usage:
       has_capture_period:
         required: true
-        multivalued: false
+        maximum_cardinality: 1
   QualityProperty:
     class_uri: s4grid:QualityProperty
     title: Quality Property
@@ -881,31 +881,31 @@ classes:
     slot_usage:
       has_friday_profile:
         required: true
-        multivalued: false
+        maximum_cardinality: 1
       has_monday_profile:
         required: true
-        multivalued: false
+        maximum_cardinality: 1
       has_saturday_profile:
         required: true
-        multivalued: false
+        maximum_cardinality: 1
       has_season_profile_name:
         required: true
-        multivalued: false
+        maximum_cardinality: 1
       has_season_start:
         required: true
-        multivalued: false
+        maximum_cardinality: 1
       has_sunday_profile:
         required: true
-        multivalued: false
+        maximum_cardinality: 1
       has_thursday_profile:
         required: true
-        multivalued: false
+        maximum_cardinality: 1
       has_tuesday_profile:
         required: true
-        multivalued: false
+        maximum_cardinality: 1
       has_wednesday_profile:
         required: true
-        multivalued: false
+        maximum_cardinality: 1
   SelectiveAccess:
     class_uri: s4grid:SelectiveAccess
     title: Selective Access
@@ -927,7 +927,7 @@ classes:
     slot_usage:
       has_input:
         required: true
-        multivalued: false
+        maximum_cardinality: 1
   SetOperationDataInput:
     class_uri: s4grid:SetOperationDataInput
     title: Set Operation Data Input
@@ -941,10 +941,10 @@ classes:
     slot_usage:
       has_input_data_type:
         required: true
-        multivalued: false
+        maximum_cardinality: 1
       obtain_input_for_property:
         required: true
-        multivalued: false
+        maximum_cardinality: 1
   SetOperationObisInput:
     class_uri: s4grid:SetOperationObisInput
     title: Set Operation Obis Input
@@ -956,7 +956,7 @@ classes:
     slot_usage:
       has_input_object_type:
         required: true
-        multivalued: false
+        maximum_cardinality: 1
   SetOperationObjectInput:
     class_uri: s4grid:SetOperationObjectInput
     title: Set Operation Object Input
@@ -970,10 +970,10 @@ classes:
     slot_usage:
       has_input_object_type:
         required: true
-        multivalued: false
+        maximum_cardinality: 1
       obtain_input_for_property:
         required: true
-        multivalued: false
+        maximum_cardinality: 1
   SetService:
     class_uri: s4grid:SetService
     title: Set Service
@@ -993,7 +993,7 @@ classes:
     slot_usage:
       has_action_value:
         required: true
-        multivalued: false
+        maximum_cardinality: 1
   SingleScheduledAction:
     class_uri: s4grid:SingleScheduledAction
     title: Single Scheduled Action
@@ -1005,7 +1005,7 @@ classes:
     slot_usage:
       executes_script:
         required: true
-        multivalued: false
+        maximum_cardinality: 1
   SpecialDayEntry:
     class_uri: s4grid:SpecialDayEntry
     title: Special Day Entry
@@ -1020,13 +1020,13 @@ classes:
     slot_usage:
       has_day_id:
         required: true
-        multivalued: false
+        maximum_cardinality: 1
       has_index:
         required: true
-        multivalued: false
+        maximum_cardinality: 1
       has_special_date:
         required: true
-        multivalued: false
+        maximum_cardinality: 1
   SpecialDayProfile:
     class_uri: s4grid:SpecialDayProfile
     title: Special Day Profile
@@ -1039,4 +1039,4 @@ classes:
     slot_usage:
       has_special_day_date:
         required: true
-        multivalued: false
+        maximum_cardinality: 1

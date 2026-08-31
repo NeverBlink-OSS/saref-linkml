@@ -235,6 +235,9 @@ types:
   DateTimeStamp:
     uri: xsd:dateTimeStamp
     typeof: datetime
+  GDay:
+    uri: xsd:gDay
+    typeof: string
   Int:
     uri: xsd:int
     typeof: integer
@@ -1062,7 +1065,7 @@ classes:
     slot_usage:
       is_command_of_interest_of:
         required: true
-        multivalued: false
+        maximum_cardinality: 1
   Commodity:
     class_uri: saref:Commodity
     title: Commodity
@@ -1260,7 +1263,7 @@ classes:
     slot_usage:
       is_function_of_interest_of:
         required: true
-        multivalued: false
+        maximum_cardinality: 1
   Meter:
     class_uri: saref:Meter
     title: Meter
@@ -1327,7 +1330,7 @@ classes:
     slot_usage:
       is_operation_of:
         required: true
-        multivalued: false
+        maximum_cardinality: 1
       represents:
         any_of:
         - range: Command
@@ -1466,7 +1469,7 @@ classes:
         - range: StateOfInterest
       is_property_of_interest_of:
         required: true
-        multivalued: false
+        maximum_cardinality: 1
   PropertyValue:
     class_uri: saref:PropertyValue
     title: Property Value
@@ -1494,9 +1497,9 @@ classes:
         - range: PropertyValue
         - range: StateValue
       has_value:
-        multivalued: false
+        maximum_cardinality: 1
       is_measured_in:
-        multivalued: false
+        maximum_cardinality: 1
   Sensor:
     class_uri: saref:Sensor
     title: Sensor
@@ -1534,7 +1537,7 @@ classes:
     slot_usage:
       is_offered_by:
         required: true
-        multivalued: false
+        maximum_cardinality: 1
       represents:
         any_of:
         - range: Function
@@ -1591,7 +1594,7 @@ classes:
     slot_usage:
       is_state_of_interest_of:
         required: true
-        multivalued: false
+        maximum_cardinality: 1
   StateValue:
     class_uri: saref:StateValue
     title: State Value

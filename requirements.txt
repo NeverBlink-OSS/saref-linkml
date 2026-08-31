@@ -1,0 +1,12 @@
+# Everything the converter and the checks need. See CONTRIBUTING.md.
+#
+#   uv venv --python 3.12
+#   uv pip install -r requirements.txt
+#
+# The LinkML-Scala CLI is not a Python package and is installed separately.
+
+rdflib>=7.0
+PyYAML>=6.0
+pyshacl>=0.26
+jsonschema>=4.21
+neverblink-linkml>=0.13

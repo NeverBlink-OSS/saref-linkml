@@ -36,6 +36,8 @@ jobs:
             source: source/saref4ener/saref4ener.ttl
           - name: saref4grid
             source: source/saref4grid/saref4grid.ttl
+          - name: saref4watr
+            source: source/saref4watr/saref4watr.ttl
     steps:
       - uses: actions/checkout@v7
 
@@ -89,6 +91,10 @@ jobs:
           - name: saref4grid
             source: source/saref4grid/saref4grid.ttl
             examples: source/saref4grid/examples
+          # ETSI publishes no example data for SAREF4WATR, so only the RDFS check runs here.
+          - name: saref4watr
+            source: source/saref4watr/saref4watr.ttl
+            examples: ""
     steps:
       - uses: actions/checkout@v7
 
@@ -141,7 +147,7 @@ jobs:
             --source ${{ matrix.source }}
 
       - name: SHACL - examples must not be over-constrained
-        if: ${{ !cancelled() && steps.resolve.outcome == 'success' }}
+        if: ${{ !cancelled() && steps.resolve.outcome == 'success' && matrix.examples != '' }}
         run: |
           python checks/check-examples.py \
             --shapes   "$SHACL" \

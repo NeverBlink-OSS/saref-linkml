@@ -22,11 +22,12 @@ Then regenerate and commit the result along with your change.
 
 ## Setting up
 
-You need Python 3.12 or newer and the LinkML-Scala CLI.
+You need Python 3.12 or newer and the LinkML-Scala CLI. Everything the converter and the checks
+need is in [requirements.txt](requirements.txt).
 
 ```shell
 python -m venv .venv && . .venv/bin/activate
-pip install rdflib pyyaml pyshacl jsonschema
+pip install -r requirements.txt
 . <(curl -sSfL https://raw.githubusercontent.com/NeverBlink-OSS/linkml-scala/refs/heads/main/cli/install.sh)
 ```
 
@@ -39,6 +40,7 @@ python bin/owl2linkml.py source/SAREFCore/saref.ttl        -o schema/saref-core.
 python bin/owl2linkml.py source/saref4bldg/saref4bldg.ttl  -o schema/saref4bldg.yaml
 python bin/owl2linkml.py source/saref4ener/saref4ener.ttl  -o schema/saref4ener.yaml
 python bin/owl2linkml.py source/saref4grid/saref4grid.ttl  -o schema/saref4grid.yaml
+python bin/owl2linkml.py source/saref4watr/saref4watr.ttl  -o schema/saref4watr.yaml
 ```
 
 The converter prints a `note:` line on stderr for anything in the source it did not know what to
@@ -78,7 +80,7 @@ declare, which catches under-coverage rather than over-constraint. CI runs `open
 
 ## Adding an extension
 
-SAREF has fifteen extensions and this repository converts three. To add another:
+SAREF has fifteen extensions and this repository converts four. To add another:
 
 1. Download the ontology from the ETSI portal, pinning the version IRI in the URL. Put it under
    `source/<name>/` and add its example data too if ETSI publishes any.
