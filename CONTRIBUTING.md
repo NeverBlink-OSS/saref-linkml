@@ -22,8 +22,8 @@ Then regenerate and commit the result along with your change.
 
 ## Setting up
 
-You need Python 3.12 or newer and the LinkML-Scala CLI. Everything the converter and the checks
-need is in [requirements.txt](requirements.txt).
+You need Python 3.12 or newer and LinkML-Scala 0.15.0 or newer. Everything the converter and the
+checks need is in [requirements.txt](requirements.txt).
 
 ```shell
 python -m venv .venv && . .venv/bin/activate
@@ -58,13 +58,13 @@ Same three things CI runs. For each schema:
 linkml-scala validate --strict schema/saref-core.yaml
 
 # 2. the generated RDFS still describes the source ontology
-linkml-scala generate rdfs --to build/rdfs.nt schema/saref-core.yaml
-python checks/check-rdfs.py --rdfs build/rdfs.nt --schema schema/saref-core.yaml \
+linkml-scala generate rdfs --to build/rdfs.ttl schema/saref-core.yaml
+python checks/check-rdfs.py --rdfs build/rdfs.ttl --schema schema/saref-core.yaml \
   --source source/SAREFCore/saref.ttl
 
 # 3. ETSI's own examples still validate against the generated SHACL
-linkml-scala generate shacl --open --to build/shapes.nt schema/saref-core.yaml
-python checks/check-examples.py --shapes build/shapes.nt --schema schema/saref-core.yaml \
+linkml-scala generate shacl --open --to build/shapes.ttl schema/saref-core.yaml
+python checks/check-examples.py --shapes build/shapes.ttl --schema schema/saref-core.yaml \
   --examples source/SAREFCore/examples --mode open
 ```
 

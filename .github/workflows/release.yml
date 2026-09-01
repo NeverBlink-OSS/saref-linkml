@@ -54,7 +54,7 @@ jobs:
           FORCE: ${{ inputs.force }}
           # Everything that changes what we publish: the schemas, and the code and pinned
           # toolchain that turn them into artifacts.
-          WATCHED: "schema bin/release-manifest.py bin/rdf2ttl.py .github/workflows/release.yml .github/workflows/build-release.yml"
+          WATCHED: "schema bin/release-manifest.py .github/workflows/release.yml .github/workflows/build-release.yml"
         run: |
           set -euo pipefail
 
