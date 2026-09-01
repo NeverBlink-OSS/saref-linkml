@@ -150,6 +150,7 @@ Most of ETSI's examples needed a small edit before they would validate, usually 
 
 ### Limitations
 
+- `owl:minCardinality 1` becomes `required: true`, and `owl:minCardinality 0` is skipped. An upper bound (max 1, cardinality 1) becomes `maximum_cardinality: 1` in `slot_usage`. Only a bound of exactly 1 is written today; larger ones are dropped and reported, though nothing in SAREF has one.
 - Two restrictions are read as closed, stricter than the axiom: `owl:someValuesFrom X` becomes `required: true` and `range: X`, and `owl:hasValue` becomes a closed enum. `owl:allValuesFrom` also becomes a range.
 - By default all slots are `multivalued: true`, constraints restrict that per class basis. Exception: `owl:FunctionalProperty` sets `multivalued: false` on the slot itself, schema-wide.
 - When there are multiple restrictions on the same slot, the WIDEST is taken (e.g. `saref:represents`). The loser is dropped whole, not just the key that lost.
