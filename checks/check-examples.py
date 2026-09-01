@@ -32,14 +32,13 @@ def generate_shapes(schema, mode, build):
 
     try:
         with linkml_scala.load_file(schema) as loaded:
-            triples = loaded.shacl(open=(mode == "open"))
+            shapes = loaded.shacl(open=(mode == "open"))
     except linkml_scala.LinkMlError as error:
         sys.exit(f"generating SHACL from {schema} failed:\n{error}")
 
-    graph = Graph()
-    graph.parse(data=triples, format="nt")
     out = build / f"shapes-{mode}.ttl"
-    graph.serialize(destination=out, format="turtle")
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(shapes)
     return out
 
 

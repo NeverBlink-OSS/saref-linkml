@@ -9,4 +9,4 @@ rdflib>=7.0
 PyYAML>=6.0
 pyshacl>=0.26
 jsonschema>=4.21
-neverblink-linkml>=0.13
+neverblink-linkml>=0.15

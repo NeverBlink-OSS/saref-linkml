@@ -28,7 +28,7 @@ permissions:
   contents: read
 
 env:
-  ENGINE: NeverBlink-OSS/linkml-scala-action@v0.14.0
+  ENGINE: NeverBlink-OSS/linkml-scala-action@v0.15.0
 
 jobs:
   build:
@@ -41,19 +41,19 @@ jobs:
         with:
           python-version: "3.12"
 
-      - run: pip install rdflib pyyaml
+      - run: pip install pyyaml
 
       # Never build a release from a schema that does not pass strict validation.
       - name: Validate
-        uses: NeverBlink-OSS/linkml-scala-action@v0.14.0
+        uses: NeverBlink-OSS/linkml-scala-action@v0.15.0
         with:
           working-directory: schema
           files: "*.yaml"
           strict: true
-          ignore: "No 'tree_root' class"
+          ignore: NoTreeRootClass
 
       - name: Resolve each schema
-        uses: NeverBlink-OSS/linkml-scala-action@v0.14.0
+        uses: NeverBlink-OSS/linkml-scala-action@v0.15.0
         with:
           command: generate
           generator: linkml
@@ -62,7 +62,7 @@ jobs:
           output: build/linkml
 
       - name: Generate JSON Schema
-        uses: NeverBlink-OSS/linkml-scala-action@v0.14.0
+        uses: NeverBlink-OSS/linkml-scala-action@v0.15.0
         with:
           command: generate
           generator: json-schema
@@ -72,20 +72,22 @@ jobs:
           output: build/json-schema
 
       - name: Generate SHACL
-        uses: NeverBlink-OSS/linkml-scala-action@v0.14.0
+        uses: NeverBlink-OSS/linkml-scala-action@v0.15.0
         with:
           command: generate
           generator: shacl
           open: true
+          format: ttl
           imports: schema
           files: "schema/*.yaml"
           output: build/shacl
 
       - name: Generate RDFS
-        uses: NeverBlink-OSS/linkml-scala-action@v0.14.0
+        uses: NeverBlink-OSS/linkml-scala-action@v0.15.0
         with:
           command: generate
           generator: rdfs
+          format: ttl
           imports: schema
           files: "schema/*.yaml"
           output: build/rdfs
@@ -105,11 +107,6 @@ jobs:
             done
           done
           [ "$missing" -eq 0 ]
-
-      - name: Rewrite the RDF as Turtle
-        run: |
-          python bin/rdf2ttl.py --schema-dir schema --in build/shacl --out build/shacl-ttl --suffix shacl
-          python bin/rdf2ttl.py --schema-dir schema --in build/rdfs  --out build/rdfs-ttl  --suffix rdfs
 
       - name: Assemble the release
         env:
@@ -134,8 +131,8 @@ jobs:
           for file in build/json-schema/*; do
             cp "$file" "$stage/json-schema/$(basename "$file" | cut -d. -f1).schema.json"
           done
-          cp build/shacl-ttl/*.ttl "$stage/shacl/"
-          cp build/rdfs-ttl/*.ttl  "$stage/rdfs/"
+          cp build/shacl/*.shacl.ttl "$stage/shacl/"
+          cp build/rdfs/*.rdfs.ttl   "$stage/rdfs/"
 
           python bin/release-manifest.py \
             --version "$VERSION" --channel "$CHANNEL" --date "$DATE" \

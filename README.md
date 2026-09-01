@@ -79,7 +79,7 @@ linkml-scala generate json-schema --to saref4ener.schema.json schema/saref4ener.
 Generate SHACL shapes, so you can validate RDF data with any SHACL engine:
 
 ```shell
-linkml-scala generate shacl --format ttl --open --to shapes.ttl schema/saref-core.yaml
+linkml-scala generate shacl --open --to shapes.ttl schema/saref-core.yaml
 ```
 
 Run `linkml-scala --help` for more generators and options.
@@ -110,7 +110,7 @@ Those single-element arrays are arrays on purpose. SAREF declares these slots mu
 `slot_usage` may only narrow a slot, never change its shape: turning a list into a scalar would
 make data that is valid against the parent class invalid against the child. So the example
 schemas write `maximum_cardinality: 1`, which says "at most one entry" without breaking that
-rule. See the note on cardinality below for what the generators currently do with it.
+rule. See the note on cardinality below.
 
 To check that the JSON really does match:
 
@@ -137,11 +137,11 @@ To run the checks locally:
 
 ```shell
 pip install -r requirements.txt
-linkml-scala generate shacl --open --to build/shapes.nt schema/saref-core.yaml
-linkml-scala generate rdfs --to build/rdfs.nt schema/saref-core.yaml
-python checks/check-rdfs.py --rdfs build/rdfs.nt --schema schema/saref-core.yaml \
+linkml-scala generate shacl --open --to build/shapes.ttl schema/saref-core.yaml
+linkml-scala generate rdfs --to build/rdfs.ttl schema/saref-core.yaml
+python checks/check-rdfs.py --rdfs build/rdfs.ttl --schema schema/saref-core.yaml \
   --source source/SAREFCore/saref.ttl
-python checks/check-examples.py --shapes build/shapes.nt --schema schema/saref-core.yaml \
+python checks/check-examples.py --shapes build/shapes.ttl --schema schema/saref-core.yaml \
   --examples source/SAREFCore/examples --mode open
 python checks/check-json.py --schema examples/device-catalog.yaml --data examples/device-catalog.json
 ```
@@ -150,7 +150,7 @@ Most of ETSI's examples needed a small edit before they would validate, usually 
 
 ### Limitations
 
-- `owl:minCardinality 1` becomes `required: true`, and `owl:minCardinality 0` is skipped. An upper bound (max 1, cardinality 1) becomes `maximum_cardinality: 1` in `slot_usage`. Only a bound of exactly 1 is written today; larger ones are dropped and reported, though nothing in SAREF has one. Note that LinkML-Scala 0.14.0 does not yet act on `maximum_cardinality`, so these 122 bounds are in the schemas but do not reach the generated SHACL (`sh:maxCount`) or JSON Schema (`maxItems`) yet.
+- `owl:minCardinality 1` becomes `required: true`, and `owl:minCardinality 0` is skipped. An upper bound (max 1, cardinality 1) becomes `maximum_cardinality: 1` in `slot_usage`. Only a bound of exactly 1 is written today; larger ones are dropped and reported, though nothing in SAREF has one.
 - Two restrictions are read as closed, stricter than the axiom: `owl:someValuesFrom X` becomes `required: true` and `range: X`, and `owl:hasValue` becomes a closed enum. `owl:allValuesFrom` also becomes a range.
 - By default all slots are `multivalued: true`, constraints restrict that per class basis. Exception: `owl:FunctionalProperty` sets `multivalued: false` on the slot itself, schema-wide.
 - When there are multiple restrictions on the same slot, the WIDEST is taken (e.g. `saref:represents`). The loser is dropped whole, not just the key that lost.

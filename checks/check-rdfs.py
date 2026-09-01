@@ -50,7 +50,7 @@ def qname(term):
     return f"<{term}>"
 
 def generate_rdfs(schema):
-    """The RDFS for `schema`, as N-Triples text.
+    """The RDFS for `schema`, as Turtle text.
 
     """
     try:
@@ -233,7 +233,7 @@ def main():
         gen.parse(args.rdfs)      # format inferred from the extension, so .ttl or .nt both work
     else:
         generated = f"generated from {args.schema.name}"
-        gen.parse(data=generate_rdfs(args.schema), format="nt")
+        gen.parse(data=generate_rdfs(args.schema), format="turtle")
 
     ref_classes, ref_props, ref_subclass, ref_subprop = read_reference(ref)
     gen_classes, gen_props, gen_subclass, gen_subprop = read_generated(gen)
