@@ -273,7 +273,7 @@ slots:
     inverse: is_accomplished_by
   broader:
     slot_uri: skos:broader
-    range: uriorcurie
+    range: Any
     multivalued: true
     inverse: narrower
   consists_of:
@@ -288,7 +288,7 @@ slots:
       its individual components.
     notes:
     - 'V3.2.1: Add local restrictions on consistsOf on feature of interest'
-    range: uriorcurie
+    range: Any
     multivalued: true
   consumes:
     slot_uri: saref:consumes
@@ -409,7 +409,7 @@ slots:
     - value: Different complementary commands can be defined for controlling a light. Turn on or off the
         light based on a desired state, toggle the light status of a specific light, set the luminosity
         level with a transition time, set the default transition time, start comfort.
-    range: uriorcurie
+    range: Any
     multivalued: true
   has_mandatory_command:
     slot_uri: saref:hasMandatoryCommand
@@ -460,7 +460,7 @@ slots:
     - value: Different complementary commands can be defined for observing a smart home. Observe the temperature
         once will output the indoor temperature property; observe status of the entry door will output
         an open/close state.
-    range: uriorcurie
+    range: Any
     multivalued: true
   has_phenomenon_time:
     slot_uri: saref:hasPhenomenonTime
@@ -523,7 +523,7 @@ slots:
     description: Links a procedure execution (e.g., an observation) to its result (e.g., a property value).
     notes:
     - 'V3.2.1: Introduced saref:hasResult as part of general will to make SAREF and SOSA/SSN converge.'
-    range: uriorcurie
+    range: Any
     multivalued: true
   has_result_time:
     slot_uri: saref:hasResultTime
@@ -609,7 +609,7 @@ slots:
     slot_uri: saref:isAccomplishedBy
     title: is accomplished by
     description: A relationship identifying an entity (e.g., a device) that can accomplish a task.
-    range: uriorcurie
+    range: Any
     multivalued: true
     inverse: accomplishes
   is_command_of:
@@ -857,7 +857,7 @@ slots:
     inverse: made_by
   narrower:
     slot_uri: skos:narrower
-    range: uriorcurie
+    range: Any
     multivalued: true
     inverse: broader
   observes:
@@ -986,6 +986,9 @@ classes:
     slot_usage:
       controls:
         required: true
+  Any:
+    class_uri: linkml:Any
+    description: A value the ontology places no constraint on.
   Appliance:
     class_uri: saref:Appliance
     title: Appliance

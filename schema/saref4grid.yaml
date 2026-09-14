@@ -321,7 +321,7 @@ slots:
   has_service:
     slot_uri: oneM2M:hasService
     title: has service
-    range: uriorcurie
+    range: Any
     multivalued: true
     source: https://git.onem2m.org/MAS/BaseOntology
   has_single_scheduled_action:

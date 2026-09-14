@@ -164,7 +164,8 @@ class Converter:
         self.issues: list[str] = []
         self.used_prefixes: set[str] = set()
         self.imports: list[str] = []  # LinkML imports resolved from owl:imports
-        self.reg = Registry(set(mapping["schema"]["root_only"]["types"]))
+        root_only = mapping["schema"]["root_only"]
+        self.reg = Registry(set(root_only["types"]) | set(root_only["classes"]))
         self.class_slots: dict[URIRef, set[str]] = defaultdict(set)
         self.default_prefix = ""  # vann:preferredNamespacePrefix, read from the ontology node
         self.members: dict[URIRef, set[URIRef]] = defaultdict(set)  # type IRI -> individuals
@@ -954,6 +955,8 @@ class Converter:
         if not self.imports:
             header |= self.m["schema"]["root_only"]
         header["imports"] = list(header.get("imports", [])) + self.imports
+        # classes the header declares join the ones read off the graph rather than replacing them
+        classes |= header.pop("classes", {})
         schema |= {k: v for k, v in header.items() if k != "prefixes"}
         prefixes = {p: str(n) for p, n in self.g.namespaces() if p in self.used_prefixes}
         schema["prefixes"] = dict(sorted((prefixes | header["prefixes"]).items()))

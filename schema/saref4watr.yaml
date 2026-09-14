@@ -222,7 +222,7 @@ slots:
   has_geometry:
     slot_uri: geo:hasGeometry
     title: hasGeometry
-    range: uriorcurie
+    range: Any
     multivalued: true
     source: http://www.opengis.net/ont/geosparql#
   has_hardware_version:
@@ -249,13 +249,13 @@ slots:
     slot_uri: s4watr:isDesignedFor
     title: is designed for
     description: The type of water for which an infrastructure is designed for.
-    range: uriorcurie
+    range: Any
     multivalued: true
   is_intended_for:
     slot_uri: s4watr:isIntendedFor
     title: is intended for
     description: The intended use of the infrastructure.
-    range: uriorcurie
+    range: Any
     multivalued: true
   operates_at_radio_frequency:
     slot_uri: s4watr:operatesAtRadioFrequency
@@ -272,13 +272,13 @@ slots:
   sf_contains:
     slot_uri: geo:sfContains
     title: sfContains
-    range: uriorcurie
+    range: Any
     multivalued: true
     source: http://www.opengis.net/ont/geosparql#
   sf_within:
     slot_uri: geo:sfWithin
     title: sfWithin
-    range: uriorcurie
+    range: Any
     multivalued: true
     source: http://www.opengis.net/ont/geosparql#
 classes:

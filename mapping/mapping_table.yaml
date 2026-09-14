@@ -165,11 +165,11 @@ ontology:
 defaults:  
   multivalued:  true # OWL by default assumes 0..n cardinality unless stated otherwise by restrictions
   range:
-    owl:ObjectProperty:    uriorcurie
+    owl:ObjectProperty:    Any
     owl:DatatypeProperty:  Literal
 
 # Emitted verbatim into the schema header. 
-# Root only types are reserved for SAREF Core, so that extensions do not redeclare them
+# Root only classes and types are reserved for SAREF Core, so that extensions do not redeclare them
 schema:
   always:
     imports:
@@ -178,6 +178,10 @@ schema:
       linkml: https://w3id.org/linkml/
     default_range:  string
   root_only:
+    classes:
+      Any:
+        class_uri: linkml:Any
+        description: A value the ontology places no constraint on.
     types:
       Duration:            {uri: xsd:duration,           typeof: string}
       DateTimeStamp:       {uri: xsd:dateTimeStamp,      typeof: datetime}

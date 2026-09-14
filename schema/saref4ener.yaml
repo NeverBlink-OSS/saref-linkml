@@ -567,7 +567,7 @@ slots:
     description: 'A relationship identifying the ownership of an entity. In particular, a slot belongs
       to a power sequence, a power sequence belongs to an alternative, an alternative  belongs to a power
       profile, a power profile belongs to a device.  '
-    range: uriorcurie
+    range: Any
     multivalued: true
   belongs_to_time_series:
     slot_uri: s4ener:belongsToTimeSeries
@@ -699,14 +699,14 @@ slots:
     title: has applied event action consume
     description: A relationship between the state of a load control event consume and the action to be
       performed as a consequence of this event.
-    range: uriorcurie
+    range: Any
     multivalued: true
   has_applied_event_action_produce:
     slot_uri: s4ener:hasAppliedEventActionProduce
     title: has applied event action produce
     description: A relationship between the state of a load control event produce and the action to be
       performed as a consequence of this event.
-    range: uriorcurie
+    range: Any
     multivalued: true
   has_commodity:
     slot_uri: s4ener:hasCommodity
@@ -804,7 +804,7 @@ slots:
     title: has device
     description: A relationship between a load control event (used to send overload warning severity level
       and related load control commands) and the device interested by this event.
-    range: uriorcurie
+    range: Any
     multivalued: true
   has_duration:
     slot_uri: s4ener:hasDuration
@@ -1180,7 +1180,7 @@ slots:
     slot_uri: s4ener:hasPowerLimitState
     title: has power limit state
     description: The relationship between the power limit state and its state (active/ inactive).
-    range: uriorcurie
+    range: Any
     multivalued: true
   has_power_plan:
     slot_uri: s4ener:hasPowerPlan
@@ -1240,7 +1240,7 @@ slots:
     multivalued: true
   has_price:
     slot_uri: saref:hasPrice
-    range: uriorcurie
+    range: Any
     multivalued: true
   has_quantile:
     slot_uri: s4ener:hasQuantile
@@ -1257,7 +1257,7 @@ slots:
     title: has recipient
     description: This property can be used to connect a flexibility offer or/and flexibility request to
       a foaf:agent or saref:Device.
-    range: uriorcurie
+    range: Any
     multivalued: true
   has_remaining_pause_time:
     slot_uri: s4ener:hasRemainingPauseTime
@@ -1375,7 +1375,7 @@ slots:
     slot_uri: s4ener:hasTier
     title: has tier incentive
     description: The relationship between the incentive table and the tiers it consists of
-    range: uriorcurie
+    range: Any
     multivalued: true
   has_timer:
     slot_uri: s4ener:hasTimer
@@ -1470,7 +1470,7 @@ slots:
     description: This property can be used to connect the flexibility offer and/or flexibility request
       to the flexibility profile. Additionally, it can be used to specify the s4ener:datapoint, s4ener:timeseries
       and ic-fc:forecast included in the flexibility offer and/or  flexibility request.
-    range: uriorcurie
+    range: Any
     multivalued: true
   is_active:
     slot_uri: s4ener:isActive
@@ -1634,7 +1634,7 @@ slots:
     title: receives
     description: A relationship between a device (e.g., an appliance or a smart meter) and a load control
       event
-    range: uriorcurie
+    range: Any
     multivalued: true
   receives_power_limit:
     slot_uri: s4ener:receivesPowerLimit
@@ -1787,14 +1787,14 @@ slots:
     title: triggers event action consume
     description: A relationship between a load control event and the consume action triggered by this
       event
-    range: uriorcurie
+    range: Any
     multivalued: true
   triggers_event_action_produce:
     slot_uri: s4ener:triggersEventActionProduce
     title: triggers event action produce
     description: A relationship between a load control event and the produce action triggered by this
       event
-    range: uriorcurie
+    range: Any
     multivalued: true
   value_tendency:
     slot_uri: s4ener:valueTendency
