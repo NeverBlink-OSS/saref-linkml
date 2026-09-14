@@ -949,13 +949,14 @@ class Converter:
                           f"neither a domain nor a restriction places it")
         self.report_predicates() # check if there is something generator missed
 
-        # `types` declares named elements, so only a schema that imports nothing may emit them;
-        # anything importing inherits them and would otherwise clash on the name.
+        # `classes` and `types` both declare named elements, so only a schema that imports nothing
+        # may emit them; anything importing inherits them and would otherwise clash on the name.
         header = dict(self.m["schema"]["always"])
         if not self.imports:
             header |= self.m["schema"]["root_only"]
         header["imports"] = list(header.get("imports", [])) + self.imports
-        # classes the header declares join the ones read off the graph rather than replacing them
+        # `types` passes straight through below, but the classes the header declares have to join
+        # the ones read off the graph: `schema["classes"]` is assigned wholesale further down.
         classes |= header.pop("classes", {})
         schema |= {k: v for k, v in header.items() if k != "prefixes"}
         prefixes = {p: str(n) for p, n in self.g.namespaces() if p in self.used_prefixes}
