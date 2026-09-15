@@ -154,7 +154,7 @@ Most of ETSI's examples needed a small edit before they would validate, usually 
 - Two restrictions are read as closed, stricter than the axiom: `owl:someValuesFrom X` becomes `required: true` and `range: X`, and `owl:hasValue` becomes a closed enum. `owl:allValuesFrom` also becomes a range.
 - By default all slots are `multivalued: true`, constraints restrict that per class basis. Exception: `owl:FunctionalProperty` sets `multivalued: false` on the slot itself, schema-wide.
 - When there are multiple restrictions on the same slot, the WIDEST is taken (e.g. `saref:represents`). The loser is dropped whole, not just the key that lost.
-- A property with no `rdfs:range` gets `range: Any` (`linkml:Any`), whether it is an `owl:ObjectProperty` or an `owl:DatatypeProperty`. An `owl:DatatypeProperty` that declares `rdfs:range rdfs:Literal` also becomes `Any`.
+- An `owl:DatatypeProperty` that declares `rdfs:range rdfs:Literal` becomes `Any` (`linkml:Any`).
 
 ## Contributing and support
 
