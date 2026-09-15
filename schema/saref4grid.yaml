@@ -45,7 +45,7 @@ slots:
     title: has action value
     description: It specifies the input of a method from the instance (COSEM object) of a class. The value
       of this property conforms to a simple type (not a structure)
-    range: Literal
+    range: Any
     multivalued: true
   has_activate_passive_calendar_time:
     slot_uri: s4grid:hasActivatePassiveCalendarTime
@@ -432,7 +432,7 @@ slots:
     title: obtain from value
     description: It restricts the range of entries to be retrieved from a profile generic defining the
       oldest or smallest entry to retrieve
-    range: Literal
+    range: Any
     multivalued: true
   obtain_input_for_property:
     slot_uri: s4grid:obtainInputForProperty
@@ -460,7 +460,7 @@ slots:
     title: obtain to value
     description: It restricts the range of entries to be retrieved from a profile generic defining the
       newest or largest entry to retrieve
-    range: Literal
+    range: Any
     multivalued: true
   related_clock:
     slot_uri: s4grid:relatedClock

@@ -259,10 +259,6 @@ types:
   PositiveInteger:
     uri: xsd:positiveInteger
     typeof: integer
-  Literal:
-    uri: rdfs:Literal
-    typeof: string
-    description: An RDF literal of any datatype, serialised as a string.
 slots:
   accomplishes:
     slot_uri: saref:accomplishes
@@ -397,7 +393,7 @@ slots:
       as s4abcd:hasUUID, s4abcd:hasGTIN12, etc.
     see_also:
     - https://labs.etsi.org/rep/saref/saref-portal/-/issues/2
-    range: Literal
+    range: Any
     multivalued: true
   has_input:
     slot_uri: saref:hasInput
@@ -427,7 +423,7 @@ slots:
       expected to be a string or a string with language tag.
     notes:
     - 'V3.2.1: Defined domain of saref:hasManufacturer to union of feature kind and feature of interest.'
-    range: Literal
+    range: Any
     multivalued: true
   has_model:
     slot_uri: saref:hasModel
@@ -436,7 +432,7 @@ slots:
       to be a string or a string with language tag.
     notes:
     - 'V3.2.1: Defined domain of saref:hasModel to union of feature kind and feature of interest.'
-    range: Literal
+    range: Any
     multivalued: true
   has_operation:
     slot_uri: saref:hasOperation
@@ -595,7 +591,7 @@ slots:
       are expected, values could use other datatypes.
     notes:
     - 'V3.2.1: Clarified definition of saref:hasValue.'
-    range: Literal
+    range: Any
     multivalued: true
   has_version:
     slot_uri: saref:hasVersion
