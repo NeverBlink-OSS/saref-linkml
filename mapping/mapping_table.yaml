@@ -143,6 +143,8 @@ datatypes:
   xsd:gDay:                GDay
   xsd:anyURI:              uri
   xsd:time:                time
+  # rdfs:Literal maps to Any.
+  rdfs:Literal:            Any
 
 # Read from the owl:Ontology node.
 ontology:
@@ -165,11 +167,11 @@ ontology:
 defaults:  
   multivalued:  true # OWL by default assumes 0..n cardinality unless stated otherwise by restrictions
   range:
-    owl:ObjectProperty:    uriorcurie
-    owl:DatatypeProperty:  Literal
+    owl:ObjectProperty:    Any
+    owl:DatatypeProperty:  Any
 
 # Emitted verbatim into the schema header. 
-# Root only types are reserved for SAREF Core, so that extensions do not redeclare them
+# Root only classes and types are reserved for SAREF Core, so that extensions do not redeclare them
 schema:
   always:
     imports:
@@ -178,6 +180,10 @@ schema:
       linkml: https://w3id.org/linkml/
     default_range:  string
   root_only:
+    classes:
+      Any:
+        class_uri: linkml:Any
+        description: A value the ontology places no constraint on.
     types:
       Duration:            {uri: xsd:duration,           typeof: string}
       DateTimeStamp:       {uri: xsd:dateTimeStamp,      typeof: datetime}
@@ -189,10 +195,6 @@ schema:
       UnsignedShort:       {uri: xsd:unsignedShort,      typeof: integer}
       NonNegativeInteger:  {uri: xsd:nonNegativeInteger, typeof: integer}
       PositiveInteger:     {uri: xsd:positiveInteger,    typeof: integer}
-      Literal: # this is done due to SAREF Core aiming to support langtags and switching to rdfs:Literal
-        uri: rdfs:Literal
-        typeof: string
-        description: An RDF literal of any datatype, serialised as a string.
 
 report_ignored:
   owl:propertyChainAxiom:  Omitted, LinkML does not support property chains.

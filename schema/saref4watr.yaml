@@ -165,19 +165,19 @@ slots:
     slot_uri: s4watr:forFinancialConsumption
     title: for financial consumption
     description: The financial consumption related to a tariff (e.g., prepaid tariffs).
-    range: Literal
+    range: Any
     multivalued: true
   for_volume_consumption:
     slot_uri: s4watr:forVolumeConsumption
     title: for volume consumption
     description: The volume consumption related to a tariff (e.g., after consumption of 900 litres).
-    range: Literal
+    range: Any
     multivalued: true
   for_volume_flow:
     slot_uri: s4watr:forVolumeFlow
     title: for volume flow
     description: The volume flow related to a tariff.
-    range: Literal
+    range: Any
     multivalued: true
   for_week_day:
     slot_uri: s4watr:forWeekDay
@@ -209,7 +209,7 @@ slots:
     description: The fabrication number of a device.
     mixins:
     - has_identifier
-    range: Literal
+    range: Any
     multivalued: true
   has_firmware_version:
     slot_uri: s4watr:hasFirmwareVersion
@@ -217,12 +217,12 @@ slots:
     description: The firmware version of a device.
     mixins:
     - has_version
-    range: Literal
+    range: Any
     multivalued: true
   has_geometry:
     slot_uri: geo:hasGeometry
     title: hasGeometry
-    range: uriorcurie
+    range: Any
     multivalued: true
     source: http://www.opengis.net/ont/geosparql#
   has_hardware_version:
@@ -231,7 +231,7 @@ slots:
     description: The hardware version of a device.
     mixins:
     - has_version
-    range: Literal
+    range: Any
     multivalued: true
   has_period:
     slot_uri: s4watr:hasPeriod
@@ -249,36 +249,36 @@ slots:
     slot_uri: s4watr:isDesignedFor
     title: is designed for
     description: The type of water for which an infrastructure is designed for.
-    range: uriorcurie
+    range: Any
     multivalued: true
   is_intended_for:
     slot_uri: s4watr:isIntendedFor
     title: is intended for
     description: The intended use of the infrastructure.
-    range: uriorcurie
+    range: Any
     multivalued: true
   operates_at_radio_frequency:
     slot_uri: s4watr:operatesAtRadioFrequency
     title: operates at radio frequency
     description: The radio frequency at which a device operates.
-    range: Literal
+    range: Any
     multivalued: true
   requires_power:
     slot_uri: s4watr:requiresPower
     title: requires power
     description: The power required by a device.
-    range: Literal
+    range: Any
     multivalued: true
   sf_contains:
     slot_uri: geo:sfContains
     title: sfContains
-    range: uriorcurie
+    range: Any
     multivalued: true
     source: http://www.opengis.net/ont/geosparql#
   sf_within:
     slot_uri: geo:sfWithin
     title: sfWithin
-    range: uriorcurie
+    range: Any
     multivalued: true
     source: http://www.opengis.net/ont/geosparql#
 classes:

@@ -1403,7 +1403,7 @@ slots:
     slot_uri: s4bldg:hasSpace
     title: has space
     description: Relation between a building or a building space and the spaces it can be divided into.
-    range: uriorcurie
+    range: Any
     multivalued: true
     inverse: is_space_of
     transitive: true
@@ -1503,7 +1503,7 @@ slots:
     slot_uri: s4bldg:isSpaceOf
     title: isSpaceOf
     description: Relation between a building space and the building or building space it belongs to.
-    range: uriorcurie
+    range: Any
     multivalued: true
     inverse: has_space
     transitive: true
@@ -1582,7 +1582,7 @@ slots:
     title: nominal supply voltage offset
     description: The maximum and minimum allowed voltage of the supply e.g. boundaries of 380V/440V may
       be applied for a nominal voltage of 400V.
-    range: uriorcurie
+    range: Any
     multivalued: true
   number_of_blades:
     slot_uri: s4bldg:numberOfBlades
@@ -1719,7 +1719,7 @@ slots:
     title: short circuit voltage
     description: A complex number that specifies the real and imaginary parts of the short-circuit voltage
       at rated current of a transformer given in %.
-    range: uriorcurie
+    range: Any
     multivalued: true
   spray_type:
     slot_uri: s4bldg:sprayType
