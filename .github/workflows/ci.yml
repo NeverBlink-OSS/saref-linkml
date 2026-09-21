@@ -64,7 +64,7 @@ jobs:
       - uses: actions/checkout@v7
 
       - name: Validate models
-        uses: NeverBlink-OSS/linkml-scala-action@v0.15.1
+        uses: NeverBlink-OSS/linkml-scala-action@v0.16.1
         with:
           working-directory: schema
           files: "*.yaml"
@@ -105,7 +105,7 @@ jobs:
       - run: pip install rdflib pyyaml pyshacl
 
       - name: Generate SHACL
-        uses: NeverBlink-OSS/linkml-scala-action@v0.15.1
+        uses: NeverBlink-OSS/linkml-scala-action@v0.16.1
         with:
           command: generate
           generator: shacl
@@ -115,7 +115,7 @@ jobs:
           output: build/shacl
 
       - name: Generate RDFS
-        uses: NeverBlink-OSS/linkml-scala-action@v0.15.1
+        uses: NeverBlink-OSS/linkml-scala-action@v0.16.1
         with:
           command: generate
           generator: rdfs
