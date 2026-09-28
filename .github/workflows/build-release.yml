@@ -45,7 +45,7 @@ jobs:
 
       # Never build a release from a schema that does not pass strict validation.
       - name: Validate
-        uses: NeverBlink-OSS/linkml-scala-action@v0.16.1
+        uses: NeverBlink-OSS/linkml-scala-action@v0.16.2
         with:
           working-directory: schema
           files: "*.yaml"
@@ -53,7 +53,7 @@ jobs:
           ignore: NoTreeRootClass
 
       - name: Resolve each schema
-        uses: NeverBlink-OSS/linkml-scala-action@v0.16.1
+        uses: NeverBlink-OSS/linkml-scala-action@v0.16.2
         with:
           command: generate
           generator: linkml
@@ -62,7 +62,7 @@ jobs:
           output: build/linkml
 
       - name: Generate JSON Schema
-        uses: NeverBlink-OSS/linkml-scala-action@v0.16.1
+        uses: NeverBlink-OSS/linkml-scala-action@v0.16.2
         with:
           command: generate
           generator: json-schema
@@ -72,7 +72,7 @@ jobs:
           output: build/json-schema
 
       - name: Generate SHACL
-        uses: NeverBlink-OSS/linkml-scala-action@v0.16.1
+        uses: NeverBlink-OSS/linkml-scala-action@v0.16.2
         with:
           command: generate
           generator: shacl
@@ -83,7 +83,7 @@ jobs:
           output: build/shacl
 
       - name: Generate RDFS
-        uses: NeverBlink-OSS/linkml-scala-action@v0.16.1
+        uses: NeverBlink-OSS/linkml-scala-action@v0.16.2
         with:
           command: generate
           generator: rdfs
