@@ -10,7 +10,7 @@
 
 # SAREF-LinkML
 
-**[SAREF](https://saref.etsi.org/) is ETSI's reference ontology for the Internet of Things.** This repository has SAREF core and four of its extensions written as [LinkML](https://linkml.io/) schemas. **We also publish SAREF SHACL shapes, RDFS, and JSON Schemas** generated from LinkML.
+**[SAREF](https://saref.etsi.org/) is ETSI's reference ontology for the Internet of Things.** This repository has SAREF core and four of its extensions written as [LinkML](https://linkml.ohi.dev/) schemas. **We also publish SAREF SHACL shapes, RDFS, and JSON Schemas** generated from LinkML.
 
 SAREF is published as OWL, which works well for reasoning and Semantic Web tools, but does not help with validation (constraints) or with data formats other than RDF. LinkML solves that: it is a modelling language that works across formats. You write a schema in LinkML, and it generates SHACL, RDFS, JSON Schema, Frictionless table schemas, GraphQL, ER diagrams, and code for several languages.
 
